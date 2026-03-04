@@ -11,6 +11,8 @@ bin/
 /out/
 /*.iml
 .settings/
+.classpath
+.project
 
 # Storage/log files
 /data/
