@@ -262,42 +262,73 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* has a need to manage a significant number of contacts
-* prefer desktop apps over other types
-* can type fast
-* prefers typing to mouse interactions
+* university tutors or teaching assistants managing one or more tutorial groups
+* needs to track student participation, attendance, and grading progress across recurring weekly assessments
+* prefers desktop apps over web-based platforms like Canvas due to speed
+* can type fast and prefers typing to mouse interactions
 * is reasonably comfortable using CLI apps
 
-**Value proposition**: manage contacts faster than a typical mouse/GUI driven app
+**Value proposition**: a single hub that reduces teaching admin overhead by keeping student group organization, grading progress, and participation records in one place, so TAs can run sessions consistently and grade faster than using web-based tools like Canvas
 
 
 ### User stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                                    | I want to …​                     | So that I can…​                                                        |
-| -------- | ------------------------------------------ | ------------------------------ | ---------------------------------------------------------------------- |
-| `* * *`  | new user                                   | see usage instructions         | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person               |                                                                        |
-| `* * *`  | user                                       | delete a person                | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name          | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details   | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name           | locate a person easily                                                 |
-
-*{More to be added}*
+| Priority | As a …​ | I want to …​ | So that I can…​ |
+| -------- | ------- | ------------ | --------------- |
+| `* * *`  | new user | see usage instructions | refer to instructions when I forget how to use the App |
+| `* * *`  | tutor | add a student with their details | keep track of all students in my tutorial groups |
+| `* * *`  | tutor | delete a student | remove students who have dropped the course |
+| `* * *`  | tutor | find a student by name | locate a student's details without scrolling through the entire list |
+| `* * *`  | tutor | list all students | see an overview of all students I am managing |
+| `* * *`  | tutor | mark a student's attendance for a tutorial session | track which students attended each session |
+| `* * *`  | tutor | record a student's grade for an assessment | keep track of grading progress |
+| `* *`    | tutor | create tutorial groups | organize students by their assigned tutorial slots |
+| `* *`    | tutor | create assessments | track grading progress for each assignment or exam |
+| `* *`    | tutor | edit a student's details | update information when it changes |
+| `* *`    | tutor | view a student's attendance history | identify students with poor attendance |
+| `* *`    | tutor | set deadlines for assessments | be reminded of upcoming grading deadlines |
+| `* *`    | tutor | see which assessments are due soon | prioritize my grading work |
+| `*`      | tutor | sort students by name | locate a student easily |
+| `*`      | tutor | export student data | share records with other teaching staff |
+| `*`      | tutor managing many groups | filter students by tutorial group | focus on one group at a time |
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is `CoursePilot` and the **Actor** is the `tutor`, unless specified otherwise)
 
-**Use case: Delete a person**
+**Use case: UC01 - Add a student**
 
 **MSS**
 
-1.  User requests to list persons
-2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+1.  Tutor enters the command to add a student with the student's name, email, and tutorial group.
+2.  CoursePilot adds the student and displays a confirmation message.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. The student's name or email is missing.
+
+    * 1a1. CoursePilot shows an error message indicating required fields.
+
+      Use case resumes at step 1.
+
+* 1b. A student with the same email already exists.
+
+    * 1b1. CoursePilot shows an error message indicating duplicate entry.
+
+      Use case resumes at step 1.
+
+**Use case: UC02 - Delete a student**
+
+**MSS**
+
+1.  Tutor requests to list students.
+2.  CoursePilot shows a list of students.
+3.  Tutor requests to delete a specific student in the list.
+4.  CoursePilot deletes the student and displays a confirmation message.
 
     Use case ends.
 
@@ -309,24 +340,86 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 3a. The given index is invalid.
 
-    * 3a1. AddressBook shows an error message.
+    * 3a1. CoursePilot shows an error message.
 
       Use case resumes at step 2.
 
-*{More to be added}*
+**Use case: UC03 - Mark attendance**
+
+**MSS**
+
+1.  Tutor requests to list students.
+2.  CoursePilot shows a list of students.
+3.  Tutor enters the command to mark a student's attendance for a specific tutorial session.
+4.  CoursePilot records the attendance and displays a confirmation message.
+
+    Use case ends.
+
+**Extensions**
+
+* 3a. The given student index is invalid.
+
+    * 3a1. CoursePilot shows an error message.
+
+      Use case resumes at step 2.
+
+* 3b. The specified tutorial session does not exist.
+
+    * 3b1. CoursePilot shows an error message.
+
+      Use case resumes at step 2.
+
+**Use case: UC04 - Record a grade**
+
+**MSS**
+
+1.  Tutor enters the command to record a grade for a student for a specific assessment.
+2.  CoursePilot records the grade and displays a confirmation message.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. The given student index is invalid.
+
+    * 1a1. CoursePilot shows an error message.
+
+      Use case resumes at step 1.
+
+* 1b. The specified assessment does not exist.
+
+    * 1b1. CoursePilot shows an error message.
+
+      Use case resumes at step 1.
+
+* 1c. The grade value is out of the valid range.
+
+    * 1c1. CoursePilot shows an error message.
+
+      Use case resumes at step 1.
 
 ### Non-Functional Requirements
 
 1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
-3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
-
-*{More to be added}*
+2.  Should be able to hold up to 1000 students without a noticeable sluggishness in performance for typical usage.
+3.  A tutor with above average typing speed for regular English text should be able to accomplish most of the tasks faster using commands than using the mouse.
+4.  Data should be stored locally in a human-editable file format (e.g., JSON).
+5.  The application should not require a database management system (DBMS).
+6.  The application should not depend on any remote server.
+7.  The application should work without requiring an installer.
+8.  The application should be packaged into a single JAR file not exceeding 100MB.
+9.  The GUI should work well for standard screen resolutions of 1920x1080 and higher at 100% and 125% scaling, and should be usable at 1280x720 and higher at 150% scaling.
+10. The application should work on JDK 17.
+11. The application should follow an object-oriented design.
 
 ### Glossary
 
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others
+* **Tutor/TA**: A teaching assistant at a university responsible for conducting tutorial sessions, marking attendance, and grading assessments
+* **Tutorial group**: A group of students assigned to a specific tutorial session managed by a tutor
+* **Assessment**: A graded component of a course such as an assignment, quiz, or exam
+* **Attendance**: A record of whether a student was present for a specific tutorial session
+* **CLI**: Command Line Interface, a text-based interface for interacting with the application
 
 --------------------------------------------------------------------------------------------------------------------
 
