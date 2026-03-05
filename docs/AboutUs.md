@@ -19,6 +19,11 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 * Role: Project Advisor
 
+### Jin Liangdong
+
+<img src="images/jyc300564.png" width="200px">
+
+[[github](http://github.com/jyc300564)]
 ### Teh Ming Wei
 
 <img src="images/tehmiw.png" width="200px">
