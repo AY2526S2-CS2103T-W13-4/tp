@@ -33,7 +33,7 @@ public class MatricNumberStartsWithKeywordsPredicate implements Predicate<Studen
             return false;
         }
 
-        MatricNumberStartsWithKeywordsPredicate otherNameContainsKeywordsPredicate = 
+        MatricNumberStartsWithKeywordsPredicate otherNameContainsKeywordsPredicate =
                 (MatricNumberStartsWithKeywordsPredicate) other;
         return keywords.equals(otherNameContainsKeywordsPredicate.keywords);
     }

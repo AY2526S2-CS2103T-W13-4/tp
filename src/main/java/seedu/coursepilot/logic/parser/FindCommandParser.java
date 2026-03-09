@@ -6,10 +6,10 @@ import java.util.Arrays;
 
 import seedu.coursepilot.logic.commands.FindCommand;
 import seedu.coursepilot.logic.parser.exceptions.ParseException;
-import seedu.coursepilot.model.person.NameContainsKeywordsPredicate;
-import seedu.coursepilot.model.person.PhoneStartsWithKeywordsPredicate;
 import seedu.coursepilot.model.person.EmailContainsKeywordsPredicate;
 import seedu.coursepilot.model.person.MatricNumberStartsWithKeywordsPredicate;
+import seedu.coursepilot.model.person.NameContainsKeywordsPredicate;
+import seedu.coursepilot.model.person.PhoneStartsWithKeywordsPredicate;
 
 /**
  * Parses input arguments and creates a new FindCommand object
@@ -40,7 +40,5 @@ public class FindCommandParser implements Parser<FindCommand> {
         default:
             return new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList(nameKeywords)));
         }
-        
     }
-
 }

@@ -7,8 +7,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
 
-import seedu.coursepilot.logic.parser.Prefix;
-
 /**
  * Helper functions for handling strings.
  */
@@ -40,7 +38,7 @@ public class StringUtil {
                 .anyMatch(preppedWord::equalsIgnoreCase);
     }
 
-        /**
+    /**
      * Returns true if the {@code sentence} contains the {@code word}.
      *   Ignores case.
      *   <br>examples:<pre>
@@ -48,7 +46,7 @@ public class StringUtil {
      *       containsWordIgnoreCase("ABc def", "DEF") == true
      *       containsWordIgnoreCase("ABc def", "AB") == false //not a full word match
      *       </pre>
-     * @param sentence cannot be null
+     * @param word cannot be null
      * @param substring cannot be null, cannot be empty, must be a single word
      */
     public static boolean containsPartWordIgnoreCase(String word, String substring) {
