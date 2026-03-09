@@ -3,7 +3,10 @@ package seedu.coursepilot.testutil;
 import java.util.HashSet;
 import java.util.Set;
 
-import seedu.coursepilot.model.person.*;
+import seedu.coursepilot.model.person.Email;
+import seedu.coursepilot.model.person.MatricNumber;
+import seedu.coursepilot.model.person.Name;
+import seedu.coursepilot.model.person.Phone;
 import seedu.coursepilot.model.person.Student;
 import seedu.coursepilot.model.tag.Tag;
 import seedu.coursepilot.model.util.SampleDataUtil;

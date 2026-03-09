@@ -1,8 +1,8 @@
 package seedu.coursepilot.logic.parser;
 
 import static seedu.coursepilot.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_MATRICNUMBER;
 import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_MATRICNUMBER;
 import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_TAG;
@@ -12,12 +12,11 @@ import java.util.stream.Stream;
 
 import seedu.coursepilot.logic.commands.AddCommand;
 import seedu.coursepilot.logic.parser.exceptions.ParseException;
-import seedu.coursepilot.model.person.Address;
 import seedu.coursepilot.model.person.Email;
 import seedu.coursepilot.model.person.MatricNumber;
 import seedu.coursepilot.model.person.Name;
-import seedu.coursepilot.model.person.Student;
 import seedu.coursepilot.model.person.Phone;
+import seedu.coursepilot.model.person.Student;
 import seedu.coursepilot.model.tag.Tag;
 
 /**
@@ -32,7 +31,8 @@ public class AddCommandParser implements Parser<AddCommand> {
      */
     public AddCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_MATRICNUMBER, PREFIX_TAG);
+                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
+                        PREFIX_MATRICNUMBER, PREFIX_TAG);
 
         if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_MATRICNUMBER, PREFIX_PHONE, PREFIX_EMAIL)
                 || !argMultimap.getPreamble().isEmpty()) {
@@ -43,7 +43,8 @@ public class AddCommandParser implements Parser<AddCommand> {
         Name name = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get());
         Phone phone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get());
         Email email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get());
-        MatricNumber matriculationNumber = ParserUtil.parseMatricNumber(argMultimap.getValue(PREFIX_MATRICNUMBER).get());
+        MatricNumber matriculationNumber =
+                ParserUtil.parseMatricNumber(argMultimap.getValue(PREFIX_MATRICNUMBER).get());
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
 
         Student student = new Student(name, phone, email, matriculationNumber, tagList);

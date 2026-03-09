@@ -2,8 +2,8 @@ package seedu.coursepilot.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_MATRICNUMBER;
 import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_MATRICNUMBER;
 import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_TAG;

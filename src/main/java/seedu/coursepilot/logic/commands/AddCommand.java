@@ -1,8 +1,8 @@
 package seedu.coursepilot.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_MATRICNUMBER;
 import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_MATRICNUMBER;
 import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_TAG;
@@ -36,7 +36,8 @@ public class AddCommand extends Command {
             + PREFIX_TAG + "owesMoney";
 
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
-    public static final String MESSAGE_DUPLICATE_PERSON = "This person or matriculation number already exists in the address book";
+    public static final String MESSAGE_DUPLICATE_PERSON =
+            "This person or matriculation number already exists in the address book";
 
     private final Student toAdd;
 

@@ -1,15 +1,15 @@
 package seedu.coursepilot.logic.parser;
 
 import static seedu.coursepilot.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.coursepilot.logic.commands.CommandTestUtil.MATRIC_DESC_AMY;
-import static seedu.coursepilot.logic.commands.CommandTestUtil.MATRIC_DESC_BOB;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;
-import static seedu.coursepilot.logic.commands.CommandTestUtil.INVALID_MATRIC_DESC;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
+import static seedu.coursepilot.logic.commands.CommandTestUtil.INVALID_MATRIC_DESC;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.INVALID_PHONE_DESC;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
+import static seedu.coursepilot.logic.commands.CommandTestUtil.MATRIC_DESC_AMY;
+import static seedu.coursepilot.logic.commands.CommandTestUtil.MATRIC_DESC_BOB;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.NAME_DESC_AMY;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.NAME_DESC_BOB;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
@@ -18,14 +18,14 @@ import static seedu.coursepilot.logic.commands.CommandTestUtil.PREAMBLE_NON_EMPT
 import static seedu.coursepilot.logic.commands.CommandTestUtil.PREAMBLE_WHITESPACE;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.TAG_DESC_FRIEND;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.TAG_DESC_HUSBAND;
-import static seedu.coursepilot.logic.commands.CommandTestUtil.VALID_MATRIC_BOB;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
+import static seedu.coursepilot.logic.commands.CommandTestUtil.VALID_MATRIC_BOB;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
-import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_MATRICNUMBER;
 import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_MATRICNUMBER;
 import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.coursepilot.logic.parser.CommandParserTestUtil.assertParseFailure;
@@ -37,7 +37,10 @@ import org.junit.jupiter.api.Test;
 
 import seedu.coursepilot.logic.Messages;
 import seedu.coursepilot.logic.commands.AddCommand;
-import seedu.coursepilot.model.person.*;
+import seedu.coursepilot.model.person.Email;
+import seedu.coursepilot.model.person.MatricNumber;
+import seedu.coursepilot.model.person.Name;
+import seedu.coursepilot.model.person.Phone;
 import seedu.coursepilot.model.person.Student;
 import seedu.coursepilot.model.tag.Tag;
 import seedu.coursepilot.testutil.PersonBuilder;
@@ -87,7 +90,8 @@ public class AddCommandParserTest {
         assertParseFailure(parser,
                 validExpectedPersonString + PHONE_DESC_AMY + EMAIL_DESC_AMY + NAME_DESC_AMY + MATRIC_DESC_AMY
                         + validExpectedPersonString,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME, PREFIX_MATRICNUMBER, PREFIX_EMAIL, PREFIX_PHONE));
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME, PREFIX_MATRICNUMBER,
+                        PREFIX_EMAIL, PREFIX_PHONE));
 
         // invalid value followed by valid value
 

@@ -6,7 +6,10 @@ import java.util.stream.Collectors;
 
 import seedu.coursepilot.model.AddressBook;
 import seedu.coursepilot.model.ReadOnlyAddressBook;
-import seedu.coursepilot.model.person.*;
+import seedu.coursepilot.model.person.Email;
+import seedu.coursepilot.model.person.MatricNumber;
+import seedu.coursepilot.model.person.Name;
+import seedu.coursepilot.model.person.Phone;
 import seedu.coursepilot.model.person.Student;
 import seedu.coursepilot.model.tag.Tag;
 

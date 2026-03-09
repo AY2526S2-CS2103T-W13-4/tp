@@ -57,7 +57,8 @@ public class AddCommandTest {
     @Test
     public void execute_duplicateMatricNumber_throwsCommandException() {
         Student alice = new PersonBuilder(ALICE).build();
-        Student bobWithAliceMatric = new PersonBuilder(BOB).withMatriculationNumber(ALICE.getMatriculationNumber().matricNumber).build();
+        Student bobWithAliceMatric = new PersonBuilder(BOB)
+                .withMatriculationNumber(ALICE.getMatriculationNumber().matricNumber).build();
         AddCommand addCommand = new AddCommand(bobWithAliceMatric);
         ModelStub modelStub = new ModelStubWithPerson(alice);
 

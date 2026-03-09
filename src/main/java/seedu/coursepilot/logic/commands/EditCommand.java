@@ -1,8 +1,8 @@
 package seedu.coursepilot.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_MATRICNUMBER;
 import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_MATRICNUMBER;
 import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_TAG;
@@ -21,7 +21,10 @@ import seedu.coursepilot.commons.util.ToStringBuilder;
 import seedu.coursepilot.logic.Messages;
 import seedu.coursepilot.logic.commands.exceptions.CommandException;
 import seedu.coursepilot.model.Model;
-import seedu.coursepilot.model.person.*;
+import seedu.coursepilot.model.person.Email;
+import seedu.coursepilot.model.person.MatricNumber;
+import seedu.coursepilot.model.person.Name;
+import seedu.coursepilot.model.person.Phone;
 import seedu.coursepilot.model.person.Student;
 import seedu.coursepilot.model.tag.Tag;
 
@@ -47,7 +50,8 @@ public class EditCommand extends Command {
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
-    public static final String MESSAGE_DUPLICATE_PERSON = "This person or matriculation number already exists in the address book.";
+    public static final String MESSAGE_DUPLICATE_PERSON =
+            "This person or matriculation number already exists in the address book.";
 
     private final Index index;
     private final EditPersonDescriptor editPersonDescriptor;
@@ -95,7 +99,8 @@ public class EditCommand extends Command {
         Name updatedName = editPersonDescriptor.getName().orElse(studentToEdit.getName());
         Phone updatedPhone = editPersonDescriptor.getPhone().orElse(studentToEdit.getPhone());
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(studentToEdit.getEmail());
-        MatricNumber updatedMatricNumber = editPersonDescriptor.getMatriculationNumber().orElse(studentToEdit.getMatriculationNumber());
+        MatricNumber updatedMatricNumber = editPersonDescriptor.getMatriculationNumber()
+                .orElse(studentToEdit.getMatriculationNumber());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(studentToEdit.getTags());
 
         return new Student(updatedName, updatedPhone, updatedEmail, updatedMatricNumber, updatedTags);

@@ -10,12 +10,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.coursepilot.commons.exceptions.IllegalValueException;
-import seedu.coursepilot.model.person.Address;
 import seedu.coursepilot.model.person.Email;
 import seedu.coursepilot.model.person.MatricNumber;
 import seedu.coursepilot.model.person.Name;
-import seedu.coursepilot.model.person.Student;
 import seedu.coursepilot.model.person.Phone;
+import seedu.coursepilot.model.person.Student;
 import seedu.coursepilot.model.tag.Tag;
 
 /**

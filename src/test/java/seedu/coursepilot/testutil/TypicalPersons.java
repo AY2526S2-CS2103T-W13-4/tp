@@ -1,9 +1,9 @@
 package seedu.coursepilot.testutil;
 
-import static seedu.coursepilot.logic.commands.CommandTestUtil.VALID_MATRIC_AMY;
-import static seedu.coursepilot.logic.commands.CommandTestUtil.VALID_MATRIC_BOB;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
+import static seedu.coursepilot.logic.commands.CommandTestUtil.VALID_MATRIC_AMY;
+import static seedu.coursepilot.logic.commands.CommandTestUtil.VALID_MATRIC_BOB;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.VALID_NAME_AMY;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
@@ -52,8 +52,8 @@ public class TypicalPersons {
     public static final Student AMY = new PersonBuilder().withName(VALID_NAME_AMY).withPhone(VALID_PHONE_AMY)
             .withEmail(VALID_EMAIL_AMY).withMatriculationNumber(VALID_MATRIC_AMY).withTags(VALID_TAG_FRIEND).build();
     public static final Student BOB = new PersonBuilder().withName(VALID_NAME_BOB).withPhone(VALID_PHONE_BOB)
-            .withEmail(VALID_EMAIL_BOB).withMatriculationNumber(VALID_MATRIC_BOB).withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND)
-            .build();
+            .withEmail(VALID_EMAIL_BOB).withMatriculationNumber(VALID_MATRIC_BOB)
+            .withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND).build();
 
     public static final String KEYWORD_MATCHING_MEIER = "Meier"; // A keyword that matches MEIER
 

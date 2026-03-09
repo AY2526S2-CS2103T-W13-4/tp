@@ -3,9 +3,9 @@ package seedu.coursepilot.model.person;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.coursepilot.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.VALID_MATRIC_AMY;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.VALID_MATRIC_BOB;
-import static seedu.coursepilot.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
@@ -44,7 +44,8 @@ public class StudentTest {
         assertTrue(ALICE.isSamePerson(editedAlice));
 
         // different name and matric number, all other attributes same -> returns false
-        editedAlice = new PersonBuilder(ALICE).withName(VALID_NAME_BOB).withMatriculationNumber(VALID_MATRIC_BOB).build();
+        editedAlice = new PersonBuilder(ALICE).withName(VALID_NAME_BOB)
+                .withMatriculationNumber(VALID_MATRIC_BOB).build();
         assertFalse(ALICE.isSamePerson(editedAlice));
 
         // name differs in case, all other attributes same -> returns true (due to same matric number)
@@ -52,7 +53,8 @@ public class StudentTest {
         assertTrue(BOB.isSamePerson(editedBob));
 
         // name differs in case, and different matric number -> returns false
-        editedBob = new PersonBuilder(BOB).withName(VALID_NAME_BOB.toLowerCase()).withMatriculationNumber(VALID_MATRIC_AMY).build();
+        editedBob = new PersonBuilder(BOB).withName(VALID_NAME_BOB.toLowerCase())
+                .withMatriculationNumber(VALID_MATRIC_AMY).build();
         assertFalse(BOB.isSamePerson(editedBob));
 
         // name has trailing spaces, all other attributes same -> returns true (due to same matric number)
@@ -61,7 +63,8 @@ public class StudentTest {
         assertTrue(BOB.isSamePerson(editedBob));
 
         // name has trailing spaces, and different matric number -> returns false
-        editedBob = new PersonBuilder(BOB).withName(nameWithTrailingSpaces).withMatriculationNumber(VALID_MATRIC_AMY).build();
+        editedBob = new PersonBuilder(BOB).withName(nameWithTrailingSpaces)
+                .withMatriculationNumber(VALID_MATRIC_AMY).build();
         assertFalse(BOB.isSamePerson(editedBob));
     }
 
@@ -107,7 +110,8 @@ public class StudentTest {
     @Test
     public void toStringMethod() {
         String expected = Student.class.getCanonicalName() + "{name=" + ALICE.getName() + ", phone=" + ALICE.getPhone()
-                + ", email=" + ALICE.getEmail() + ", matriculationNumber=" + ALICE.getMatriculationNumber() + ", tags=" + ALICE.getTags() + "}";
+                + ", email=" + ALICE.getEmail() + ", matriculationNumber=" + ALICE.getMatriculationNumber()
+                + ", tags=" + ALICE.getTags() + "}";
         assertEquals(expected, ALICE.toString());
     }
 }
