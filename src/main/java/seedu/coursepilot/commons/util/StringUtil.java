@@ -38,6 +38,10 @@ public class StringUtil {
                 .anyMatch(preppedWord::equalsIgnoreCase);
     }
 
+    public static boolean startsWithInteger(String value, String prefix) {
+        return value.startsWith(prefix);
+    }
+
     /**
      * Returns a detailed message of the t, including the stack trace.
      */
