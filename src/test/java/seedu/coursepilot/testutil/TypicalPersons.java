@@ -25,10 +25,10 @@ public class TypicalPersons {
 
     public static final Student ALICE = new PersonBuilder().withName("Alice Pauline")
             .withMatriculationNumber("A111111").withEmail("alice@example.com")
-            .withPhone("94351253")
+            .withPhone("94351253").withRemark("She likes aardvarks.")
             .withTags("friends").build();
     public static final Student BENSON = new PersonBuilder().withName("Benson Meier")
-            .withMatriculationNumber("A222222")
+            .withMatriculationNumber("A222222").withRemark("He can't take beer!")
             .withEmail("johnd@example.com").withPhone("98765432")
             .withTags("owesMoney", "friends").build();
     public static final Student CARL = new PersonBuilder().withName("Carl Kurz").withPhone("95352563")

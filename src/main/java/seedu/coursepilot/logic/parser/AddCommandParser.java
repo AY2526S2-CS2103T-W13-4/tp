@@ -16,6 +16,7 @@ import seedu.coursepilot.model.person.Email;
 import seedu.coursepilot.model.person.MatricNumber;
 import seedu.coursepilot.model.person.Name;
 import seedu.coursepilot.model.person.Phone;
+import seedu.coursepilot.model.person.Remark;
 import seedu.coursepilot.model.person.Student;
 import seedu.coursepilot.model.tag.Tag;
 
@@ -45,9 +46,10 @@ public class AddCommandParser implements Parser<AddCommand> {
         Email email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get());
         MatricNumber matriculationNumber =
                 ParserUtil.parseMatricNumber(argMultimap.getValue(PREFIX_MATRICNUMBER).get());
+        Remark remark = new Remark(""); // add command does not allow adding remarks straight away
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
 
-        Student student = new Student(name, phone, email, matriculationNumber, tagList);
+        Student student = new Student(name, phone, email, matriculationNumber, remark, tagList);
 
         return new AddCommand(student);
     }
