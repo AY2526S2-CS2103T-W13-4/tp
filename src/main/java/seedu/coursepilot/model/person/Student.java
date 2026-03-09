@@ -21,6 +21,7 @@ public class Student {
     private final Phone phone;
     private final Email email;
     private final MatricNumber matriculationNumber;
+    private final Remark remark;
 
     // Data fields
     private final Set<Tag> tags = new HashSet<>();
@@ -28,12 +29,14 @@ public class Student {
     /**
      * Every field must be present and not null.
      */
-    public Student(Name name, Phone phone, Email email, MatricNumber matriculationNumber, Set<Tag> tags) {
-        requireAllNonNull(name, phone, email, matriculationNumber, tags);
+    public Student(Name name, Phone phone, Email email, MatricNumber matriculationNumber,
+                Remark remark, Set<Tag> tags) {
+        requireAllNonNull(name, phone, email, matriculationNumber, remark, tags);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.matriculationNumber = matriculationNumber;
+        this.remark = remark;
         this.tags.addAll(tags);
     }
 
@@ -51,6 +54,10 @@ public class Student {
 
     public MatricNumber getMatriculationNumber() {
         return matriculationNumber;
+    }
+
+    public Remark getRemark() {
+        return remark;
     }
 
     /**

@@ -7,6 +7,7 @@ import seedu.coursepilot.model.person.Email;
 import seedu.coursepilot.model.person.MatricNumber;
 import seedu.coursepilot.model.person.Name;
 import seedu.coursepilot.model.person.Phone;
+import seedu.coursepilot.model.person.Remark;
 import seedu.coursepilot.model.person.Student;
 import seedu.coursepilot.model.tag.Tag;
 import seedu.coursepilot.model.util.SampleDataUtil;
@@ -20,11 +21,13 @@ public class PersonBuilder {
     public static final String DEFAULT_PHONE = "85355255";
     public static final String DEFAULT_EMAIL = "amy@gmail.com";
     public static final String DEFAULT_MATRIC = "A000000";
+    public static final String DEFAULT_REMARK = "She likes aardvarks.";
 
     private Name name;
     private Phone phone;
     private Email email;
     private MatricNumber matricNumber;
+    private Remark remark;
     private Set<Tag> tags;
 
     /**
@@ -35,6 +38,7 @@ public class PersonBuilder {
         phone = new Phone(DEFAULT_PHONE);
         email = new Email(DEFAULT_EMAIL);
         matricNumber = new MatricNumber(DEFAULT_MATRIC);
+        remark = new Remark(DEFAULT_REMARK);
         tags = new HashSet<>();
     }
 
@@ -46,6 +50,7 @@ public class PersonBuilder {
         phone = studentToCopy.getPhone();
         email = studentToCopy.getEmail();
         matricNumber = studentToCopy.getMatriculationNumber();
+        remark = studentToCopy.getRemark();
         tags = new HashSet<>(studentToCopy.getTags());
     }
 
@@ -89,8 +94,16 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Sets the {@code Remark} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withRemark(String remark) {
+        this.remark = new Remark(remark);
+        return this;
+    }
+
     public Student build() {
-        return new Student(name, phone, email, matricNumber, tags);
+        return new Student(name, phone, email, matricNumber, remark, tags);
     }
 
 }

@@ -25,6 +25,7 @@ import seedu.coursepilot.model.person.Email;
 import seedu.coursepilot.model.person.MatricNumber;
 import seedu.coursepilot.model.person.Name;
 import seedu.coursepilot.model.person.Phone;
+import seedu.coursepilot.model.person.Remark;
 import seedu.coursepilot.model.person.Student;
 import seedu.coursepilot.model.tag.Tag;
 
@@ -101,9 +102,10 @@ public class EditCommand extends Command {
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(studentToEdit.getEmail());
         MatricNumber updatedMatricNumber = editPersonDescriptor.getMatriculationNumber()
                 .orElse(studentToEdit.getMatriculationNumber());
+        Remark updatedRemark = studentToEdit.getRemark(); // edit command does not allow editing remarks
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(studentToEdit.getTags());
 
-        return new Student(updatedName, updatedPhone, updatedEmail, updatedMatricNumber, updatedTags);
+        return new Student(updatedName, updatedPhone, updatedEmail, updatedMatricNumber, updatedRemark, updatedTags);
     }
 
     @Override
