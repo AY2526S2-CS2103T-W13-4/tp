@@ -1,7 +1,6 @@
 package seedu.coursepilot.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.coursepilot.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import seedu.coursepilot.logic.commands.exceptions.CommandException;
 import seedu.coursepilot.model.Model;
@@ -52,7 +51,9 @@ public class ListCommand extends Command {
             throw new CommandException(MESSAGE_NO_CURRENT_OPERATING_TUTORIAL);
         }
 
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        model.updateFilteredPersonList(
+            student -> model.getCurrentOperatingTutorial().get().hasStudent(student)
+        );
         return new CommandResult(MESSAGE_SUCCESS_STUDENT);
     }
 }

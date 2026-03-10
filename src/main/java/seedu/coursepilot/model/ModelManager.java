@@ -15,6 +15,7 @@ import seedu.coursepilot.commons.core.GuiSettings;
 import seedu.coursepilot.commons.core.LogsCenter;
 import seedu.coursepilot.model.person.Student;
 import seedu.coursepilot.model.tutorial.Tutorial;
+import seedu.coursepilot.model.util.SampleDataUtil;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -40,12 +41,8 @@ public class ModelManager implements Model {
         this.userPrefs = new UserPrefs(userPrefs);
         this.filteredStudents = new FilteredList<>(this.addressBook.getPersonList());
 
-        // Dummy data, need to connect to storage
-        this.tutorialList = FXCollections.observableArrayList(
-                new Tutorial("CS2103T-W13", "Monday", "10:00-11:00", 20),
-                new Tutorial("CS2103T-W14", "Wednesday", "12:00-13:00", 20),
-                new Tutorial("CS2103T-W15", "Friday", "14:00-15:00", 20)
-        );
+        // Test data, need to connect to storage
+        this.tutorialList = SampleDataUtil.getSampleTutorials();
         currentOperatingTutorial = null;
     }
 

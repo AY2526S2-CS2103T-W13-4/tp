@@ -30,22 +30,24 @@ public class ListCommandTest {
     @Test
     public void execute_listTutorial_success() {
         assertCommandSuccess(new ListCommand(ListCommand.ListTarget.TUTORIAL),
-                model, ListCommand.MESSAGE_SUCCESS_TUTORIAL, expectedModel);
+            model, ListCommand.MESSAGE_SUCCESS_TUTORIAL, expectedModel);
     }
 
     @Test
     public void execute_listStudentWithNoCurrentOperatingTutorial_throwsCommandException() {
         assertCommandFailure(new ListCommand(ListCommand.ListTarget.STUDENT),
-                model, ListCommand.MESSAGE_NO_CURRENT_OPERATING_TUTORIAL);
+            model, ListCommand.MESSAGE_NO_CURRENT_OPERATING_TUTORIAL);
     }
 
     @Test
     public void execute_listStudentWithCurrentOperatingTutorial_success() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        model.setCurrentOperatingTutorial(model.getTutorialList().get(0));
         expectedModel.setCurrentOperatingTutorial(expectedModel.getTutorialList().get(0));
+        expectedModel.updateFilteredPersonList(student ->
+            expectedModel.getCurrentOperatingTutorial().get().hasStudent(student));
+        model.setCurrentOperatingTutorial(model.getTutorialList().get(0));
 
         assertCommandSuccess(new ListCommand(ListCommand.ListTarget.STUDENT),
-                model, ListCommand.MESSAGE_SUCCESS_STUDENT, expectedModel);
+            model, ListCommand.MESSAGE_SUCCESS_STUDENT, expectedModel);
     }
 }
