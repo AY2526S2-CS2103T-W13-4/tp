@@ -40,19 +40,33 @@
 }
 
 .table-view {
-    -fx-base: #1d1d1d;
-    -fx-control-inner-background: #1d1d1d;
-    -fx-background-color: #1d1d1d;
+    -fx-base: #383838;
+    -fx-control-inner-background: #383838;
+    -fx-control-inner-background-alt: #383838;
+    -fx-background-color: #383838;
     -fx-table-cell-border-color: transparent;
     -fx-table-header-border-color: transparent;
     -fx-padding: 5;
+}
+
+.table-view .virtual-flow {
+    -fx-background-color: transparent;
+}
+
+.table-view .clipped-container {
+    -fx-background-color: transparent;
+}
+
+.table-view .sheet {
+    -fx-background-color: transparent;
 }
 
 .table-view .column-header-background {
     -fx-background-color: transparent;
 }
 
-.table-view .column-header, .table-view .filler {
+.table-view .column-header,
+.table-view .filler {
     -fx-size: 35;
     -fx-border-width: 0 0 1 0;
     -fx-background-color: transparent;
@@ -65,15 +79,31 @@
 }
 
 .table-view .column-header .label {
-    -fx-font-size: 20pt;
-    -fx-font-family: "Segoe UI Light";
+    -fx-font-size: 28px;
     -fx-text-fill: white;
+    -fx-font-weight: bold;
     -fx-alignment: center-left;
-    -fx-opacity: 1;
 }
 
 .table-view:focused .table-row-cell:filled:focused:selected {
     -fx-background-color: -fx-focus-color;
+}
+
+.table-view .table-row-cell:filled:odd {
+    -fx-background-color: #515658;
+}
+
+.table-view .table-row-cell:filled:even {
+    -fx-background-color: #3c3e3f;
+}
+
+.table-view .table-row-cell:empty {
+    -fx-background-color: #383838;
+}
+
+.table-view .table-cell:empty {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
 }
 
 .split-pane:horizontal .split-pane-divider {
@@ -349,4 +379,22 @@
     -fx-border-radius: 2;
     -fx-background-radius: 2;
     -fx-font-size: 11;
+}
+
+.tutorial-panel-header {
+    -fx-font-size: 28px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+#tutorialCodeListView .table-cell {
+    -fx-text-fill: #c7d0d9;
+    -fx-font-size: 15px;
+    -fx-padding: 8 6 8 6;
+}
+
+#tutorialDetailsTable .table-cell {
+    -fx-font-size: 15px;
+    -fx-font-size: 15px;
+    -fx-padding: 8 6 8 6;
 }

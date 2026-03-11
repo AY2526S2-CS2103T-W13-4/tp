@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      spacing="8.0">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10" />
+    </padding>
+
+    <Label text="Tutorial Details" styleClass="tutorial-panel-header" />
+
+    <TableView fx:id="tutorialDetailsTable"
+               VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="dayColumn" text="Day" />
+            <TableColumn fx:id="timeSlotColumn" text="Time Slot" />
+            <TableColumn fx:id="capacityColumn" text="Capacity" />
+        </columns>
+    </TableView>
+</VBox>
