@@ -1,6 +1,7 @@
 package seedu.coursepilot.logic.parser;
 
 import static seedu.coursepilot.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.coursepilot.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT_FLAG;
 
 import java.util.Arrays;
 
@@ -10,7 +11,6 @@ import seedu.coursepilot.model.person.EmailContainsKeywordsPredicate;
 import seedu.coursepilot.model.person.MatricNumberStartsWithKeywordsPredicate;
 import seedu.coursepilot.model.person.NameContainsKeywordsPredicate;
 import seedu.coursepilot.model.person.PhoneStartsWithKeywordsPredicate;
-import seedu.coursepilot.model.person.TutorialKeywordPredicate;
 
 /**
  * Parses input arguments and creates a new FindCommand object
@@ -31,17 +31,25 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         String[] nameKeywords = trimmedArgs.split("\\s+");
 
-        switch (nameKeywords[0]) {
-        case "/tutorial":
-            return new FindCommand(new TutorialKeywordPredicate(Arrays.asList(nameKeywords)));
-        case "/phone":
-            return new FindCommand(new PhoneStartsWithKeywordsPredicate(Arrays.asList(nameKeywords)));
-        case "/email":
-            return new FindCommand(new EmailContainsKeywordsPredicate(Arrays.asList(nameKeywords)));
-        case "/matric":
-            return new FindCommand(new MatricNumberStartsWithKeywordsPredicate(Arrays.asList(nameKeywords)));
-        default:
-            return new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList(nameKeywords)));
+        if (nameKeywords[0].startsWith("/")) {
+            FindCommand.Flag flag = FindCommand.Flag.fromString(nameKeywords[0]);
+            if (flag == null) {
+                throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT_FLAG, FindCommand.MESSAGE_USAGE_FLAG));
+            }
+            switch (flag) {
+            case PHONE:
+                return new FindCommand(new PhoneStartsWithKeywordsPredicate(Arrays.asList(nameKeywords)));
+            case EMAIL:
+                return new FindCommand(new EmailContainsKeywordsPredicate(Arrays.asList(nameKeywords)));
+            case MATRIC:
+                return new FindCommand(new MatricNumberStartsWithKeywordsPredicate(Arrays.asList(nameKeywords)));
+            default:
+                // Default case only occurs if you added a flag into FindCommand.Flag but did not add the case here
+                throw new AssertionError("Unhandled flag: " + flag);
+            }
         }
+
+        return new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList(nameKeywords)));
     }
 }
