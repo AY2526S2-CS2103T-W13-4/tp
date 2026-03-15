@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import seedu.coursepilot.commons.util.ToStringBuilder;
 import seedu.coursepilot.logic.Messages;
+import seedu.coursepilot.logic.commands.exceptions.CommandException;
 import seedu.coursepilot.model.Model;
 import seedu.coursepilot.model.person.Student;
 
@@ -74,6 +75,9 @@ public class FindCommand extends Command {
             + Flag.validFlagsString() + "\n"
             + "Example: " + COMMAND_WORD + " /email @u.nus.edu @gmail";
 
+    public static final String MESSAGE_NO_CURRENT_OPERATING_TUTORIAL =
+        "No current operating tutorial selected. Use select first.";
+
     private final Predicate<Student> predicate;
 
     public FindCommand(Predicate<Student> predicate) {
@@ -81,8 +85,13 @@ public class FindCommand extends Command {
     }
 
     @Override
-    public CommandResult execute(Model model) {
+    public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
+
+        if (model.getCurrentOperatingTutorial().isEmpty()) {
+            throw new CommandException(MESSAGE_NO_CURRENT_OPERATING_TUTORIAL);
+        }
+
         model.updateFilteredPersonList(predicate);
         return new CommandResult(
                 String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredPersonList().size()));
