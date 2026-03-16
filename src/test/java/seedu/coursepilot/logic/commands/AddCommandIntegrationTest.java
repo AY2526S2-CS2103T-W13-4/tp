@@ -12,8 +12,8 @@ import seedu.coursepilot.model.Model;
 import seedu.coursepilot.model.ModelManager;
 import seedu.coursepilot.model.UserPrefs;
 import seedu.coursepilot.model.person.Student;
-import seedu.coursepilot.testutil.PersonBuilder;
 import seedu.coursepilot.model.tutorial.Tutorial;
+import seedu.coursepilot.testutil.PersonBuilder;
 
 /**
  * Contains integration tests (interaction with the Model) for {@code AddCommand}.
