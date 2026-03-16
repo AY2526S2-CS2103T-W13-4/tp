@@ -102,7 +102,7 @@ public class AddCommandTest {
     /**
      * A default model stub that have all of the methods failing.
      */
-    private abstract class ModelStub implements Model {
+    private class ModelStub implements Model {
         @Override
         public void setUserPrefs(ReadOnlyUserPrefs userPrefs) {
             throw new AssertionError("This method should not be called.");
@@ -207,12 +207,26 @@ public class AddCommandTest {
         public void updateFilteredTutorialList(Predicate<Tutorial> predicate) {
             throw new AssertionError("This method should not be called.");
         }
+        @Override
+        public boolean hasTutorial(Tutorial tutorial) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void deleteTutorial(Tutorial target) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addTutorial(Tutorial tutorial) {
+            throw new AssertionError("This method should not be called.");
+        }
     }
 
     /**
      * A Model stub that contains a single person.
      */
-    private abstract class ModelStubWithPerson extends ModelStub {
+    private class ModelStubWithPerson extends ModelStub {
         private final Student student;
 
         ModelStubWithPerson(Student student) {
@@ -230,7 +244,7 @@ public class AddCommandTest {
     /**
      * A Model stub that always accept the person being added.
      */
-    private abstract class ModelStubAcceptingPersonAdded extends ModelStub {
+    private class ModelStubAcceptingPersonAdded extends ModelStub {
         final ArrayList<Student> personsAdded = new ArrayList<>();
 
         @Override
