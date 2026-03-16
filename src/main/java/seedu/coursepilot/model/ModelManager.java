@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.coursepilot.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
@@ -149,18 +150,22 @@ public class ModelManager implements Model {
 
     @Override
     public Optional<Tutorial> getCurrentOperatingTutorial() {
-        return Optional.ofNullable(currentOperatingTutorial);
+        return Optional.ofNullable(currentOperatingTutorial.get());
     }
 
     @Override
+    public ObjectProperty<Tutorial> getCurrentOperatingTutorialProperty() {
+        return currentOperatingTutorial;
+    }
+
     public void setCurrentOperatingTutorial(Tutorial tutorial) {
         requireNonNull(tutorial);
-        currentOperatingTutorial = tutorial;
+        currentOperatingTutorial.set(tutorial);
     }
 
     @Override
     public void clearCurrentOperatingTutorial() {
-        currentOperatingTutorial = null;
+        currentOperatingTutorial.setValue(null);
     }
 
     //=========== Filtered Person List Accessors =============================================================
@@ -210,5 +215,4 @@ public class ModelManager implements Model {
                 && Optional.ofNullable(currentOperatingTutorial)
                     .equals(Optional.ofNullable(otherModelManager.currentOperatingTutorial));
     }
-
 }
