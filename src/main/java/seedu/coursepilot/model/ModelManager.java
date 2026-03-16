@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.coursepilot.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
@@ -215,5 +216,4 @@ public class ModelManager implements Model {
                 && Optional.ofNullable(currentOperatingTutorial.get())
                     .equals(Optional.ofNullable(otherModelManager.currentOperatingTutorial.get()));
     }
-
 }

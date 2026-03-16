@@ -80,8 +80,13 @@ public class LogicManager implements Logic {
     }
 
     @Override
-    public Tutorial getCurrentOperatingTutorial() {
-        return model.getCurrentOperatingTutorial().orElse(null);
+    public Optional<Tutorial> getCurrentOperatingTutorial() {
+        return model.getCurrentOperatingTutorial();
+    }
+
+    @Override
+    public ObjectProperty<Tutorial> getCurrentOperatingTutorialProperty() {
+        return model.getCurrentOperatingTutorialProperty();
     }
 
     @Override

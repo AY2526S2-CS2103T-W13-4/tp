@@ -1,6 +1,7 @@
 package seedu.coursepilot.logic;
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
@@ -39,7 +40,10 @@ public interface Logic {
     ObservableList<Tutorial> getFilteredTutorialList();
 
     /** Returns the current operating tutorial, if any. */
-    Tutorial getCurrentOperatingTutorial();
+    Optional<Tutorial> getCurrentOperatingTutorial();
+
+    /** Returns the current operating tutorial, for JavaFX UI */
+    ObjectProperty<Tutorial> getCurrentOperatingTutorialProperty();
 
     /** Returns the current operating tutorial, for JavaFX UI */
     ObjectProperty<Tutorial> getCurrentOperatingTutorialProperty();
