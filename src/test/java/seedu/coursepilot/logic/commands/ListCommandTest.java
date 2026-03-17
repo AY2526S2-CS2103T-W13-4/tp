@@ -41,11 +41,13 @@ public class ListCommandTest {
 
     @Test
     public void execute_listStudentWithCurrentOperatingTutorial_success() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
+        // Set the current operating tutorial to the first tutorial in the list
+        model.setCurrentOperatingTutorial(model.getTutorialList().get(0));
         expectedModel.setCurrentOperatingTutorial(expectedModel.getTutorialList().get(0));
+
+        // Update filter to show only students in the current tutorial
         expectedModel.updateFilteredPersonList(student ->
             expectedModel.getCurrentOperatingTutorial().get().hasStudent(student));
-        model.setCurrentOperatingTutorial(model.getTutorialList().get(0));
 
         assertCommandSuccess(new ListCommand(ListCommand.ListTarget.STUDENT),
             model, ListCommand.MESSAGE_SUCCESS_STUDENT, expectedModel);

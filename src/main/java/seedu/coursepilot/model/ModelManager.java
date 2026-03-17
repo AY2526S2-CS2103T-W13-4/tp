@@ -183,7 +183,6 @@ public class ModelManager implements Model {
         return addressBook.equals(otherModelManager.addressBook)
                 && userPrefs.equals(otherModelManager.userPrefs)
                 && filteredStudents.equals(otherModelManager.filteredStudents)
-                && tutorialList.equals(otherModelManager.tutorialList)
                 && Objects.equals(currentOperatingTutorial.get(),
                         otherModelManager.currentOperatingTutorial.get());
     }
