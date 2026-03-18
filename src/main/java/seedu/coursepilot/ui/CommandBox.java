@@ -70,6 +70,22 @@ public class CommandBox extends UiPart<Region> {
     }
 
     /**
+     * Sets the text in the command box programmatically.
+     * Used by AI suggestion to pre-fill a translated command for user review.
+     */
+    public void setCommandText(String text) {
+        commandTextField.setText(text);
+        commandTextField.positionCaret(text.length());
+    }
+
+    /**
+     * Returns the current text in the command box.
+     */
+    public String getCommandText() {
+        return commandTextField.getText();
+    }
+
+    /**
      * Represents a function that can execute commands.
      */
     @FunctionalInterface

@@ -3,6 +3,7 @@ package seedu.coursepilot.logic.commands;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import seedu.coursepilot.commons.util.ToStringBuilder;
 
@@ -19,6 +20,9 @@ public class CommandResult {
     /** The application should exit. */
     private final boolean exit;
 
+    /** AI-suggested command to pre-fill in the command box for user review. */
+    private final String suggestedCommand;
+
     /**
      * Constructs a {@code CommandResult} with the specified fields.
      */
@@ -26,6 +30,7 @@ public class CommandResult {
         this.feedbackToUser = requireNonNull(feedbackToUser);
         this.showHelp = showHelp;
         this.exit = exit;
+        this.suggestedCommand = null;
     }
 
     /**
@@ -34,6 +39,17 @@ public class CommandResult {
      */
     public CommandResult(String feedbackToUser) {
         this(feedbackToUser, false, false);
+    }
+
+    /**
+     * Constructs a {@code CommandResult} with an AI-suggested command.
+     * The suggested command will be pre-filled in the command box for user review.
+     */
+    public CommandResult(String feedbackToUser, String suggestedCommand) {
+        this.feedbackToUser = requireNonNull(feedbackToUser);
+        this.showHelp = false;
+        this.exit = false;
+        this.suggestedCommand = suggestedCommand;
     }
 
     public String getFeedbackToUser() {
@@ -46,6 +62,10 @@ public class CommandResult {
 
     public boolean isExit() {
         return exit;
+    }
+
+    public Optional<String> getSuggestedCommand() {
+        return Optional.ofNullable(suggestedCommand);
     }
 
     @Override
@@ -62,12 +82,13 @@ public class CommandResult {
         CommandResult otherCommandResult = (CommandResult) other;
         return feedbackToUser.equals(otherCommandResult.feedbackToUser)
                 && showHelp == otherCommandResult.showHelp
-                && exit == otherCommandResult.exit;
+                && exit == otherCommandResult.exit
+                && Objects.equals(suggestedCommand, otherCommandResult.suggestedCommand);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(feedbackToUser, showHelp, exit);
+        return Objects.hash(feedbackToUser, showHelp, exit, suggestedCommand);
     }
 
     @Override
@@ -76,6 +97,7 @@ public class CommandResult {
                 .add("feedbackToUser", feedbackToUser)
                 .add("showHelp", showHelp)
                 .add("exit", exit)
+                .add("suggestedCommand", suggestedCommand)
                 .toString();
     }
 

@@ -44,21 +44,27 @@ dependencies {
     String jUnitVersion = '5.4.0'
     String javaFxVersion = '17.0.7'
 
-    implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: 'win'
-    implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: 'mac'
-    implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: 'linux'
-    implementation group: 'org.openjfx', name: 'javafx-controls', version: javaFxVersion, classifier: 'win'
-    implementation group: 'org.openjfx', name: 'javafx-controls', version: javaFxVersion, classifier: 'mac'
-    implementation group: 'org.openjfx', name: 'javafx-controls', version: javaFxVersion, classifier: 'linux'
-    implementation group: 'org.openjfx', name: 'javafx-fxml', version: javaFxVersion, classifier: 'win'
-    implementation group: 'org.openjfx', name: 'javafx-fxml', version: javaFxVersion, classifier: 'mac'
-    implementation group: 'org.openjfx', name: 'javafx-fxml', version: javaFxVersion, classifier: 'linux'
-    implementation group: 'org.openjfx', name: 'javafx-graphics', version: javaFxVersion, classifier: 'win'
-    implementation group: 'org.openjfx', name: 'javafx-graphics', version: javaFxVersion, classifier: 'mac'
-    implementation group: 'org.openjfx', name: 'javafx-graphics', version: javaFxVersion, classifier: 'linux'
+    String osName = System.getProperty('os.name').toLowerCase()
+    String osArch = System.getProperty('os.arch')
+    String platform
+    if (osName.contains('win')) {
+        platform = 'win'
+    } else if (osName.contains('mac') || osName.contains('darwin')) {
+        platform = osArch == 'aarch64' ? 'mac-aarch64' : 'mac'
+    } else {
+        platform = 'linux'
+    }
 
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.0'
-    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.7.4'
+    implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: platform
+    implementation group: 'org.openjfx', name: 'javafx-controls', version: javaFxVersion, classifier: platform
+    implementation group: 'org.openjfx', name: 'javafx-fxml', version: javaFxVersion, classifier: platform
+    implementation group: 'org.openjfx', name: 'javafx-graphics', version: javaFxVersion, classifier: platform
+
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.17.2'
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.17.2'
+
+    implementation 'dev.langchain4j:langchain4j:0.36.2'
+    implementation 'dev.langchain4j:langchain4j-ollama:0.36.2'
 
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: jUnitVersion
 
@@ -67,6 +73,7 @@ dependencies {
 
 shadowJar {
     archiveFileName = 'coursepilot.jar'
+    mergeServiceFiles()
 }
 
 defaultTasks 'clean', 'test'
