@@ -16,6 +16,7 @@ import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import seedu.coursepilot.commons.core.GuiSettings;
 import seedu.coursepilot.logic.Messages;
@@ -32,17 +33,19 @@ public class AddCommandTest {
 
     @Test
     public void constructor_nullPerson_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> new AddCommand(null));
+        assertThrows(NullPointerException.class, () -> new AddCommand((Student) null));
     }
 
     @Test
     public void execute_personAcceptedByModel_addSuccessful() throws Exception {
         ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
         Student validStudent = new PersonBuilder().build();
+        Tutorial tutorial = new Tutorial("T01", "Mon", "1-2pm", 20);
+        modelStub.setCurrentOperatingTutorial(tutorial);
 
         CommandResult commandResult = new AddCommand(validStudent).execute(modelStub);
 
-        assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(validStudent)),
+        assertEquals(String.format(AddCommand.MESSAGE_SUCCESS_STUDENT, Messages.format(validStudent)),
                 commandResult.getFeedbackToUser());
         assertEquals(Arrays.asList(validStudent), modelStub.personsAdded);
     }
@@ -51,7 +54,10 @@ public class AddCommandTest {
     public void execute_duplicatePerson_throwsCommandException() {
         Student validStudent = new PersonBuilder().build();
         AddCommand addCommand = new AddCommand(validStudent);
-        ModelStub modelStub = new ModelStubWithPerson(validStudent);
+        ModelStubWithPerson modelStub = new ModelStubWithPerson(validStudent);
+        Tutorial tutorial = new Tutorial("T01", "Mon", "1-2pm", 20);
+        tutorial.addStudent(validStudent);
+        modelStub.setCurrentOperatingTutorial(tutorial);
 
         assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_PERSON, () -> addCommand.execute(modelStub));
     }
@@ -62,7 +68,10 @@ public class AddCommandTest {
         Student bobWithAliceMatric = new PersonBuilder(BOB)
                 .withMatriculationNumber(ALICE.getMatriculationNumber().matricNumber).build();
         AddCommand addCommand = new AddCommand(bobWithAliceMatric);
-        ModelStub modelStub = new ModelStubWithPerson(alice);
+        ModelStubWithPerson modelStub = new ModelStubWithPerson(alice);
+        Tutorial tutorial = new Tutorial("T01", "Mon", "1-2pm", 20);
+        tutorial.addStudent(alice);
+        modelStub.setCurrentOperatingTutorial(tutorial);
 
         assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_PERSON, () -> addCommand.execute(modelStub));
     }
@@ -102,8 +111,14 @@ public class AddCommandTest {
      * A default model stub that have all of the methods failing.
      */
     private class ModelStub implements Model {
+        private Tutorial currentTutorial;
         @Override
         public void setUserPrefs(ReadOnlyUserPrefs userPrefs) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setTutorial(Tutorial target, Tutorial editedTutorial) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -173,22 +188,46 @@ public class AddCommandTest {
         }
 
         @Override
-        public ObservableList<Tutorial> getTutorialList() {
+        public ObservableList<Tutorial> getFilteredTutorialList() {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
         public Optional<Tutorial> getCurrentOperatingTutorial() {
+            return Optional.ofNullable(currentTutorial);
+        }
+
+        @Override
+        public ObjectProperty<Tutorial> getCurrentOperatingTutorialProperty() {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
         public void setCurrentOperatingTutorial(Tutorial tutorial) {
-            throw new AssertionError("This method should not be called.");
-        };
+            this.currentTutorial = tutorial;
+        }
 
         @Override
         public void clearCurrentOperatingTutorial() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void updateFilteredTutorialList(Predicate<Tutorial> predicate) {
+            throw new AssertionError("This method should not be called.");
+        }
+        @Override
+        public boolean hasTutorial(Tutorial tutorial) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void deleteTutorial(Tutorial target) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addTutorial(Tutorial tutorial) {
             throw new AssertionError("This method should not be called.");
         }
     }
