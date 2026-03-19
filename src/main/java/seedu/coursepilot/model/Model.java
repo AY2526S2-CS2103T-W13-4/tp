@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import seedu.coursepilot.commons.core.GuiSettings;
-import seedu.coursepilot.model.person.Student;
+import seedu.coursepilot.model.student.Student;
 import seedu.coursepilot.model.tutorial.Tutorial;
 
 /**
@@ -15,7 +15,7 @@ import seedu.coursepilot.model.tutorial.Tutorial;
  */
 public interface Model {
     /** {@code Predicate} that always evaluate to true */
-    Predicate<Student> PREDICATE_SHOW_ALL_PERSONS = unused -> true;
+    Predicate<Student> PREDICATE_SHOW_ALL_STUDENTS = unused -> true;
 
     Predicate<Tutorial> PREDICATE_SHOW_ALL_TUTORIALS = unused -> true;
 
@@ -40,55 +40,56 @@ public interface Model {
     void setGuiSettings(GuiSettings guiSettings);
 
     /**
-     * Returns the user prefs' address book file path.
+     * Returns the user prefs' course pilot file path.
      */
-    Path getAddressBookFilePath();
+    Path getCoursePilotFilePath();
 
     /**
-     * Sets the user prefs' address book file path.
+     * Sets the user prefs' course pilot file path.
      */
-    void setAddressBookFilePath(Path addressBookFilePath);
+    void setCoursePilotFilePath(Path coursePilotFilePath);
 
     /**
-     * Replaces address book data with the data in {@code addressBook}.
+     * Replaces course pilot data with the data in {@code coursePilot}.
      */
-    void setAddressBook(ReadOnlyAddressBook addressBook);
+    void setCoursePilot(ReadOnlyCoursePilot coursePilot);
 
-    /** Returns the AddressBook */
-    ReadOnlyAddressBook getAddressBook();
+    /** Returns the CoursePilot */
+    ReadOnlyCoursePilot getCoursePilot();
 
     /**
-     * Returns true if a person with the same identity as {@code person} exists in the address book.
+     * Returns true if a student with the same identity as {@code student} exists in the course pilot.
      */
-    boolean hasPerson(Student student);
+    boolean hasStudent(Student student);
     boolean hasTutorial(Tutorial tutorial);
     /**
-     * Deletes the given person.
-     * The person must exist in the address book.
+     * Deletes the given student.
+     * The student must exist in the course pilot.
      */
-    void deletePerson(Student target);
+    void deleteStudent(Student target);
     void deleteTutorial(Tutorial target);
     /**
-     * Adds the given person.
-     * {@code person} must not already exist in the address book.
+     * Adds the given student.
+     * {@code student} must not already exist in the course pilot.
      */
-    void addPerson(Student student);
+    void addStudent(Student student);
     void addTutorial(Tutorial tutorial);
     /**
-     * Replaces the given person {@code target} with {@code editedPerson}.
-     * {@code target} must exist in the address book.
-     * The person identity of {@code editedPerson} must not be the same as another existing person in the address book.
+     * Replaces the given student {@code target} with {@code editedStudent}.
+     * {@code target} must exist in the course pilot.
+     * The student identity of {@code editedStudent} must not be the same as
+     * another existing student in the course pilot.
      */
-    void setPerson(Student target, Student editedStudent);
+    void setStudent(Student target, Student editedStudent);
     void setTutorial(Tutorial target, Tutorial editedTutorial);
-    /** Returns an unmodifiable view of the filtered person list */
-    ObservableList<Student> getFilteredPersonList();
+    /** Returns an unmodifiable view of the filtered student list */
+    ObservableList<Student> getFilteredStudentList();
     ObservableList<Tutorial> getFilteredTutorialList();
     /**
-     * Updates the filter of the filtered person list to filter by the given {@code predicate}.
+     * Updates the filter of the filtered student list to filter by the given {@code predicate}.
      * @throws NullPointerException if {@code predicate} is null.
      */
-    void updateFilteredPersonList(Predicate<Student> predicate);
+    void updateFilteredStudentList(Predicate<Student> predicate);
     void updateFilteredTutorialList(Predicate<Tutorial> predicate);
     /** Returns the current operating tutorial, if any. */
     Optional<Tutorial> getCurrentOperatingTutorial();

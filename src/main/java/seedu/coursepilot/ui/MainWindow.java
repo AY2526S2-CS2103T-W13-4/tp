@@ -31,7 +31,7 @@ public class MainWindow extends UiPart<Stage> {
     private Logic logic;
 
     // Independent Ui parts residing in this Ui container
-    private PersonListPanel personListPanel;
+    private StudentListPanel studentListPanel;
     private TutorialCodeListPanel tutorialCodeListPanel;
     private TutorialDetailsPanel tutorialDetailsPanel;
     private ResultDisplay resultDisplay;
@@ -44,7 +44,7 @@ public class MainWindow extends UiPart<Stage> {
     private MenuItem helpMenuItem;
 
     @FXML
-    private StackPane personListPanelPlaceholder;
+    private StackPane studentListPanelPlaceholder;
 
     @FXML
     private StackPane tutorialListPanelPlaceholder;
@@ -111,9 +111,9 @@ public class MainWindow extends UiPart<Stage> {
         });
     }
 
-    private void setPersonListPanelVisible(boolean visible) {
-        this.personListPanel.getRoot().setVisible(visible);
-        this.personListPanel.getRoot().setManaged(visible);
+    private void setStudentListPanelVisible(boolean visible) {
+        this.studentListPanel.getRoot().setVisible(visible);
+        this.studentListPanel.getRoot().setManaged(visible);
     }
 
     private void setTutorialDetailsPanelVisible(boolean visible) {
@@ -129,18 +129,19 @@ public class MainWindow extends UiPart<Stage> {
                 logic.getCurrentOperatingTutorialProperty());
         tutorialListPanelPlaceholder.getChildren().add(tutorialCodeListPanel.getRoot());
 
-        personListPanel = new PersonListPanel(logic.getFilteredPersonList());
-        setPersonListPanelVisible(false);
-        personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
+        studentListPanel = new StudentListPanel(logic.getFilteredStudentList());
+        setStudentListPanelVisible(false);
+        studentListPanelPlaceholder.getChildren().add(studentListPanel.getRoot());
 
         tutorialDetailsPanel = new TutorialDetailsPanel(logic.getFilteredTutorialList());
         setTutorialDetailsPanelVisible(true);
-        personListPanelPlaceholder.getChildren().add(tutorialDetailsPanel.getRoot());
+        studentListPanelPlaceholder.getChildren().add(tutorialDetailsPanel.getRoot());
 
         resultDisplay = new ResultDisplay();
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
 
-        StatusBarFooter statusBarFooter = new StatusBarFooter(logic.getAddressBookFilePath());
+        StatusBarFooter statusBarFooter = new StatusBarFooter(
+            logic.getCurrentOperatingTutorialProperty());
         statusbarPlaceholder.getChildren().add(statusBarFooter.getRoot());
 
         CommandBox commandBox = new CommandBox(this::executeCommand);
@@ -187,18 +188,18 @@ public class MainWindow extends UiPart<Stage> {
         primaryStage.hide();
     }
 
-    public PersonListPanel getPersonListPanel() {
-        return personListPanel;
+    public StudentListPanel getStudentListPanel() {
+        return studentListPanel;
     }
 
     private void updateCenterPanel(String commandText) {
         String trimmedCommand = commandText.trim();
         if (trimmedCommand.equals("list -tutorial")) {
-            setPersonListPanelVisible(false);
+            setStudentListPanelVisible(false);
             setTutorialDetailsPanelVisible(true);
         } else if (trimmedCommand.equals("list -student")) {
             setTutorialDetailsPanelVisible(false);
-            setPersonListPanelVisible(true);
+            setStudentListPanelVisible(true);
         }
     }
 

@@ -30,27 +30,27 @@ import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.coursepilot.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.coursepilot.logic.parser.CommandParserTestUtil.assertParseSuccess;
-import static seedu.coursepilot.testutil.TypicalPersons.AMY;
-import static seedu.coursepilot.testutil.TypicalPersons.BOB;
+import static seedu.coursepilot.testutil.TypicalStudents.AMY;
+import static seedu.coursepilot.testutil.TypicalStudents.BOB;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.coursepilot.logic.Messages;
 import seedu.coursepilot.logic.commands.AddCommand;
-import seedu.coursepilot.model.person.Email;
-import seedu.coursepilot.model.person.MatricNumber;
-import seedu.coursepilot.model.person.Name;
-import seedu.coursepilot.model.person.Phone;
-import seedu.coursepilot.model.person.Student;
+import seedu.coursepilot.model.student.Email;
+import seedu.coursepilot.model.student.MatricNumber;
+import seedu.coursepilot.model.student.Name;
+import seedu.coursepilot.model.student.Phone;
+import seedu.coursepilot.model.student.Student;
 import seedu.coursepilot.model.tag.Tag;
-import seedu.coursepilot.testutil.PersonBuilder;
+import seedu.coursepilot.testutil.StudentBuilder;
 
 public class AddCommandParserTest {
     private AddCommandParser parser = new AddCommandParser();
 
     @Test
     public void parse_allFieldsPresent_success() {
-        Student expectedStudent = new PersonBuilder(BOB).withTags(VALID_TAG_FRIEND).build();
+        Student expectedStudent = new StudentBuilder(BOB).withTags(VALID_TAG_FRIEND).build();
 
         // whitespace only preamble
         assertParseSuccess(parser, PREAMBLE_WHITESPACE + " -student " + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
@@ -58,7 +58,7 @@ public class AddCommandParserTest {
 
 
         // multiple tags - all accepted
-        Student expectedStudentMultipleTags = new PersonBuilder(BOB).withTags(VALID_TAG_FRIEND, VALID_TAG_HUSBAND)
+        Student expectedStudentMultipleTags = new StudentBuilder(BOB).withTags(VALID_TAG_FRIEND, VALID_TAG_HUSBAND)
                 .build();
         assertParseSuccess(parser,
                 " -student " + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + MATRIC_DESC_BOB
@@ -68,73 +68,73 @@ public class AddCommandParserTest {
 
     @Test
     public void parse_repeatedNonTagValue_failure() {
-        String validExpectedPersonString = " -student " + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
+        String validExpectedStudentString = " -student " + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
                 + MATRIC_DESC_BOB + TAG_DESC_FRIEND;
 
         // multiple names
-        assertParseFailure(parser, " -student " + NAME_DESC_AMY + validExpectedPersonString,
+        assertParseFailure(parser, " -student " + NAME_DESC_AMY + validExpectedStudentString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME));
 
         // multiple phones
-        assertParseFailure(parser, " -student " + PHONE_DESC_AMY + validExpectedPersonString,
+        assertParseFailure(parser, " -student " + PHONE_DESC_AMY + validExpectedStudentString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE));
 
         // multiple emails
-        assertParseFailure(parser, " -student " + EMAIL_DESC_AMY + validExpectedPersonString,
+        assertParseFailure(parser, " -student " + EMAIL_DESC_AMY + validExpectedStudentString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_EMAIL));
 
         // multiple addresses
-        assertParseFailure(parser, " -student " + MATRIC_DESC_AMY + validExpectedPersonString,
+        assertParseFailure(parser, " -student " + MATRIC_DESC_AMY + validExpectedStudentString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_MATRICNUMBER));
 
         // multiple fields repeated
         assertParseFailure(parser,
-                " -student " + validExpectedPersonString + PHONE_DESC_AMY + EMAIL_DESC_AMY + NAME_DESC_AMY
-                        + MATRIC_DESC_AMY + validExpectedPersonString,
+                " -student " + validExpectedStudentString + PHONE_DESC_AMY + EMAIL_DESC_AMY + NAME_DESC_AMY
+                        + MATRIC_DESC_AMY + validExpectedStudentString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
                         PREFIX_MATRICNUMBER));
 
         // invalid value followed by valid value
 
         // invalid name
-        assertParseFailure(parser, " -student " + INVALID_NAME_DESC + validExpectedPersonString,
+        assertParseFailure(parser, " -student " + INVALID_NAME_DESC + validExpectedStudentString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME));
 
         // invalid email
-        assertParseFailure(parser, " -student " + INVALID_EMAIL_DESC + validExpectedPersonString,
+        assertParseFailure(parser, " -student " + INVALID_EMAIL_DESC + validExpectedStudentString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_EMAIL));
 
         // invalid phone
-        assertParseFailure(parser, " -student " + INVALID_PHONE_DESC + validExpectedPersonString,
+        assertParseFailure(parser, " -student " + INVALID_PHONE_DESC + validExpectedStudentString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE));
 
         // invalid address
-        assertParseFailure(parser, " -student " + INVALID_MATRIC_DESC + validExpectedPersonString,
+        assertParseFailure(parser, " -student " + INVALID_MATRIC_DESC + validExpectedStudentString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_MATRICNUMBER));
 
         // valid value followed by invalid value
 
         // invalid name
-        assertParseFailure(parser, validExpectedPersonString + INVALID_NAME_DESC,
+        assertParseFailure(parser, validExpectedStudentString + INVALID_NAME_DESC,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME));
 
         // invalid email
-        assertParseFailure(parser, validExpectedPersonString + INVALID_EMAIL_DESC,
+        assertParseFailure(parser, validExpectedStudentString + INVALID_EMAIL_DESC,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_EMAIL));
 
         // invalid phone
-        assertParseFailure(parser, validExpectedPersonString + INVALID_PHONE_DESC,
+        assertParseFailure(parser, validExpectedStudentString + INVALID_PHONE_DESC,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE));
 
         // invalid address
-        assertParseFailure(parser, validExpectedPersonString + INVALID_MATRIC_DESC,
+        assertParseFailure(parser, validExpectedStudentString + INVALID_MATRIC_DESC,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_MATRICNUMBER));
     }
 
     @Test
     public void parse_optionalFieldsMissing_success() {
         // zero tags
-        Student expectedStudent = new PersonBuilder(AMY).withTags().build();
+        Student expectedStudent = new StudentBuilder(AMY).withTags().build();
         assertParseSuccess(parser, " -student " + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + MATRIC_DESC_AMY,
                 new AddCommand(expectedStudent));
     }

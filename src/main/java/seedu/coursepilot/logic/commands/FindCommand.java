@@ -10,7 +10,7 @@ import seedu.coursepilot.commons.util.ToStringBuilder;
 import seedu.coursepilot.logic.Messages;
 import seedu.coursepilot.logic.commands.exceptions.CommandException;
 import seedu.coursepilot.model.Model;
-import seedu.coursepilot.model.person.Student;
+import seedu.coursepilot.model.student.Student;
 
 /**
  * Finds and lists all students in coursepilot whose name contains any of the argument keywords.
@@ -66,7 +66,7 @@ public class FindCommand extends Command {
 
     public static final String COMMAND_WORD = "find";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose names contain any of "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all students whose names contain any of "
             + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
             + "Parameters: KEYWORD [MORE_KEYWORDS]...\n"
             + "Example: " + COMMAND_WORD + " alice bob charlie";
@@ -92,13 +92,13 @@ public class FindCommand extends Command {
             throw new CommandException(MESSAGE_NO_CURRENT_OPERATING_TUTORIAL);
         }
 
-        model.updateFilteredPersonList(
+        model.updateFilteredStudentList(
             student -> predicate.test(student)
                     && model.getCurrentOperatingTutorial()
                             .map(tutorial -> tutorial.hasStudent(student))
                             .orElse(false));
         return new CommandResult(
-                String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredPersonList().size()));
+                String.format(Messages.MESSAGE_STUDENTS_LISTED_OVERVIEW, model.getFilteredStudentList().size()));
     }
 
     @Override

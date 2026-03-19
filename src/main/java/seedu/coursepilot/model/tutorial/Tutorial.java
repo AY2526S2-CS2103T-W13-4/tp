@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import seedu.coursepilot.model.person.Student;
+import seedu.coursepilot.model.student.Student;
 
 /**
  * Represents a tutorial in CoursePilot.
@@ -77,7 +77,7 @@ public class Tutorial {
      */
     public boolean hasStudent(Student student) {
         requireNonNull(student);
-        return students.stream().anyMatch(student::isSamePerson);
+        return students.stream().anyMatch(student::isSameStudent);
     }
     /**
      * Adds a student to the studentList belonging to this particular tutorial instance
@@ -100,7 +100,7 @@ public class Tutorial {
         return students.removeIf(s -> s.isSamePerson(student));
     }
     /**
-     * Returns true if both persons have the same tutorial code.
+     * Returns true if both students have the same tutorial code.
      * This defines a weaker notion of equality between two tutorials.
      */
     public boolean isSameTutorial(Tutorial other) {

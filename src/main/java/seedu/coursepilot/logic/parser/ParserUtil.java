@@ -9,11 +9,11 @@ import java.util.Set;
 import seedu.coursepilot.commons.core.index.Index;
 import seedu.coursepilot.commons.util.StringUtil;
 import seedu.coursepilot.logic.parser.exceptions.ParseException;
-import seedu.coursepilot.model.person.Address;
-import seedu.coursepilot.model.person.Email;
-import seedu.coursepilot.model.person.MatricNumber;
-import seedu.coursepilot.model.person.Name;
-import seedu.coursepilot.model.person.Phone;
+import seedu.coursepilot.model.student.Address;
+import seedu.coursepilot.model.student.Email;
+import seedu.coursepilot.model.student.MatricNumber;
+import seedu.coursepilot.model.student.Name;
+import seedu.coursepilot.model.student.Phone;
 import seedu.coursepilot.model.tag.Tag;
 
 /**

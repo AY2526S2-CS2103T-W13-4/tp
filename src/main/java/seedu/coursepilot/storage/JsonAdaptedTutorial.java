@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.coursepilot.commons.exceptions.IllegalValueException;
-import seedu.coursepilot.model.person.Student;
+import seedu.coursepilot.model.student.Student;
 import seedu.coursepilot.model.tutorial.Tutorial;
 
 /**
@@ -22,7 +22,7 @@ class JsonAdaptedTutorial {
     private final String day;
     private final String timeSlot;
     private final int capacity;
-    private final List<JsonAdaptedPerson> students = new ArrayList<>();
+    private final List<JsonAdaptedStudent> students = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonAdaptedTutorial} with the given tutorial details.
@@ -30,7 +30,7 @@ class JsonAdaptedTutorial {
     @JsonCreator
     public JsonAdaptedTutorial(@JsonProperty("tutorialCode") String tutorialCode, @JsonProperty("day") String day,
                              @JsonProperty("timeSlot") String timeSlot, @JsonProperty("capacity") int capacity,
-                               @JsonProperty("students") List<JsonAdaptedPerson> students) {
+                               @JsonProperty("students") List<JsonAdaptedStudent> students) {
         this.tutorialCode = tutorialCode;
         this.day = day;
         this.timeSlot = timeSlot;
@@ -49,7 +49,7 @@ class JsonAdaptedTutorial {
         timeSlot = source.getTimeSlot();
         capacity = source.getCapacity();
         students.addAll(source.getStudents().stream()
-                .map(JsonAdaptedPerson::new)
+                .map(JsonAdaptedStudent::new)
                 .collect(Collectors.toList()));
     }
 
@@ -73,7 +73,7 @@ class JsonAdaptedTutorial {
         }
 
         List<Student> modelStudents = new ArrayList<>();
-        for (JsonAdaptedPerson jsonStudent : students) {
+        for (JsonAdaptedStudent jsonStudent : students) {
             modelStudents.add(jsonStudent.toModelType());
         }
 

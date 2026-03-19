@@ -2,9 +2,9 @@ package seedu.coursepilot.logic.commands;
 
 import static seedu.coursepilot.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.coursepilot.logic.commands.CommandTestUtil.showPersonAtIndex;
-import static seedu.coursepilot.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
-import static seedu.coursepilot.testutil.TypicalPersons.getTypicalAddressBook;
+import static seedu.coursepilot.logic.commands.CommandTestUtil.showStudentAtIndex;
+import static seedu.coursepilot.testutil.TypicalIndexes.INDEX_FIRST_STUDENT;
+import static seedu.coursepilot.testutil.TypicalStudents.getTypicalCoursePilot;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,8 +23,8 @@ public class ListCommandTest {
 
     @BeforeEach
     public void setUp() {
-        model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-        expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        model = new ModelManager(getTypicalCoursePilot(), new UserPrefs());
+        expectedModel = new ModelManager(model.getCoursePilot(), new UserPrefs());
     }
 
     @Test
@@ -41,9 +41,9 @@ public class ListCommandTest {
 
     @Test
     public void execute_listStudentWithCurrentOperatingTutorial_success() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
+        showStudentAtIndex(model, INDEX_FIRST_STUDENT);
         expectedModel.setCurrentOperatingTutorial(expectedModel.getFilteredTutorialList().get(0));
-        expectedModel.updateFilteredPersonList(student ->
+        expectedModel.updateFilteredStudentList(student ->
             expectedModel.getCurrentOperatingTutorial().get().hasStudent(student));
         model.setCurrentOperatingTutorial(model.getFilteredTutorialList().get(0));
 

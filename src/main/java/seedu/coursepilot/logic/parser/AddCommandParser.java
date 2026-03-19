@@ -16,11 +16,11 @@ import java.util.stream.Stream;
 
 import seedu.coursepilot.logic.commands.AddCommand;
 import seedu.coursepilot.logic.parser.exceptions.ParseException;
-import seedu.coursepilot.model.person.Email;
-import seedu.coursepilot.model.person.MatricNumber;
-import seedu.coursepilot.model.person.Name;
-import seedu.coursepilot.model.person.Phone;
-import seedu.coursepilot.model.person.Student;
+import seedu.coursepilot.model.student.Email;
+import seedu.coursepilot.model.student.MatricNumber;
+import seedu.coursepilot.model.student.Name;
+import seedu.coursepilot.model.student.Phone;
+import seedu.coursepilot.model.student.Student;
 import seedu.coursepilot.model.tag.Tag;
 import seedu.coursepilot.model.tutorial.Tutorial;
 

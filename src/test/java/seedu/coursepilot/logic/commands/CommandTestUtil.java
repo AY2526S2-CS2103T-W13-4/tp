@@ -15,11 +15,11 @@ import java.util.List;
 
 import seedu.coursepilot.commons.core.index.Index;
 import seedu.coursepilot.logic.commands.exceptions.CommandException;
-import seedu.coursepilot.model.AddressBook;
+import seedu.coursepilot.model.CoursePilot;
 import seedu.coursepilot.model.Model;
-import seedu.coursepilot.model.person.NameContainsKeywordsPredicate;
-import seedu.coursepilot.model.person.Student;
-import seedu.coursepilot.testutil.EditPersonDescriptorBuilder;
+import seedu.coursepilot.model.student.NameContainsKeywordsPredicate;
+import seedu.coursepilot.model.student.Student;
+import seedu.coursepilot.testutil.EditStudentDescriptorBuilder;
 
 /**
  * Contains helper methods for testing commands.
@@ -57,14 +57,14 @@ public class CommandTestUtil {
     public static final String PREAMBLE_WHITESPACE = "\t  \r  \n";
     public static final String PREAMBLE_NON_EMPTY = "NonEmptyPreamble";
 
-    public static final EditCommand.EditPersonDescriptor DESC_AMY;
-    public static final EditCommand.EditPersonDescriptor DESC_BOB;
+    public static final EditCommand.EditStudentDescriptor DESC_AMY;
+    public static final EditCommand.EditStudentDescriptor DESC_BOB;
 
     static {
-        DESC_AMY = new EditPersonDescriptorBuilder().withName(VALID_NAME_AMY)
+        DESC_AMY = new EditStudentDescriptorBuilder().withName(VALID_NAME_AMY)
                 .withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_AMY).withMatriculationNumber(VALID_MATRIC_AMY)
                 .withTags(VALID_TAG_FRIEND).build();
-        DESC_BOB = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB)
+        DESC_BOB = new EditStudentDescriptorBuilder().withName(VALID_NAME_BOB)
                 .withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_BOB).withMatriculationNumber(VALID_MATRIC_BOB)
                 .withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND).build();
     }
@@ -99,30 +99,30 @@ public class CommandTestUtil {
      * Executes the given {@code command}, confirms that <br>
      * - a {@code CommandException} is thrown <br>
      * - the CommandException message matches {@code expectedMessage} <br>
-     * - the address book, filtered person list and selected person in {@code actualModel} remain unchanged
+     * - the course pilot, filtered student list and selected student in {@code actualModel} remain unchanged
      */
     public static void assertCommandFailure(Command command, Model actualModel, String expectedMessage) {
         // we are unable to defensively copy the model for comparison later, so we can
         // only do so by copying its components.
-        AddressBook expectedAddressBook = new AddressBook(actualModel.getAddressBook());
-        List<Student> expectedFilteredList = new ArrayList<>(actualModel.getFilteredPersonList());
+        CoursePilot expectedCoursePilot = new CoursePilot(actualModel.getCoursePilot());
+        List<Student> expectedFilteredList = new ArrayList<>(actualModel.getFilteredStudentList());
 
         assertThrows(CommandException.class, expectedMessage, () -> command.execute(actualModel));
-        assertEquals(expectedAddressBook, actualModel.getAddressBook());
-        assertEquals(expectedFilteredList, actualModel.getFilteredPersonList());
+        assertEquals(expectedCoursePilot, actualModel.getCoursePilot());
+        assertEquals(expectedFilteredList, actualModel.getFilteredStudentList());
     }
     /**
-     * Updates {@code model}'s filtered list to show only the person at the given {@code targetIndex} in the
-     * {@code model}'s address book.
+     * Updates {@code model}'s filtered list to show only the student at the given {@code targetIndex} in the
+     * {@code model}'s course pilot.
      */
-    public static void showPersonAtIndex(Model model, Index targetIndex) {
-        assertTrue(targetIndex.getZeroBased() < model.getFilteredPersonList().size());
+    public static void showStudentAtIndex(Model model, Index targetIndex) {
+        assertTrue(targetIndex.getZeroBased() < model.getFilteredStudentList().size());
 
-        Student student = model.getFilteredPersonList().get(targetIndex.getZeroBased());
+        Student student = model.getFilteredStudentList().get(targetIndex.getZeroBased());
         final String[] splitName = student.getName().fullName.split("\\s+");
-        model.updateFilteredPersonList(new NameContainsKeywordsPredicate(Arrays.asList(splitName[0])));
+        model.updateFilteredStudentList(new NameContainsKeywordsPredicate(Arrays.asList(splitName[0])));
 
-        assertEquals(1, model.getFilteredPersonList().size());
+        assertEquals(1, model.getFilteredStudentList().size());
     }
 
 }

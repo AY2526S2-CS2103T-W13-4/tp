@@ -10,24 +10,24 @@ import seedu.coursepilot.commons.util.ToStringBuilder;
 import seedu.coursepilot.logic.Messages;
 import seedu.coursepilot.logic.commands.exceptions.CommandException;
 import seedu.coursepilot.model.Model;
-import seedu.coursepilot.model.person.Student;
+import seedu.coursepilot.model.student.Student;
 import seedu.coursepilot.model.tutorial.Tutorial;
 
 
 /**
- * Deletes a person identified using it's displayed index from the address book.
+ * Deletes a student identified using it's displayed index from the course pilot.
  */
 public class DeleteCommand extends Command {
 
     public static final String COMMAND_WORD = "delete";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Deletes the person identified by the index number used in the displayed person list.\n"
+            + ": Deletes the student identified by the index number used in the displayed student list.\n"
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " -student 1"
             + "\nExample: " + COMMAND_WORD + " -tutorial 1";
 
-    public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
+    public static final String MESSAGE_DELETE_STUDENT_SUCCESS = "Deleted Student: %1$s";
     public static final String MESSAGE_DELETE_TUTORIAL_SUCCESS = "Deleted Tutorial: %1$s";
     public static final String MESSAGE_NO_CURRENT_OPERATING_TUTORIAL =
             "No current operating tutorial selected. Use select first.";
@@ -61,7 +61,7 @@ public class DeleteCommand extends Command {
             List<Student> tutorialStudents = currentTutorial.getStudents();
 
             if (targetIndex.getZeroBased() >= tutorialStudents.size()) {
-                throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+                throw new CommandException(Messages.MESSAGE_INVALID_STUDENT_DISPLAYED_INDEX);
             }
 
             Student studentToDelete = tutorialStudents.get(targetIndex.getZeroBased());
@@ -80,10 +80,10 @@ public class DeleteCommand extends Command {
 
             // If student is not in any other tutorial, remove from main list
             if (!inOtherTutorial) {
-                model.deletePerson(studentToDelete);
+                model.deleteStudent(studentToDelete);
             }
 
-            return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS,
+            return new CommandResult(String.format(MESSAGE_DELETE_STUDENT_SUCCESS,
                     Messages.format(studentToDelete)));
         } else if (this.type.equals("tutorial")) {
             List<Tutorial> lastShownList = model.getFilteredTutorialList();
@@ -96,7 +96,7 @@ public class DeleteCommand extends Command {
             model.deleteTutorial(tutorialToDelete);
             return new CommandResult(String.format(MESSAGE_DELETE_TUTORIAL_SUCCESS, Messages.format(tutorialToDelete)));
         }
-        throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        throw new CommandException(Messages.MESSAGE_INVALID_STUDENT_DISPLAYED_INDEX);
     }
 
     @Override

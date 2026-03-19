@@ -9,8 +9,8 @@ import seedu.coursepilot.commons.core.GuiSettings;
 import seedu.coursepilot.logic.commands.CommandResult;
 import seedu.coursepilot.logic.commands.exceptions.CommandException;
 import seedu.coursepilot.logic.parser.exceptions.ParseException;
-import seedu.coursepilot.model.ReadOnlyAddressBook;
-import seedu.coursepilot.model.person.Student;
+import seedu.coursepilot.model.ReadOnlyCoursePilot;
+import seedu.coursepilot.model.student.Student;
 import seedu.coursepilot.model.tutorial.Tutorial;
 
 /**
@@ -27,14 +27,14 @@ public interface Logic {
     CommandResult execute(String commandText) throws CommandException, ParseException;
 
     /**
-     * Returns the AddressBook.
+     * Returns the CoursePilot.
      *
-     * @see seedu.coursepilot.model.Model#getAddressBook()
+     * @see seedu.coursepilot.model.Model#getCoursePilot()
      */
-    ReadOnlyAddressBook getAddressBook();
+    ReadOnlyCoursePilot getCoursePilot();
 
-    /** Returns an unmodifiable view of the filtered list of persons */
-    ObservableList<Student> getFilteredPersonList();
+    /** Returns an unmodifiable view of the filtered list of students */
+    ObservableList<Student> getFilteredStudentList();
 
     /** Returns an unmodifiable view of the tutorial list. */
     ObservableList<Tutorial> getFilteredTutorialList();
@@ -46,9 +46,9 @@ public interface Logic {
     ObjectProperty<Tutorial> getCurrentOperatingTutorialProperty();
 
     /**
-     * Returns the user prefs' address book file path.
+     * Returns the user prefs' course pilot file path.
      */
-    Path getAddressBookFilePath();
+    Path getCoursePilotFilePath();
 
     /**
      * Returns the user prefs' GUI settings.

@@ -2,7 +2,7 @@ package seedu.coursepilot.storage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static seedu.coursepilot.testutil.TypicalPersons.getTypicalAddressBook;
+import static seedu.coursepilot.testutil.TypicalStudents.getTypicalCoursePilot;
 
 import java.nio.file.Path;
 
@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import seedu.coursepilot.commons.core.GuiSettings;
-import seedu.coursepilot.model.AddressBook;
-import seedu.coursepilot.model.ReadOnlyAddressBook;
+import seedu.coursepilot.model.CoursePilot;
+import seedu.coursepilot.model.ReadOnlyCoursePilot;
 import seedu.coursepilot.model.UserPrefs;
 
 public class StorageManagerTest {
@@ -24,9 +24,9 @@ public class StorageManagerTest {
 
     @BeforeEach
     public void setUp() {
-        JsonAddressBookStorage addressBookStorage = new JsonAddressBookStorage(getTempFilePath("ab"));
+        JsonCoursePilotStorage coursePilotStorage = new JsonCoursePilotStorage(getTempFilePath("ab"));
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(getTempFilePath("prefs"));
-        storageManager = new StorageManager(addressBookStorage, userPrefsStorage);
+        storageManager = new StorageManager(coursePilotStorage, userPrefsStorage);
     }
 
     private Path getTempFilePath(String fileName) {
@@ -48,21 +48,21 @@ public class StorageManagerTest {
     }
 
     @Test
-    public void addressBookReadSave() throws Exception {
+    public void coursePilotReadSave() throws Exception {
         /*
          * Note: This is an integration test that verifies the StorageManager is properly wired to the
-         * {@link JsonAddressBookStorage} class.
-         * More extensive testing of UserPref saving/reading is done in {@link JsonAddressBookStorageTest} class.
+         * {@link JsonCoursePilotStorage} class.
+         * More extensive testing of UserPref saving/reading is done in {@link JsonCoursePilotStorageTest} class.
          */
-        AddressBook original = getTypicalAddressBook();
-        storageManager.saveAddressBook(original);
-        ReadOnlyAddressBook retrieved = storageManager.readAddressBook().get();
-        assertEquals(original, new AddressBook(retrieved));
+        CoursePilot original = getTypicalCoursePilot();
+        storageManager.saveCoursePilot(original);
+        ReadOnlyCoursePilot retrieved = storageManager.readCoursePilot().get();
+        assertEquals(original, new CoursePilot(retrieved));
     }
 
     @Test
-    public void getAddressBookFilePath() {
-        assertNotNull(storageManager.getAddressBookFilePath());
+    public void getCoursePilotFilePath() {
+        assertNotNull(storageManager.getCoursePilotFilePath());
     }
 
 }

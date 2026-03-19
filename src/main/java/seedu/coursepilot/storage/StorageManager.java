@@ -7,24 +7,24 @@ import java.util.logging.Logger;
 
 import seedu.coursepilot.commons.core.LogsCenter;
 import seedu.coursepilot.commons.exceptions.DataLoadingException;
-import seedu.coursepilot.model.ReadOnlyAddressBook;
+import seedu.coursepilot.model.ReadOnlyCoursePilot;
 import seedu.coursepilot.model.ReadOnlyUserPrefs;
 import seedu.coursepilot.model.UserPrefs;
 
 /**
- * Manages storage of AddressBook data in local storage.
+ * Manages storage of CoursePilot data in local storage.
  */
 public class StorageManager implements Storage {
 
     private static final Logger logger = LogsCenter.getLogger(StorageManager.class);
-    private AddressBookStorage addressBookStorage;
+    private CoursePilotStorage coursePilotStorage;
     private UserPrefsStorage userPrefsStorage;
 
     /**
-     * Creates a {@code StorageManager} with the given {@code AddressBookStorage} and {@code UserPrefStorage}.
+     * Creates a {@code StorageManager} with the given {@code CoursePilotStorage} and {@code UserPrefStorage}.
      */
-    public StorageManager(AddressBookStorage addressBookStorage, UserPrefsStorage userPrefsStorage) {
-        this.addressBookStorage = addressBookStorage;
+    public StorageManager(CoursePilotStorage coursePilotStorage, UserPrefsStorage userPrefsStorage) {
+        this.coursePilotStorage = coursePilotStorage;
         this.userPrefsStorage = userPrefsStorage;
     }
 
@@ -46,33 +46,33 @@ public class StorageManager implements Storage {
     }
 
 
-    // ================ AddressBook methods ==============================
+    // ================ CoursePilot methods ==============================
 
     @Override
-    public Path getAddressBookFilePath() {
-        return addressBookStorage.getAddressBookFilePath();
+    public Path getCoursePilotFilePath() {
+        return coursePilotStorage.getCoursePilotFilePath();
     }
 
     @Override
-    public Optional<ReadOnlyAddressBook> readAddressBook() throws DataLoadingException {
-        return readAddressBook(addressBookStorage.getAddressBookFilePath());
+    public Optional<ReadOnlyCoursePilot> readCoursePilot() throws DataLoadingException {
+        return readCoursePilot(coursePilotStorage.getCoursePilotFilePath());
     }
 
     @Override
-    public Optional<ReadOnlyAddressBook> readAddressBook(Path filePath) throws DataLoadingException {
+    public Optional<ReadOnlyCoursePilot> readCoursePilot(Path filePath) throws DataLoadingException {
         logger.fine("Attempting to read data from file: " + filePath);
-        return addressBookStorage.readAddressBook(filePath);
+        return coursePilotStorage.readCoursePilot(filePath);
     }
 
     @Override
-    public void saveAddressBook(ReadOnlyAddressBook addressBook) throws IOException {
-        saveAddressBook(addressBook, addressBookStorage.getAddressBookFilePath());
+    public void saveCoursePilot(ReadOnlyCoursePilot coursePilot) throws IOException {
+        saveCoursePilot(coursePilot, coursePilotStorage.getCoursePilotFilePath());
     }
 
     @Override
-    public void saveAddressBook(ReadOnlyAddressBook addressBook, Path filePath) throws IOException {
+    public void saveCoursePilot(ReadOnlyCoursePilot coursePilot, Path filePath) throws IOException {
         logger.fine("Attempting to write to data file: " + filePath);
-        addressBookStorage.saveAddressBook(addressBook, filePath);
+        coursePilotStorage.saveCoursePilot(coursePilot, filePath);
     }
 
 }

@@ -15,16 +15,16 @@ import seedu.coursepilot.commons.util.ToStringBuilder;
 import seedu.coursepilot.logic.Messages;
 import seedu.coursepilot.logic.commands.exceptions.CommandException;
 import seedu.coursepilot.model.Model;
-import seedu.coursepilot.model.person.Student;
+import seedu.coursepilot.model.student.Student;
 import seedu.coursepilot.model.tutorial.Tutorial;
 /**
- * Adds a person to the address book.
+ * Adds a student to the course pilot.
  */
 public class AddCommand extends Command {
 
     public static final String COMMAND_WORD = "add";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + " -student: Adds a person to the address book. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + " -student: Adds a student to the course pilot. "
             + "Parameters: add -student "
             + PREFIX_NAME + " NAME "
             + PREFIX_PHONE + " PHONE "
@@ -39,7 +39,7 @@ public class AddCommand extends Command {
             + PREFIX_TAG + " friends "
             + PREFIX_TAG + " owesMoney"
             + "\nAlternatively, \n"
-            + COMMAND_WORD + " -tutorial: Adds a tutorial to the address book. "
+            + COMMAND_WORD + " -tutorial: Adds a tutorial to the course pilot. "
             + "\nParameters: add -tutorial "
             + PREFIX_TUTORIALCODE + " CODE "
             + PREFIX_DAY + " DAY "
@@ -53,8 +53,8 @@ public class AddCommand extends Command {
 
     public static final String MESSAGE_SUCCESS_STUDENT = "New student added: %1$s";
     public static final String MESSAGE_SUCCESS_TUTORIAL = "New tutorial added: %1$s";
-    public static final String MESSAGE_DUPLICATE_PERSON =
-            "This person or matriculation number already exists in the address book";
+    public static final String MESSAGE_DUPLICATE_STUDENT =
+            "This student or matriculation number already exists in the course pilot";
     public static final String MESSAGE_DUPLICATE_TUTORIAL =
             "This tutorial already exists in the system";
     public static final String MESSAGE_NO_CURRENT_OPERATING_TUTORIAL =
@@ -74,7 +74,7 @@ public class AddCommand extends Command {
     private final AddTarget addTarget;
 
     /**
-     * Creates an AddCommand to add the specified {@code Person}
+     * Creates an AddCommand to add the specified {@code Student}
      */
     public AddCommand(Student student) {
         requireNonNull(student);
@@ -105,15 +105,15 @@ public class AddCommand extends Command {
             Tutorial currentOperatingTutorial = model.getCurrentOperatingTutorial()
                     .orElseThrow(() -> new CommandException(MESSAGE_NO_CURRENT_OPERATING_TUTORIAL));
 
-            if (!model.hasPerson(toAdd)) {
-                model.addPerson(toAdd);
+            if (!model.hasStudent(toAdd)) {
+                model.addStudent(toAdd);
             }
 
             if (!currentOperatingTutorial.hasStudent(toAdd)) {
                 currentOperatingTutorial.addStudent(toAdd);
                 return new CommandResult(String.format(MESSAGE_SUCCESS_STUDENT, Messages.format(toAdd)));
             }
-            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+            throw new CommandException(MESSAGE_DUPLICATE_STUDENT);
         }
         if (addTarget == AddTarget.TUTORIAL) {
             model.addTutorial(tutorialToAdd);

@@ -2,7 +2,7 @@ package seedu.coursepilot.logic.commands;
 
 import static seedu.coursepilot.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.coursepilot.testutil.TypicalPersons.getTypicalAddressBook;
+import static seedu.coursepilot.testutil.TypicalStudents.getTypicalCoursePilot;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,9 +11,9 @@ import seedu.coursepilot.logic.Messages;
 import seedu.coursepilot.model.Model;
 import seedu.coursepilot.model.ModelManager;
 import seedu.coursepilot.model.UserPrefs;
-import seedu.coursepilot.model.person.Student;
+import seedu.coursepilot.model.student.Student;
 import seedu.coursepilot.model.tutorial.Tutorial;
-import seedu.coursepilot.testutil.PersonBuilder;
+import seedu.coursepilot.testutil.StudentBuilder;
 
 /**
  * Contains integration tests (interaction with the Model) for {@code AddCommand}.
@@ -24,7 +24,7 @@ public class AddCommandIntegrationTest {
 
     @BeforeEach
     public void setUp() {
-        model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        model = new ModelManager(getTypicalCoursePilot(), new UserPrefs());
         if (model.getFilteredTutorialList().isEmpty()) {
             Tutorial currentTutorial = new Tutorial("CS2103T-W13", "Wed", "1pm-2pm", 10);
             model.addTutorial(currentTutorial);
@@ -35,14 +35,14 @@ public class AddCommandIntegrationTest {
     }
 
     @Test
-    public void execute_newPerson_success() {
-        Student validStudent = new PersonBuilder().build();
+    public void execute_newStudent_success() {
+        Student validStudent = new StudentBuilder().build();
 
-        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(model.getCoursePilot(), new UserPrefs());
         Tutorial currentTutorial = model.getCurrentOperatingTutorial().get();
-        // expectedModel already has currentTutorial because it's in model.getAddressBook()
+        // expectedModel already has currentTutorial because it's in model.getCoursePilot()
         expectedModel.setCurrentOperatingTutorial(currentTutorial);
-        expectedModel.addPerson(validStudent);
+        expectedModel.addStudent(validStudent);
 
         assertCommandSuccess(new AddCommand(validStudent), model,
                 String.format(AddCommand.MESSAGE_SUCCESS_STUDENT, Messages.format(validStudent)),
@@ -50,13 +50,13 @@ public class AddCommandIntegrationTest {
     }
 
     @Test
-    public void execute_duplicatePerson_throwsCommandException() {
-        Student validStudent = new PersonBuilder().build();
-        model.addPerson(validStudent);
+    public void execute_duplicateStudent_throwsCommandException() {
+        Student validStudent = new StudentBuilder().build();
+        model.addStudent(validStudent);
         model.getCurrentOperatingTutorial().get().addStudent(validStudent);
 
         assertCommandFailure(new AddCommand(validStudent), model,
-                AddCommand.MESSAGE_DUPLICATE_PERSON);
+                AddCommand.MESSAGE_DUPLICATE_STUDENT);
     }
 
 }

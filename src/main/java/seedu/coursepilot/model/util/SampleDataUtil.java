@@ -6,21 +6,21 @@ import java.util.stream.Collectors;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import seedu.coursepilot.model.AddressBook;
-import seedu.coursepilot.model.ReadOnlyAddressBook;
-import seedu.coursepilot.model.person.Email;
-import seedu.coursepilot.model.person.MatricNumber;
-import seedu.coursepilot.model.person.Name;
-import seedu.coursepilot.model.person.Phone;
-import seedu.coursepilot.model.person.Student;
+import seedu.coursepilot.model.CoursePilot;
+import seedu.coursepilot.model.ReadOnlyCoursePilot;
+import seedu.coursepilot.model.student.Email;
+import seedu.coursepilot.model.student.MatricNumber;
+import seedu.coursepilot.model.student.Name;
+import seedu.coursepilot.model.student.Phone;
+import seedu.coursepilot.model.student.Student;
 import seedu.coursepilot.model.tag.Tag;
 import seedu.coursepilot.model.tutorial.Tutorial;
 
 /**
- * Contains utility methods for populating {@code AddressBook} with sample data.
+ * Contains utility methods for populating {@code CoursePilot} with sample data.
  */
 public class SampleDataUtil {
-    public static Student[] getSamplePersons1() {
+    public static Student[] getSampleStudents1() {
         return new Student[] {
             new Student(new Name("Alex Yeoh"), new Phone("87438807"), new Email("alexyeoh@example.com"),
                 new MatricNumber("A000000"),
@@ -31,7 +31,7 @@ public class SampleDataUtil {
         };
     }
 
-    public static Student[] getSamplePersons2() {
+    public static Student[] getSampleStudents2() {
         return new Student[] {
             new Student(new Name("Charlotte Oliveiro"), new Phone("93210283"), new Email("charlotte@example.com"),
                 new MatricNumber("A000002"),
@@ -42,7 +42,7 @@ public class SampleDataUtil {
         };
     }
 
-    public static Student[] getSamplePersons3() {
+    public static Student[] getSampleStudents3() {
         return new Student[] {
             new Student(new Name("Irfan Ibrahim"), new Phone("92492021"), new Email("irfan@example.com"),
                 new MatricNumber("A000004"),
@@ -61,10 +61,10 @@ public class SampleDataUtil {
         );
     }
 
-    public static ReadOnlyAddressBook getSampleAddressBook() {
-        AddressBook sampleAb = new AddressBook();
-        for (Student sampleStudent : getSamplePersons1()) {
-            sampleAb.addPerson(sampleStudent);
+    public static ReadOnlyCoursePilot getSampleCoursePilot() {
+        CoursePilot sampleAb = new CoursePilot();
+        for (Student sampleStudent : getSampleStudents1()) {
+            sampleAb.addStudent(sampleStudent);
         }
         return sampleAb;
     }

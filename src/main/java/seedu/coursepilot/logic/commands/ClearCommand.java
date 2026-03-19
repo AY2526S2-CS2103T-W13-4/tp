@@ -2,22 +2,22 @@ package seedu.coursepilot.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
-import seedu.coursepilot.model.AddressBook;
+import seedu.coursepilot.model.CoursePilot;
 import seedu.coursepilot.model.Model;
 
 /**
- * Clears the address book.
+ * Clears the course pilot.
  */
 public class ClearCommand extends Command {
 
     public static final String COMMAND_WORD = "clear";
-    public static final String MESSAGE_SUCCESS = "Address book has been cleared!";
+    public static final String MESSAGE_SUCCESS = "Course pilot has been cleared!";
 
 
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
-        model.setAddressBook(new AddressBook());
+        model.setCoursePilot(new CoursePilot());
         return new CommandResult(MESSAGE_SUCCESS);
     }
 }
