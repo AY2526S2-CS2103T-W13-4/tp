@@ -172,6 +172,10 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) {
         logger.info("Starting CoursePilot " + MainApp.VERSION);
         ui.start(primaryStage);
+        if (ui instanceof UiManager) {
+            UiManager uiManager = (UiManager) ui;
+            uiManager.setHostServices(getHostServices());
+        }
     }
 
     @Override

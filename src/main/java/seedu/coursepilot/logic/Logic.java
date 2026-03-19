@@ -59,4 +59,14 @@ public interface Logic {
      * Set the user prefs' GUI settings.
      */
     void setGuiSettings(GuiSettings guiSettings);
+
+    /**
+     * Returns the Gemini API key from user prefs.
+     */
+    String getGeminiApiKey();
+
+    /**
+     * Sets the Gemini API key in user prefs.
+     */
+    void setGeminiApiKey(String apiKey);
 }

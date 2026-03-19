@@ -2,6 +2,7 @@ package seedu.coursepilot.ui;
 
 import java.util.logging.Logger;
 
+import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -30,6 +31,15 @@ public class UiManager implements Ui {
      */
     public UiManager(Logic logic) {
         this.logic = logic;
+    }
+
+    /**
+     * Sets the HostServices for opening URLs in the browser.
+     */
+    public void setHostServices(HostServices hostServices) {
+        if (mainWindow != null) {
+            mainWindow.setHostServices(hostServices);
+        }
     }
 
     @Override

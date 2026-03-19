@@ -105,4 +105,14 @@ public class LogicManager implements Logic {
     public void setGuiSettings(GuiSettings guiSettings) {
         model.setGuiSettings(guiSettings);
     }
+
+    @Override
+    public String getGeminiApiKey() {
+        return model.getGeminiApiKey();
+    }
+
+    @Override
+    public void setGeminiApiKey(String apiKey) {
+        model.setGeminiApiKey(apiKey);
+    }
 }

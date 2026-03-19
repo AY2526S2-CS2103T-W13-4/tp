@@ -230,6 +230,16 @@ public class AddCommandTest {
         public void addTutorial(Tutorial tutorial) {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public String getGeminiApiKey() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setGeminiApiKey(String apiKey) {
+            throw new AssertionError("This method should not be called.");
+        }
     }
 
     /**

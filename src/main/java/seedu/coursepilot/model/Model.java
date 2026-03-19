@@ -102,4 +102,10 @@ public interface Model {
 
     /** Clears the current operating tutorial. */
     void clearCurrentOperatingTutorial();
+
+    /** Returns the Gemini API key from user prefs. */
+    String getGeminiApiKey();
+
+    /** Sets the Gemini API key in user prefs. */
+    void setGeminiApiKey(String apiKey);
 }

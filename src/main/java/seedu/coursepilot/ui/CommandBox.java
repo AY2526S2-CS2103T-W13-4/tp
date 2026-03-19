@@ -70,6 +70,20 @@ public class CommandBox extends UiPart<Region> {
     }
 
     /**
+     * Sets the text in the command box.
+     */
+    public void setCommandText(String text) {
+        commandTextField.setText(text);
+    }
+
+    /**
+     * Returns the current text in the command box.
+     */
+    public String getCommandText() {
+        return commandTextField.getText();
+    }
+
+    /**
      * Represents a function that can execute commands.
      */
     @FunctionalInterface

@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,7 +38,9 @@ public class JsonUtil {
             .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
             .registerModule(new SimpleModule("SimpleModule")
                     .addSerializer(Level.class, new ToStringSerializer())
-                    .addDeserializer(Level.class, new LevelDeserializer(Level.class)));
+                    .addDeserializer(Level.class, new LevelDeserializer(Level.class))
+                    .addSerializer(Path.class, new ToStringSerializer())
+                    .addDeserializer(Path.class, new PathDeserializer(Path.class)));
 
     static <T> void serializeObjectToJsonFile(Path jsonFile, T objectToSerialize) throws IOException {
         FileUtil.writeToFile(jsonFile, toJsonString(objectToSerialize));
@@ -138,6 +141,26 @@ public class JsonUtil {
         @Override
         public Class<Level> handledType() {
             return Level.class;
+        }
+    }
+
+    /**
+     * Deserializes a JSON string into a {@code Path}, preserving relative paths.
+     */
+    private static class PathDeserializer extends FromStringDeserializer<Path> {
+
+        protected PathDeserializer(Class<?> vc) {
+            super(vc);
+        }
+
+        @Override
+        protected Path _deserialize(String value, DeserializationContext ctxt) {
+            return Paths.get(value);
+        }
+
+        @Override
+        public Class<Path> handledType() {
+            return Path.class;
         }
     }
 

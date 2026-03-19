@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Scene?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.stage.Stage?>
+
+<fx:root resizable="false" title="AI Settings" type="javafx.stage.Stage"
+         xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+  <icons>
+    <Image url="@/images/help_icon.png" />
+  </icons>
+  <scene>
+    <Scene>
+      <stylesheets>
+        <URL value="@DarkTheme.css" />
+      </stylesheets>
+
+      <VBox spacing="10" prefWidth="550">
+        <padding>
+          <Insets top="15" right="15" bottom="15" left="15" />
+        </padding>
+
+        <Label text="AI Assistant Settings" style="-fx-font-size: 16; -fx-font-weight: bold;" />
+
+        <Label text="Configure a Google Gemini API key to enable AI-powered assistance."
+               wrapText="true" />
+
+        <Label text="Get your free API key from:" />
+        <Hyperlink fx:id="geminiLink" text="Google AI Studio"
+                   onAction="#openGeminiLink" />
+
+        <Label text="API Key:" />
+        <HBox spacing="10" alignment="CENTER_LEFT">
+          <TextField fx:id="apiKeyField" promptText="Enter your Gemini API key"
+                     HBox.hgrow="ALWAYS" />
+          <Button fx:id="saveButton" text="Save" onAction="#handleSave"
+                  minWidth="70" />
+          <Button fx:id="clearButton" text="Clear" onAction="#handleClear"
+                  minWidth="70" />
+        </HBox>
+
+        <Label fx:id="statusLabel" text="" wrapText="true" />
+      </VBox>
+    </Scene>
+  </scene>
+</fx:root>

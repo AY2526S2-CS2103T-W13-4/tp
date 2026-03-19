@@ -15,6 +15,7 @@ public class UserPrefs implements ReadOnlyUserPrefs {
 
     private GuiSettings guiSettings = new GuiSettings();
     private Path coursePilotFilePath = Paths.get("data" , "addressbook.json");
+    private String geminiApiKey = "";
 
     /**
      * Creates a {@code UserPrefs} with default values.
@@ -36,6 +37,7 @@ public class UserPrefs implements ReadOnlyUserPrefs {
         requireNonNull(newUserPrefs);
         setGuiSettings(newUserPrefs.getGuiSettings());
         setCoursePilotFilePath(newUserPrefs.getCoursePilotFilePath());
+        setGeminiApiKey(newUserPrefs.getGeminiApiKey());
     }
 
     public GuiSettings getGuiSettings() {
@@ -56,6 +58,14 @@ public class UserPrefs implements ReadOnlyUserPrefs {
         this.coursePilotFilePath = coursePilotFilePath;
     }
 
+    public String getGeminiApiKey() {
+        return geminiApiKey;
+    }
+
+    public void setGeminiApiKey(String geminiApiKey) {
+        this.geminiApiKey = geminiApiKey == null ? "" : geminiApiKey;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -69,12 +79,13 @@ public class UserPrefs implements ReadOnlyUserPrefs {
 
         UserPrefs otherUserPrefs = (UserPrefs) other;
         return guiSettings.equals(otherUserPrefs.guiSettings)
-                && coursePilotFilePath.equals(otherUserPrefs.coursePilotFilePath);
+                && coursePilotFilePath.equals(otherUserPrefs.coursePilotFilePath)
+                && Objects.equals(geminiApiKey, otherUserPrefs.geminiApiKey);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(guiSettings, coursePilotFilePath);
+        return Objects.hash(guiSettings, coursePilotFilePath, geminiApiKey);
     }
 
     @Override
@@ -82,6 +93,7 @@ public class UserPrefs implements ReadOnlyUserPrefs {
         StringBuilder sb = new StringBuilder();
         sb.append("Gui Settings : " + guiSettings);
         sb.append("\nLocal data file location : " + coursePilotFilePath);
+        sb.append("\nGemini API key : " + (geminiApiKey.isEmpty() ? "not set" : "configured"));
         return sb.toString();
     }
 

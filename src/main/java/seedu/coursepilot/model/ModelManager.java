@@ -75,6 +75,16 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public String getGeminiApiKey() {
+        return userPrefs.getGeminiApiKey();
+    }
+
+    @Override
+    public void setGeminiApiKey(String apiKey) {
+        userPrefs.setGeminiApiKey(apiKey);
+    }
+
+    @Override
     public Path getCoursePilotFilePath() {
         return userPrefs.getCoursePilotFilePath();
     }

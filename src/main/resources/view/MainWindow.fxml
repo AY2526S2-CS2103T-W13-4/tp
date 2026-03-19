@@ -31,6 +31,9 @@
           <Menu mnemonicParsing="false" text="Help">
             <MenuItem fx:id="helpMenuItem" mnemonicParsing="false" onAction="#handleHelp" text="Help" />
           </Menu>
+          <Menu mnemonicParsing="false" text="AI">
+            <MenuItem mnemonicParsing="false" onAction="#handleAiSettings" text="AI Settings" />
+          </Menu>
         </MenuBar>
 
         <SplitPane VBox.vgrow="ALWAYS" dividerPositions="0.25" styleClass="pane-with-border">

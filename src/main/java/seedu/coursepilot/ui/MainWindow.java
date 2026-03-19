@@ -1,7 +1,10 @@
 package seedu.coursepilot.ui;
 
+import java.util.Optional;
 import java.util.logging.Logger;
 
+import javafx.application.HostServices;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
@@ -13,6 +16,7 @@ import javafx.stage.Stage;
 import seedu.coursepilot.commons.core.GuiSettings;
 import seedu.coursepilot.commons.core.LogsCenter;
 import seedu.coursepilot.logic.Logic;
+import seedu.coursepilot.logic.ai.NaturalLanguageParser;
 import seedu.coursepilot.logic.commands.CommandResult;
 import seedu.coursepilot.logic.commands.exceptions.CommandException;
 import seedu.coursepilot.logic.parser.exceptions.ParseException;
@@ -36,6 +40,10 @@ public class MainWindow extends UiPart<Stage> {
     private TutorialDetailsPanel tutorialDetailsPanel;
     private ResultDisplay resultDisplay;
     private HelpWindow helpWindow;
+    private AiSettingsWindow aiSettingsWindow;
+    private CommandBox commandBox;
+    private final NaturalLanguageParser nlParser = new NaturalLanguageParser();
+    private HostServices hostServices;
 
     @FXML
     private StackPane commandBoxPlaceholder;
@@ -71,6 +79,19 @@ public class MainWindow extends UiPart<Stage> {
         setAccelerators();
 
         helpWindow = new HelpWindow();
+
+        // Initialize Gemini if API key is configured
+        String savedKey = logic.getGeminiApiKey();
+        if (savedKey != null && !savedKey.isBlank()) {
+            nlParser.setGeminiApiKey(savedKey);
+        }
+    }
+
+    /**
+     * Sets the HostServices for opening URLs in the browser.
+     */
+    public void setHostServices(HostServices hostServices) {
+        this.hostServices = hostServices;
     }
 
     public Stage getPrimaryStage() {
@@ -144,7 +165,7 @@ public class MainWindow extends UiPart<Stage> {
             logic.getCurrentOperatingTutorialProperty());
         statusbarPlaceholder.getChildren().add(statusBarFooter.getRoot());
 
-        CommandBox commandBox = new CommandBox(this::executeCommand);
+        commandBox = new CommandBox(this::executeCommand);
         commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
     }
 
@@ -204,7 +225,32 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     /**
+     * Opens the AI settings window or focuses on it if it's already opened.
+     */
+    @FXML
+    public void handleAiSettings() {
+        if (aiSettingsWindow == null || !aiSettingsWindow.isShowing()) {
+            String currentKey = logic.getGeminiApiKey();
+            aiSettingsWindow = new AiSettingsWindow(
+                    this::onApiKeySaved, hostServices,
+                    currentKey != null ? currentKey : "");
+            aiSettingsWindow.show();
+        } else {
+            aiSettingsWindow.focus();
+        }
+    }
+
+    /**
+     * Callback when the user saves or clears the Gemini API key.
+     */
+    private void onApiKeySaved(String apiKey) {
+        logic.setGeminiApiKey(apiKey);
+        nlParser.setGeminiApiKey(apiKey);
+    }
+
+    /**
      * Executes the command and returns the result.
+     * If the command is unknown, falls back to AI assistance.
      *
      * @see seedu.coursepilot.logic.Logic#execute(String)
      */
@@ -225,10 +271,46 @@ public class MainWindow extends UiPart<Stage> {
             updateCenterPanel(commandText);
 
             return commandResult;
-        } catch (CommandException | ParseException e) {
+        } catch (ParseException e) {
+            if (e.getMessage().contains("Unknown command")) {
+                handleUnknownCommand(commandText);
+                throw e;
+            }
             logger.info("An error occurred while executing command: " + commandText);
             resultDisplay.setFeedbackToUser(e.getMessage());
             throw e;
+        } catch (CommandException e) {
+            logger.info("An error occurred while executing command: " + commandText);
+            resultDisplay.setFeedbackToUser(e.getMessage());
+            throw e;
+        }
+    }
+
+    /**
+     * Handles an unknown command by trying keyword matching, then Gemini API.
+     * Keyword matching is instant; Gemini runs on a background thread.
+     */
+    private void handleUnknownCommand(String userInput) {
+        if (nlParser.isGeminiAvailable()) {
+            // Check keyword match first (instant)
+            Optional<String> keywordMatch =
+                    new seedu.coursepilot.logic.ai.KeywordMatcher().match(userInput);
+            if (keywordMatch.isPresent()) {
+                resultDisplay.setFeedbackToUser(keywordMatch.get());
+                return;
+            }
+            // Fall through to Gemini on background thread
+            resultDisplay.setFeedbackToUser("Asking AI assistant...");
+            Thread aiThread = new Thread(() -> {
+                String response = nlParser.handleUnknownInput(userInput);
+                Platform.runLater(() -> resultDisplay.setFeedbackToUser(response));
+            });
+            aiThread.setDaemon(true);
+            aiThread.start();
+        } else {
+            // No Gemini — use keyword matcher with fallback
+            String response = nlParser.handleUnknownInput(userInput);
+            resultDisplay.setFeedbackToUser(response);
         }
     }
 }
