@@ -1,7 +1,9 @@
 package seedu.coursepilot.ui;
 
+import java.util.Optional;
 import java.util.logging.Logger;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
@@ -13,6 +15,7 @@ import javafx.stage.Stage;
 import seedu.coursepilot.commons.core.GuiSettings;
 import seedu.coursepilot.commons.core.LogsCenter;
 import seedu.coursepilot.logic.Logic;
+import seedu.coursepilot.logic.ai.NaturalLanguageParser;
 import seedu.coursepilot.logic.commands.CommandResult;
 import seedu.coursepilot.logic.commands.exceptions.CommandException;
 import seedu.coursepilot.logic.parser.exceptions.ParseException;
@@ -36,6 +39,8 @@ public class MainWindow extends UiPart<Stage> {
     private TutorialDetailsPanel tutorialDetailsPanel;
     private ResultDisplay resultDisplay;
     private HelpWindow helpWindow;
+    private CommandBox commandBox;
+    private final NaturalLanguageParser nlParser = new NaturalLanguageParser();
 
     @FXML
     private StackPane commandBoxPlaceholder;
@@ -144,7 +149,7 @@ public class MainWindow extends UiPart<Stage> {
             logic.getCurrentOperatingTutorialProperty());
         statusbarPlaceholder.getChildren().add(statusBarFooter.getRoot());
 
-        CommandBox commandBox = new CommandBox(this::executeCommand);
+        commandBox = new CommandBox(this::executeCommand);
         commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
     }
 
@@ -205,6 +210,7 @@ public class MainWindow extends UiPart<Stage> {
 
     /**
      * Executes the command and returns the result.
+     * If the command is unknown, attempts AI translation via Ollama.
      *
      * @see seedu.coursepilot.logic.Logic#execute(String)
      */
@@ -213,6 +219,11 @@ public class MainWindow extends UiPart<Stage> {
             CommandResult commandResult = logic.execute(commandText);
             logger.info("Result: " + commandResult.getFeedbackToUser());
             resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
+
+            if (commandResult.getSuggestedCommand().isPresent()) {
+                handleAiSuggestion(commandResult);
+                return commandResult;
+            }
 
             if (commandResult.isShowHelp()) {
                 handleHelp();
@@ -225,10 +236,64 @@ public class MainWindow extends UiPart<Stage> {
             updateCenterPanel(commandText);
 
             return commandResult;
-        } catch (CommandException | ParseException e) {
+        } catch (ParseException e) {
+            if (e.getMessage().contains("Unknown command")) {
+                handleAiTranslation(commandText);
+                throw e;
+            }
+            logger.info("An error occurred while executing command: " + commandText);
+            resultDisplay.setFeedbackToUser(e.getMessage());
+            throw e;
+        } catch (CommandException e) {
             logger.info("An error occurred while executing command: " + commandText);
             resultDisplay.setFeedbackToUser(e.getMessage());
             throw e;
         }
+    }
+
+    /**
+     * Handles unknown input by classifying it as a question or command,
+     * then routing to chat or translation accordingly on a background thread.
+     */
+    private void handleAiTranslation(String userInput) {
+        NaturalLanguageParser.InputType inputType = nlParser.classifyInput(userInput);
+
+        if (inputType == NaturalLanguageParser.InputType.QUESTION) {
+            resultDisplay.setFeedbackToUser("Thinking...");
+            Thread chatThread = new Thread(() -> {
+                String response = nlParser.chat(userInput);
+                Platform.runLater(() -> resultDisplay.setFeedbackToUser(response));
+            });
+            chatThread.setDaemon(true);
+            chatThread.start();
+        } else {
+            resultDisplay.setFeedbackToUser("Translating your input with AI...");
+            Thread translationThread = new Thread(() -> {
+                Optional<String> translated = nlParser.translate(userInput);
+                Platform.runLater(() -> {
+                    if (translated.isPresent()) {
+                        commandBox.setCommandText(translated.get());
+                        resultDisplay.setFeedbackToUser(
+                                "AI suggested the command above. Press Enter to run, or edit it first.");
+                    } else {
+                        resultDisplay.setFeedbackToUser(
+                                "Unknown command. AI could not interpret your input.\n"
+                                + "Type 'help' to see available commands.");
+                    }
+                });
+            });
+            translationThread.setDaemon(true);
+            translationThread.start();
+        }
+    }
+
+    /**
+     * Handles a command result that contains an AI-suggested command.
+     */
+    private void handleAiSuggestion(CommandResult commandResult) {
+        commandResult.getSuggestedCommand().ifPresent(suggested -> {
+            commandBox.setCommandText(suggested);
+            resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
+        });
     }
 }
