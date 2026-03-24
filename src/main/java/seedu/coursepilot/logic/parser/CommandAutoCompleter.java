@@ -1,10 +1,30 @@
 package seedu.coursepilot.logic.parser;
 
+import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_CAPACITY;
+import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_DAY;
+import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_MATRICNUMBER;
+import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_TIMESLOT;
+import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_TUTORIALCODE;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import seedu.coursepilot.logic.commands.AddCommand;
+import seedu.coursepilot.logic.commands.ClearCommand;
+import seedu.coursepilot.logic.commands.DeleteCommand;
+import seedu.coursepilot.logic.commands.EditCommand;
+import seedu.coursepilot.logic.commands.ExitCommand;
+import seedu.coursepilot.logic.commands.FindCommand;
+import seedu.coursepilot.logic.commands.HelpCommand;
+import seedu.coursepilot.logic.commands.ListCommand;
+import seedu.coursepilot.logic.commands.SelectCommand;
 
 /**
  * Provides context-aware autocomplete suggestions for the command box.
@@ -13,19 +33,25 @@ import java.util.stream.Collectors;
 public class CommandAutoCompleter {
 
     private static final List<String> COMMAND_WORDS = List.of(
-            "add", "clear", "delete", "edit", "exit", "find", "help", "list", "select");
+            AddCommand.COMMAND_WORD, ClearCommand.COMMAND_WORD, DeleteCommand.COMMAND_WORD,
+            EditCommand.COMMAND_WORD, ExitCommand.COMMAND_WORD, FindCommand.COMMAND_WORD,
+            HelpCommand.COMMAND_WORD, ListCommand.COMMAND_WORD, SelectCommand.COMMAND_WORD);
 
-    private static final List<String> ADD_FLAGS = List.of("-student", "-tutorial");
-    private static final List<String> DELETE_FLAGS = List.of("-student", "-tutorial");
-    private static final List<String> LIST_FLAGS = List.of("-student", "-tutorial");
-    private static final List<String> FIND_FLAGS = List.of("/phone", "/email", "/matric");
+    private static final List<String> TYPE_FLAGS = List.of("-student", "-tutorial");
+
+    private static final List<String> FIND_FLAGS = Arrays.stream(FindCommand.Flag.values())
+            .map(FindCommand.Flag::getValue)
+            .collect(Collectors.toUnmodifiableList());
 
     private static final List<String> STUDENT_PREFIXES = List.of(
-            "/name", "/phone", "/email", "/matric", "/tag");
+            PREFIX_NAME.toString(), PREFIX_PHONE.toString(), PREFIX_EMAIL.toString(),
+            PREFIX_MATRICNUMBER.toString(), PREFIX_TAG.toString());
     private static final List<String> TUTORIAL_PREFIXES = List.of(
-            "/code", "/day", "/timeslot", "/capacity");
+            PREFIX_TUTORIALCODE.toString(), PREFIX_DAY.toString(),
+            PREFIX_TIMESLOT.toString(), PREFIX_CAPACITY.toString());
     private static final List<String> EDIT_PREFIXES = List.of(
-            "/name", "/phone", "/email", "/matric", "/tag");
+            PREFIX_NAME.toString(), PREFIX_PHONE.toString(), PREFIX_EMAIL.toString(),
+            PREFIX_MATRICNUMBER.toString(), PREFIX_TAG.toString());
 
     /**
      * Returns autocomplete suggestions based on the current input text.
@@ -40,15 +66,12 @@ public class CommandAutoCompleter {
 
         String trimmed = text.stripLeading();
         String[] parts = trimmed.split("\\s+");
-
-        if (parts.length == 0) {
-            return COMMAND_WORDS;
-        }
+        assert parts.length >= 1 : "split on non-empty string should produce at least one part";
 
         String commandWord = parts[0].toLowerCase();
 
         // State 1: Typing the command word (no space after yet)
-        if (!text.contains(" ")) {
+        if (!trimmed.contains(" ")) {
             return filterByPrefix(COMMAND_WORDS, commandWord);
         }
 
@@ -65,23 +88,23 @@ public class CommandAutoCompleter {
      */
     private List<String> getSuggestionsForCommand(String command, String fullText, String[] parts) {
         switch (command) {
-        case "add":
+        case AddCommand.COMMAND_WORD:
             return getAddSuggestions(fullText, parts);
-        case "delete":
-            return getFlagSuggestions(DELETE_FLAGS, parts);
-        case "list":
-            return getFlagSuggestions(LIST_FLAGS, parts);
-        case "find":
+        case DeleteCommand.COMMAND_WORD:
+            return getFlagSuggestions(TYPE_FLAGS, parts);
+        case ListCommand.COMMAND_WORD:
+            return getFlagSuggestions(TYPE_FLAGS, parts);
+        case FindCommand.COMMAND_WORD:
             return getFlagSuggestions(FIND_FLAGS, parts);
-        case "edit":
+        case EditCommand.COMMAND_WORD:
             return getEditSuggestions(fullText, parts);
-        case "clear":
-        case "help":
-        case "exit":
-        case "select":
+        case ClearCommand.COMMAND_WORD:
+        case HelpCommand.COMMAND_WORD:
+        case ExitCommand.COMMAND_WORD:
+        case SelectCommand.COMMAND_WORD:
             return Collections.emptyList();
         default:
-            return Collections.emptyList();
+            throw new AssertionError("Unknown command should not reach here: " + command);
         }
     }
 
@@ -90,14 +113,14 @@ public class CommandAutoCompleter {
      */
     private List<String> getAddSuggestions(String fullText, String[] parts) {
         if (parts.length < 2) {
-            return ADD_FLAGS;
+            return TYPE_FLAGS;
         }
 
         String flag = parts[1];
 
         // Still typing the flag
         if (parts.length == 2 && !fullText.endsWith(" ")) {
-            return filterByPrefix(ADD_FLAGS, flag);
+            return filterByPrefix(TYPE_FLAGS, flag);
         }
 
         // Flag is complete, suggest prefixes
@@ -144,7 +167,7 @@ public class CommandAutoCompleter {
                 .collect(Collectors.toSet());
 
         return allPrefixes.stream()
-                .filter(prefix -> "/tag".equals(prefix) || !usedPrefixes.contains(prefix))
+                .filter(prefix -> PREFIX_TAG.toString().equals(prefix) || !usedPrefixes.contains(prefix))
                 .collect(Collectors.toList());
     }
 
