@@ -91,19 +91,22 @@ public class FindCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
+        assert predicate != null;
 
         if (model.getCurrentOperatingTutorial().isEmpty()) {
             model.updateFilteredStudentList(predicate);
+            assert model.getFilteredStudentList() != null;
             return new CommandResult(
                 String.format(Messages.MESSAGE_STUDENTS_LISTED_OVERVIEW,
                         model.getFilteredStudentList().size()), false, false, PanelSwitch.SHOW_STUDENT_LIST);
         }
 
         model.updateFilteredStudentList(
-            student -> predicate.test(student)
-                    && model.getCurrentOperatingTutorial()
+            student -> predicate.test(student) &&
+                    model.getCurrentOperatingTutorial()
                             .map(tutorial -> tutorial.hasStudent(student))
                             .orElse(false));
+        assert model.getFilteredStudentList() != null;
         return new CommandResult(
                 String.format(Messages.MESSAGE_STUDENTS_LISTED_OVERVIEW, model.getFilteredStudentList().size()));
     }

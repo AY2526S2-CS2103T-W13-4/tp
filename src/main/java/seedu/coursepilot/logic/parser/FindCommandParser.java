@@ -34,6 +34,7 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         String[] nameKeywords = trimmedArgs.split("\\s+");
+        assert nameKeywords.length > 0;
 
         if (nameKeywords[0].startsWith("/")) {
             FindCommand.Flag flag = FindCommand.Flag.fromString(nameKeywords[0]);
@@ -41,6 +42,12 @@ public class FindCommandParser implements Parser<FindCommand> {
                 throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT_FLAG, FindCommand.MESSAGE_USAGE_FLAG));
             }
+
+            if (nameKeywords.length < 2) {
+                throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE_FLAG));
+            }
+
             switch (flag) {
             case PHONE:
                 return new FindCommand(new PhoneStartsWithKeywordsPredicate(Arrays.asList(nameKeywords)));
