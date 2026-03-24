@@ -12,7 +12,7 @@ import seedu.coursepilot.model.tag.Tag;
 
 /**
  * Represents a Student in the course pilot.
- * Guarantees: details are present and not null, field values are validated, immutable.
+ * Guarantees: details are present and not null, field values are validated and immutable.
  */
 public class Student {
 
