@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.coursepilot.logic.Messages.MESSAGE_STUDENTS_LISTED_OVERVIEW;
-import static seedu.coursepilot.logic.commands.CommandTestUtil.assertCommandFailure;
+// import static seedu.coursepilot.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.coursepilot.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.coursepilot.testutil.TypicalStudents.CARL;
 import static seedu.coursepilot.testutil.TypicalStudents.ELLE;
