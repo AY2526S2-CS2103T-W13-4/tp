@@ -222,6 +222,13 @@
     -fx-text-fill: white;
 }
 
+.autocomplete-label {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: white;
+    -fx-padding: 3 8 3 8;
+}
+
 .menu-bar {
     -fx-background-color: derive(#1d1d1d, 20%);
 }

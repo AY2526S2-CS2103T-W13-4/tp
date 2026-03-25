@@ -230,15 +230,28 @@ Exits the program.
 
 Format: `exit`
 
+### Command autocomplete
+
+CoursePilot provides context-aware autocomplete suggestions as you type in the command box. Suggestions appear in a dropdown menu below the input field.
+
+* **Command words**: Start typing and matching commands (e.g., `add`, `delete`, `list`) are suggested.
+* **Flags**: After typing a command word, relevant flags are suggested (e.g., `-student`, `-tutorial` for `add`).
+* **Prefixes**: After selecting a flag, the required parameter prefixes are suggested (e.g., `/name`, `/phone`, `/email`, `/matric` for `add -student`). Already-used prefixes are excluded from suggestions, except `/tag` which can be used multiple times.
+
+**Keyboard shortcuts:**
+* <kbd>Tab</kbd> : Accepts the first suggestion.
+* <kbd>Escape</kbd> : Dismisses the suggestion menu.
+* You can also click on any suggestion to select it.
+
 ### Saving the data
 
 CoursePilot automatically saves all data after any command that modifies data. There is no need to save manually.
 
-The data is saved in a JSON file located at `[JAR file location]/data/addressbook.json`.
+The data is saved in a JSON file located at `[JAR file location]/data/coursepilot.json`.
 
 ### Editing the data file
 
-Advanced users can directly edit the data file to make bulk changes. The data file is stored as `[JAR file location]/data/addressbook.json` in JSON format.
+Advanced users can directly edit the data file to make bulk changes. The data file is stored as `[JAR file location]/data/coursepilot.json` in JSON format.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
 If your changes to the data file make its format invalid, CoursePilot will discard all data and start with an empty data file on the next run. Ensure you make a backup before editing and thoroughly validate the JSON format after making changes.<br>
@@ -250,7 +263,7 @@ Furthermore, manual edits can cause CoursePilot to behave unexpectedly if invali
 ## FAQ
 
 **Q**: How do I transfer my data to another computer?<br>
-**A**: Install CoursePilot on the other computer and overwrite the empty data file it creates with the `addressbook.json` file from your previous installation.
+**A**: Install CoursePilot on the other computer and overwrite the empty data file it creates with the `coursepilot.json` file from your previous installation.
 
 **Q**: What happens if I forget to select a tutorial before using `add -student`, `delete -student`, `list -student`, or `find`?<br>
 **A**: CoursePilot will display an error message: "No current operating tutorial selected. Use select first." Use the `select` command to choose a tutorial before retrying.

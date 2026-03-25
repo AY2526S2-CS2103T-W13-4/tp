@@ -14,7 +14,7 @@ import seedu.coursepilot.commons.core.GuiSettings;
 public class UserPrefs implements ReadOnlyUserPrefs {
 
     private GuiSettings guiSettings = new GuiSettings();
-    private Path coursePilotFilePath = Paths.get("data" , "addressbook.json");
+    private Path coursePilotFilePath = Paths.get("data" , "coursepilot.json");
 
     /**
      * Creates a {@code UserPrefs} with default values.
