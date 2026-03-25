@@ -35,13 +35,20 @@ public class CommandResult {
     private final PanelSwitch panelSwitch;
 
     /**
-     * Constructs a {@code CommandResult} with the specified fields.
+     * Primary constructor that all other constructors will use.
      */
-    public CommandResult(String feedbackToUser, boolean showHelp, boolean exit, PanelSwitch panelSwitch) {
+    private CommandResult(String feedbackToUser, boolean showHelp, boolean exit, PanelSwitch panelSwitch) {
         this.feedbackToUser = requireNonNull(feedbackToUser);
         this.showHelp = showHelp;
         this.exit = exit;
         this.panelSwitch = panelSwitch;
+    }
+
+    /**
+     * Constructs a {@code CommandResult} with the specified fields.
+     */
+    public CommandResult(String feedbackToUser, boolean showHelp, boolean exit) {
+        this(feedbackToUser, showHelp, exit, PanelSwitch.NO_CHANGE);
     }
 
     /**
@@ -50,6 +57,14 @@ public class CommandResult {
      */
     public CommandResult(String feedbackToUser) {
         this(feedbackToUser, false, false, PanelSwitch.NO_CHANGE);
+    }
+
+    /**
+     * Constructs a {@code CommandResult} with the specified {@code feedbackToUser} and {@code panelSwitch},
+     * and other fields set to their default value.
+     */
+    public CommandResult(String feedbackToUser, PanelSwitch panelSwitch) {
+        this(feedbackToUser, false, false, panelSwitch);
     }
 
     public String getFeedbackToUser() {

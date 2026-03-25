@@ -98,7 +98,7 @@ public class FindCommand extends Command {
             assert model.getFilteredStudentList() != null;
             return new CommandResult(
                 String.format(Messages.MESSAGE_STUDENTS_LISTED_OVERVIEW,
-                        model.getFilteredStudentList().size()), false, false, PanelSwitch.SHOW_STUDENT_LIST);
+                        model.getFilteredStudentList().size()), PanelSwitch.SHOW_STUDENT_LIST);
         }
 
         model.updateFilteredStudentList(

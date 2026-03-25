@@ -198,20 +198,6 @@ public class MainWindow extends UiPart<Stage> {
         setTutorialDetailsPanelVisible(true);
     }
 
-    public StudentListPanel getStudentListPanel() {
-        return studentListPanel;
-    }
-
-    private void updateCenterPanel(CommandResult commandResult) {
-        if (commandResult.getPanelSwitch() == CommandResult.PanelSwitch.SHOW_TUTORIAL_DETAILS) {
-            setStudentListPanelVisible(false);
-            setTutorialDetailsPanelVisible(true);
-        } else if (commandResult.getPanelSwitch() == CommandResult.PanelSwitch.SHOW_STUDENT_LIST) {
-            setTutorialDetailsPanelVisible(false);
-            setStudentListPanelVisible(true);
-        }
-    }
-
     /**
      * Executes the command and returns the result.
      *

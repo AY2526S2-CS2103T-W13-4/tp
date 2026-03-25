@@ -16,7 +16,8 @@ public class CommandResultTest {
 
         // same values -> returns true
         assertTrue(commandResult.equals(new CommandResult("feedback")));
-        assertTrue(commandResult.equals(new CommandResult("feedback", false, false, PanelSwitch.NO_CHANGE)));
+        assertTrue(commandResult.equals(new CommandResult("feedback", false, false)));
+        assertTrue(commandResult.equals(new CommandResult("feedback", PanelSwitch.NO_CHANGE)));
 
         // same object -> returns true
         assertTrue(commandResult.equals(commandResult));
@@ -32,19 +33,19 @@ public class CommandResultTest {
 
         // different showHelp value -> returns false
         assertFalse(commandResult.equals(new CommandResult(
-                "feedback", true, false, PanelSwitch.NO_CHANGE)));
+                "feedback", true, false)));
 
         // different exit value -> returns false
         assertFalse(commandResult.equals(new CommandResult(
-                "feedback", false, true, PanelSwitch.NO_CHANGE)));
+                "feedback", false, true)));
 
         // different panelSwitch value -> returns false
         assertFalse(commandResult.equals(new CommandResult(
-                "feedback", false, false, PanelSwitch.SHOW_STUDENT_LIST)));
+                "feedback", PanelSwitch.SHOW_STUDENT_LIST)));
 
         // different panelSwitch value -> returns false
         assertFalse(commandResult.equals(new CommandResult(
-                "feedback", false, false, PanelSwitch.SHOW_TUTORIAL_DETAILS)));
+                "feedback", PanelSwitch.SHOW_TUTORIAL_DETAILS)));
     }
 
     @Test
@@ -59,19 +60,19 @@ public class CommandResultTest {
 
         // different showHelp value -> returns different hashcode
         assertNotEquals(commandResult.hashCode(), new CommandResult(
-                "feedback", true, false, PanelSwitch.NO_CHANGE).hashCode());
+                "feedback", true, false).hashCode());
 
         // different exit value -> returns different hashcode
         assertNotEquals(commandResult.hashCode(), new CommandResult(
-                "feedback", false, true, PanelSwitch.NO_CHANGE).hashCode());
+                "feedback", false, true).hashCode());
 
         // different panelSwitch value -> returns different hashcode
         assertNotEquals(commandResult.hashCode(), new CommandResult(
-                "feedback", false, false, PanelSwitch.SHOW_STUDENT_LIST).hashCode());
+                "feedback", PanelSwitch.SHOW_STUDENT_LIST).hashCode());
 
         // different panelSwitch value -> returns different hashcode
         assertNotEquals(commandResult.hashCode(), new CommandResult(
-                "feedback", false, false, PanelSwitch.SHOW_TUTORIAL_DETAILS).hashCode());
+                "feedback", PanelSwitch.SHOW_TUTORIAL_DETAILS).hashCode());
     }
 
     @Test
