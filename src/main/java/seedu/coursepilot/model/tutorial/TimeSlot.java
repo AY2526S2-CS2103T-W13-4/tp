@@ -1,8 +1,9 @@
 package seedu.coursepilot.model.tutorial;
 
 import static java.util.Objects.requireNonNull;
-import java.time.LocalTime;
 import static seedu.coursepilot.commons.util.AppUtil.checkArgument;
+
+import java.time.LocalTime;
 
 /**
  * Represents a Tutorial's time slot in the course pilot.
