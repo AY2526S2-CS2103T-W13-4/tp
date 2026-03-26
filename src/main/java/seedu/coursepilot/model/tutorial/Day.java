@@ -19,7 +19,7 @@ public class Day {
      * Accepts only abbreviations (Mon).
      */
 
-    private static final String days[] = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+    private static final String[] days = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
 
     public final String value;
 

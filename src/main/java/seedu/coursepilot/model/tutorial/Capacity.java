@@ -43,14 +43,13 @@ public class Capacity {
      * Returns true if a given integer is a valid capacity.
      */
     public static boolean isValidCapacity(String test) {
-
-            try {
-                Integer.parseInt(test);
-            } catch (NumberFormatException e) {
-                return false;
-            }
-            int testValue = Integer.parseInt(test);
-            return testValue >= MIN_CAPACITY && testValue <= MAX_CAPACITY;
+        try {
+            Integer.parseInt(test);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        int testValue = Integer.parseInt(test);
+        return testValue >= MIN_CAPACITY && testValue <= MAX_CAPACITY;
     }
 
     public static boolean isValidCapacity(int test) {

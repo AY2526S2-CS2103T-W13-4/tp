@@ -1,7 +1,7 @@
 package seedu.coursepilot.model.tutorial;
 
-import java.time.LocalTime;
 import static java.util.Objects.requireNonNull;
+import java.time.LocalTime;
 import static seedu.coursepilot.commons.util.AppUtil.checkArgument;
 
 /**
