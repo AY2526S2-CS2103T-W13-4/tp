@@ -45,13 +45,13 @@ public class CommandAutoCompleter {
 
     private static final List<String> STUDENT_PREFIXES = List.of(
             PREFIX_NAME.toString(), PREFIX_PHONE.toString(), PREFIX_EMAIL.toString(),
-            PREFIX_MATRICNUMBER.toString(), PREFIX_TAG.toString());
+            PREFIX_MATRICNUMBER.toString());
     private static final List<String> TUTORIAL_PREFIXES = List.of(
             PREFIX_TUTORIALCODE.toString(), PREFIX_DAY.toString(),
             PREFIX_TIMESLOT.toString(), PREFIX_CAPACITY.toString());
     private static final List<String> EDIT_PREFIXES = List.of(
             PREFIX_NAME.toString(), PREFIX_PHONE.toString(), PREFIX_EMAIL.toString(),
-            PREFIX_MATRICNUMBER.toString(), PREFIX_TAG.toString());
+            PREFIX_MATRICNUMBER.toString());
 
     /**
      * Returns autocomplete suggestions based on the current input text.
@@ -99,8 +99,11 @@ public class CommandAutoCompleter {
         case EditCommand.COMMAND_WORD:
             return getEditSuggestions(fullText, parts);
         case ClearCommand.COMMAND_WORD:
+            return Collections.emptyList();
         case HelpCommand.COMMAND_WORD:
+            return Collections.emptyList();
         case ExitCommand.COMMAND_WORD:
+            return Collections.emptyList();
         case SelectCommand.COMMAND_WORD:
             return Collections.emptyList();
         default:
@@ -162,12 +165,24 @@ public class CommandAutoCompleter {
      * The /tag prefix is always suggested since it can be used multiple times.
      */
     private List<String> getUnusedPrefixes(List<String> allPrefixes, String fullText) {
-        Set<String> usedPrefixes = Arrays.stream(fullText.split("\\s+"))
+        if (fullText.endsWith(" ")) {
+            return Collections.emptyList();
+        }
+
+        String[] parts = fullText.split("\\s+");
+        String lastToken = parts[parts.length - 1];
+
+        if (!lastToken.startsWith("/")) {
+            return Collections.emptyList();
+        }
+
+        Set<String> usedPrefixes = Arrays.stream(parts)
                 .filter(word -> word.startsWith("/"))
                 .collect(Collectors.toSet());
 
         return allPrefixes.stream()
                 .filter(prefix -> PREFIX_TAG.toString().equals(prefix) || !usedPrefixes.contains(prefix))
+                .filter(prefix -> prefix.startsWith(lastToken) && !prefix.equals(lastToken))
                 .collect(Collectors.toList());
     }
 

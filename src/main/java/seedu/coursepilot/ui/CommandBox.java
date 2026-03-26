@@ -2,16 +2,16 @@ package seedu.coursepilot.ui;
 
 import java.util.List;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Side;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.CustomMenuItem;
-import javafx.scene.control.Label;
+import javafx.geometry.Bounds;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
+import javafx.stage.Popup;
 import seedu.coursepilot.logic.commands.CommandResult;
 import seedu.coursepilot.logic.commands.exceptions.CommandException;
 import seedu.coursepilot.logic.parser.CommandAutoCompleter;
@@ -25,11 +25,15 @@ public class CommandBox extends UiPart<Region> {
     public static final String ERROR_STYLE_CLASS = "error";
     private static final String FXML = "CommandBox.fxml";
     private static final int MAX_SUGGESTIONS = 8;
+    private static final double LIST_CELL_HEIGHT = 30.0;
 
     private final CommandExecutor commandExecutor;
     private final CommandAutoCompleter autoCompleter = new CommandAutoCompleter();
-    private final ContextMenu suggestionMenu = new ContextMenu();
-    private boolean suppressSuggestions = false;
+
+    private final Popup suggestionPopup = new Popup();
+    private final ListView<String> suggestionListView = new ListView<>();
+
+    private boolean isApplyingSuggestion = false;
 
     @FXML
     private TextField commandTextField;
@@ -40,83 +44,136 @@ public class CommandBox extends UiPart<Region> {
     public CommandBox(CommandExecutor commandExecutor) {
         super(FXML);
         this.commandExecutor = commandExecutor;
-        commandTextField.textProperty().addListener((unused1, unused2, unused3) -> {
+
+        setupSuggestionUi();
+
+        commandTextField.textProperty().addListener((unused1, unused2, newVal) -> {
             setStyleToDefault();
-            if (suppressSuggestions) {
-                return;
-            }
-            updateSuggestions();
+            updateSuggestions(newVal);
         });
+
         commandTextField.addEventFilter(KeyEvent.KEY_PRESSED, this::handleKeyPressed);
+
         commandTextField.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
             if (!isFocused) {
-                suggestionMenu.hide();
+                commandTextField.requestFocus();
+                commandTextField.end();
             }
         });
-        commandTextField.setOnMouseClicked(event -> suggestionMenu.hide());
     }
 
     /**
-     * Handles key presses for Tab completion, Enter to execute, and Escape to dismiss.
+     * Initializes the UI constraints for the suggestion box.
      */
+    private void setupSuggestionUi() {
+        suggestionListView.getStyleClass().add("suggestion-list-view");
+
+        suggestionListView.setFocusTraversable(false);
+        suggestionListView.setMouseTransparent(false);
+
+        suggestionListView.prefWidthProperty().bind(commandTextField.widthProperty());
+        
+        suggestionPopup.getContent().add(suggestionListView);
+        suggestionPopup.setAutoHide(true);
+    }
+
     private void handleKeyPressed(KeyEvent event) {
-        if (event.getCode() == KeyCode.ENTER) {
-            suggestionMenu.hide();
-            // Don't consume — let the onAction handler in FXML fire
-        } else if (event.getCode() == KeyCode.TAB) {
-            if (suggestionMenu.isShowing() && !suggestionMenu.getItems().isEmpty()) {
-                applySuggestion(((Label) ((CustomMenuItem)
-                        suggestionMenu.getItems().get(0)).getContent()).getText());
-                event.consume();
+        if (event.getCode() == KeyCode.TAB) {
+            if (suggestionPopup.isShowing()) {
+                String selected = suggestionListView.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    applySuggestion(selected);
+                }
             }
-        } else if (event.getCode() == KeyCode.ESCAPE) {
-            suggestionMenu.hide();
-        }
-    }
-
-    /**
-     * Updates the autocomplete suggestion menu based on the current text.
-     */
-    private void updateSuggestions() {
-        String text = commandTextField.getText();
-
-        if (text == null || text.isEmpty()) {
-            suggestionMenu.hide();
+            event.consume();
             return;
         }
 
+        if (!suggestionPopup.isShowing()) {
+            return;
+        }
+
+        switch (event.getCode()) {
+        case DOWN:
+            int nextIndex = (suggestionListView.getSelectionModel().getSelectedIndex() + 1) 
+                    % suggestionListView.getItems().size();
+            suggestionListView.getSelectionModel().select(nextIndex);
+            event.consume();
+            break;
+
+        case UP:
+            int size = suggestionListView.getItems().size();
+            int prevIndex = (suggestionListView.getSelectionModel().getSelectedIndex() - 1 + size) % size;
+            suggestionListView.getSelectionModel().select(prevIndex);
+            event.consume();
+            break;
+
+        case ENTER:
+            String selected = suggestionListView.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                applySuggestion(selected);
+                event.consume();
+            } else if (event.getCode() == KeyCode.ENTER) {
+                suggestionPopup.hide();
+            }
+            break;
+
+        case ESCAPE:
+            suggestionPopup.hide();
+            event.consume();
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    private void updateSuggestions(String text) {
         List<String> suggestions = autoCompleter.getSuggestions(text);
 
-        suggestionMenu.getItems().clear();
-
-        if (suggestions.isEmpty()) {
-            suggestionMenu.hide();
+        if (suggestions.isEmpty() || text.isEmpty()) {
+            suggestionPopup.hide();
             return;
         }
 
-        suggestions.stream()
-                .limit(MAX_SUGGESTIONS)
-                .forEach(suggestion -> {
-                    Label label = new Label(suggestion);
-                    label.getStyleClass().add("autocomplete-label");
-                    CustomMenuItem item = new CustomMenuItem(label, true);
-                    item.setOnAction(e -> applySuggestion(suggestion));
-                    suggestionMenu.getItems().add(item);
-                });
+        ObservableList<String> items = FXCollections.observableArrayList(suggestions);
+        if (items.size() > MAX_SUGGESTIONS) {
+            items = FXCollections.observableArrayList(items.subList(0, MAX_SUGGESTIONS));
+        }
 
-        if (!suggestionMenu.isShowing()) {
-            suggestionMenu.show(commandTextField, Side.BOTTOM, 0, 0);
+        suggestionListView.setItems(items);
+        
+        suggestionListView.getSelectionModel().selectFirst();
+
+        double height = Math.min(items.size() * LIST_CELL_HEIGHT + 2, 200);
+        suggestionListView.setPrefHeight(height);
+
+        showPopupAboveTextField(height);
+    }
+
+    private void showPopupAboveTextField(double listHeight) {
+        if (commandTextField.getScene() == null) {
+            return;
+        }
+
+        Bounds bounds = commandTextField.localToScreen(commandTextField.getBoundsInLocal());
+        double x = bounds.getMinX();
+        double y = bounds.getMinY() - listHeight;
+
+        if (!suggestionPopup.isShowing()) {
+            suggestionPopup.show(commandTextField.getScene().getWindow(), x, y);
+        } else {
+            suggestionPopup.setX(x);
+            suggestionPopup.setY(y);
         }
     }
 
-    /**
-     * Applies the selected suggestion to the command text field.
-     */
     private void applySuggestion(String suggestion) {
-        String text = commandTextField.getText();
-        String trimmed = text.stripLeading();
-        String[] parts = trimmed.split("\\s+");
+        isApplyingSuggestion = true;
 
+        String text = commandTextField.getText();
+        String[] parts = text.stripLeading().split("\\s+");
+        
         String newText;
         if (!text.contains(" ")) {
             newText = suggestion + " ";
@@ -127,29 +184,28 @@ public class CommandBox extends UiPart<Region> {
             newText = text + suggestion + " ";
         }
 
-        suppressSuggestions = true;
         commandTextField.setText(newText);
         commandTextField.positionCaret(newText.length());
-        suppressSuggestions = false;
-        suggestionMenu.hide();
+        suggestionPopup.hide();
+
+        isApplyingSuggestion = false;
     }
 
     /**
-     * Handles the Enter button pressed event.
+     * Handles button pressed event.
      */
     @FXML
     private void handleCommandEntered() {
-        suggestionMenu.hide();
         String commandText = commandTextField.getText();
-        if (commandText.equals("")) {
+        if (commandText.isEmpty()) {
             return;
         }
 
         try {
             commandExecutor.execute(commandText);
-            suppressSuggestions = true;
+            isApplyingSuggestion = true;
             commandTextField.setText("");
-            suppressSuggestions = false;
+            isApplyingSuggestion = false;
         } catch (CommandException | ParseException e) {
             setStyleToIndicateCommandFailure();
         }
@@ -183,7 +239,7 @@ public class CommandBox extends UiPart<Region> {
         /**
          * Executes the command and returns the result.
          *
-         * @see seedu.coursepilot.logic.Logic#execute(String)
+         * @see seedu.address.logic.Logic#execute(String)
          */
         CommandResult execute(String commandText) throws CommandException, ParseException;
     }

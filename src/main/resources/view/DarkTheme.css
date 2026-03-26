@@ -229,6 +229,30 @@
     -fx-padding: 3 8 3 8;
 }
 
+.suggestion-list-view {
+    -fx-background-color: #383838;
+    -fx-border-color: #0096C9;
+    -fx-border-width: 1px;
+    -fx-background-insets: 0;
+}
+
+.suggestion-list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-family: "Segoe UI Light";
+    -fx-font-size: 11pt;
+    -fx-padding: 5 10 5 10;
+}
+
+.suggestion-list-view .list-cell:filled:selected {
+    -fx-background-color: #0096C9;
+    -fx-text-fill: white;
+}
+
+.suggestion-list-view .list-cell:filled:hover {
+    -fx-background-color: #4e4e4e;
+}
+
 .menu-bar {
     -fx-background-color: derive(#1d1d1d, 20%);
 }
