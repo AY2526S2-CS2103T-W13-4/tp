@@ -43,7 +43,7 @@
                        minWidth="200" minHeight="150" prefHeight="250"/>
 
             <StackPane fx:id="studentListPanelPlaceholder" VBox.vgrow="ALWAYS"
-                       minWidth="300" minHeight="150" prefHeight="400"/>
+                       minWidth="150" minHeight="150" prefHeight="400"/>
 
           </SplitPane>
         </SplitPane>
