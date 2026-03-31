@@ -122,6 +122,18 @@ public class SelectCommandTest {
     }
 
     @Test
+    public void execute_clearKeywordMixedCase_clearsCurrentOperatingTutorial() {
+        Tutorial tutorialToSelect = model.getFilteredTutorialList().get(0);
+        model.setCurrentOperatingTutorial(tutorialToSelect);
+
+        SelectCommand clearCommand = new SelectCommand("NonE");
+        String expectedMessage = SelectCommand.MESSAGE_CLEAR_TUTORIAL;
+
+        assertCommandSuccess(clearCommand, model, expectedMessage, expectedModel);
+        assertTrue(model.getCurrentOperatingTutorial().isEmpty());
+    }
+
+    @Test
     public void equals_sameObject_returnsTrue() {
         SelectCommand selectCommand = new SelectCommand("T01");
         assertTrue(selectCommand.equals(selectCommand));
