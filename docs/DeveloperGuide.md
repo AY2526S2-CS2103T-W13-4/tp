@@ -122,7 +122,7 @@ How the parsing works:
 
 The `Model` component,
 
-* stores the course pilot data i.e., all `Student` objects (which are contained in a `UniqueStudentList` object).
+* stores CoursePilot data i.e., all `Student` objects (which are contained in a `UniqueStudentList` object).
 * stores the currently 'selected' `Student` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Student>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
@@ -141,7 +141,7 @@ The `Model` component,
 <img src="images/StorageClassDiagram.png" width="550" />
 
 The `Storage` component,
-* can save both course pilot data and user preference data in JSON format, and read them back into corresponding objects.
+* can save both CoursePilot data and user preference data in JSON format, and read them back into corresponding objects.
 * inherits from both `CoursePilotStorage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
 * depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
 
@@ -161,31 +161,31 @@ This section describes some noteworthy details on how certain features are imple
 
 The proposed undo/redo mechanism is facilitated by `VersionedCoursePilot`. It extends `CoursePilot` with an undo/redo history, stored internally as an `coursePilotStateList` and `currentStatePointer`. Additionally, it implements the following operations:
 
-* `VersionedCoursePilot#commit()` — Saves the current course pilot state in its history.
-* `VersionedCoursePilot#undo()` — Restores the previous course pilot state from its history.
-* `VersionedCoursePilot#redo()` — Restores a previously undone course pilot state from its history.
+* `VersionedCoursePilot#commit()` — Saves the current CoursePilot state in its history.
+* `VersionedCoursePilot#undo()` — Restores the previous CoursePilot state from its history.
+* `VersionedCoursePilot#redo()` — Restores a previously undone CoursePilot state from its history.
 
 These operations are exposed in the `Model` interface as `Model#commitCoursePilot()`, `Model#undoCoursePilot()` and `Model#redoCoursePilot()` respectively.
 
 Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
 
-Step 1. The user launches the application for the first time. The `VersionedCoursePilot` will be initialized with the initial course pilot state, and the `currentStatePointer` pointing to that single course pilot state.
+Step 1. The user launches the application for the first time. The `VersionedCoursePilot` will be initialized with the initial CoursePilot state, and the `currentStatePointer` pointing to that single CoursePilot state.
 
 ![UndoRedoState0](images/UndoRedoState0.png)
 
-Step 2. The user executes `delete 5` command to delete the 5th student in the course pilot. The `delete` command calls `Model#commitCoursePilot()`, causing the modified state of the course pilot after the `delete 5` command executes to be saved in the `coursePilotStateList`, and the `currentStatePointer` is shifted to the newly inserted course pilot state.
+Step 2. The user executes `delete 5` command to delete the 5th student in the CoursePilot. The `delete` command calls `Model#commitCoursePilot()`, causing the modified state of the CoursePilot after the `delete 5` command executes to be saved in the `coursePilotStateList`, and the `currentStatePointer` is shifted to the newly inserted CoursePilot state.
 
 ![UndoRedoState1](images/UndoRedoState1.png)
 
-Step 3. The user executes `add n/David …​` to add a new student. The `add` command also calls `Model#commitCoursePilot()`, causing another modified course pilot state to be saved into the `coursePilotStateList`.
+Step 3. The user executes `add n/David …​` to add a new student. The `add` command also calls `Model#commitCoursePilot()`, causing another modified CoursePilot state to be saved into the `coursePilotStateList`.
 
 ![UndoRedoState2](images/UndoRedoState2.png)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If a command fails its execution, it will not call `Model#commitCoursePilot()`, so the course pilot state will not be saved into the `coursePilotStateList`.
+<div markdown="span" class="alert alert-info">:information_source: **Note:** If a command fails its execution, it will not call `Model#commitCoursePilot()`, so the CoursePilot state will not be saved into the `coursePilotStateList`.
 
 </div>
 
-Step 4. The user now decides that adding the student was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoCoursePilot()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous course pilot state, and restores the course pilot to that state.
+Step 4. The user now decides that adding the student was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoCoursePilot()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous CoursePilot state, and restores CoursePilot to that state.
 
 ![UndoRedoState3](images/UndoRedoState3.png)
 
@@ -206,17 +206,17 @@ Similarly, how an undo operation goes through the `Model` component is shown bel
 
 ![UndoSequenceDiagram](images/UndoSequenceDiagram-Model.png)
 
-The `redo` command does the opposite — it calls `Model#redoCoursePilot()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the course pilot to that state.
+The `redo` command does the opposite — it calls `Model#redoCoursePilot()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores CoursePilot to that state.
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If the `currentStatePointer` is at index `coursePilotStateList.size() - 1`, pointing to the latest course pilot state, then there are no undone CoursePilot states to restore. The `redo` command uses `Model#canRedoCoursePilot()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
+<div markdown="span" class="alert alert-info">:information_source: **Note:** If the `currentStatePointer` is at index `coursePilotStateList.size() - 1`, pointing to the latest CoursePilot state, then there are no undone CoursePilot states to restore. The `redo` command uses `Model#canRedoCoursePilot()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
 
 </div>
 
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the course pilot, such as `list`, will usually not call `Model#commitCoursePilot()`, `Model#undoCoursePilot()` or `Model#redoCoursePilot()`. Thus, the `coursePilotStateList` remains unchanged.
+Step 5. The user then decides to execute the command `list`. Commands that do not modify CoursePilot, such as `list`, will usually not call `Model#commitCoursePilot()`, `Model#undoCoursePilot()` or `Model#redoCoursePilot()`. Thus, the `coursePilotStateList` remains unchanged.
 
 ![UndoRedoState4](images/UndoRedoState4.png)
 
-Step 6. The user executes `clear`, which calls `Model#commitCoursePilot()`. Since the `currentStatePointer` is not pointing at the end of the `coursePilotStateList`, all course pilot states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
+Step 6. The user executes `clear`, which calls `Model#commitCoursePilot()`. Since the `currentStatePointer` is not pointing at the end of the `coursePilotStateList`, all CoursePilot states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
 
 ![UndoRedoState5](images/UndoRedoState5.png)
 
@@ -228,7 +228,7 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 **Aspect: How undo & redo executes:**
 
-* **Alternative 1 (current choice):** Saves the entire course pilot.
+* **Alternative 1 (current choice):** Saves the entire CoursePilot.
   * Pros: Easy to implement.
   * Cons: May have performance issues in terms of memory usage.
 
@@ -281,10 +281,10 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | * * *    | Tutor | Ask for help when using CoursePilot                      | I can refer to instructions when I forget how to use CoursePilot |
 | * * *    | Tutor | Add a student to CoursePilot                             | I can keep track of all my students in one place |
 | * * *    | Tutor | Delete a student from CoursePilot                        | I can remove students who are no longer relevant |
-| * * *    | Tutor | List all student records                                 | I can quickly view all students stored in CoursePilot |
-| * * *    | Tutor | Edit existing student record                             | I can keep student information accurate and up to date |
-| * * *    | Tutor | Find a student record                                    | I can quickly find a specific student's information |
-| * * *    | Tutor | Clear all existing student records                       | I can reset the system when the data is no longer needed |
+| * * *    | Tutor | List all student contacts                                | I can quickly view all students stored in CoursePilot |
+| * * *    | Tutor | Edit existing student contact                            | I can keep student information accurate and up to date |
+| * * *    | Tutor | Find a student contact                                   | I can quickly find a specific student's information |
+| * * *    | Tutor | Clear all existing student contacts                      | I can reset the system when the data is no longer needed |
 | * * *    | Tutor | Exit CoursePilot                                         | I can safely close the application after use |
 | * * *    | Tutor | Archive CoursePilot data                                 | I do not have to repopulate all my data again |
 | * * *    | Tutor | List all tutorial slots                                  | I can check all the tutorials I am in charge of |
@@ -322,16 +322,15 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 (For all use cases below, the **System** is `CoursePilot` and the **Actor** is the `tutor`, unless specified otherwise)
 
 **Use case: UC01 - Ask for help**
-**Use case: UC02 - Manage Student Records**
-How to add, delete, edit, find, list, clear, assign to tutorial
-**Use case: UC03 - Manage Tutorial Slots**
-How to add, delete, select, list tutorial slots and detail
-**Use case: UC04 - Manage Attendance**
-**Use case: UC05 - Manage Deadlines**
-**Use case: UC06 - Archive and Restore Data**
-**Use case: UC07 - Manage Assessments**
 
-**Use case: UC01 - Add a student**
+**MSS**
+
+1.  Tutor requests for help.
+2.  CoursePilot shows the details of possible user commands.
+
+    Use case ends.
+
+**Use case: UC02 - Add a student**
 
 **MSS**
 
@@ -354,7 +353,7 @@ How to add, delete, select, list tutorial slots and detail
 
       Use case ends.
 
-**Use case: UC02 - Delete a student**
+**Use case: UC03 - Delete a student**
 
 **MSS**
 
@@ -376,7 +375,7 @@ How to add, delete, select, list tutorial slots and detail
 
       Use case ends.
 
-**Use case: UC03 - Mark attendance**
+**Use case: UC04 - Edit a student**
 
 **MSS**
 
@@ -400,54 +399,8 @@ How to add, delete, select, list tutorial slots and detail
 
       Use case ends.
 
-**Use case: UC04 - Record a grade**
 
-**MSS**
-
-1.  Tutor enters the command to record a grade for a student for a specific assessment.
-2.  CoursePilot records the grade and displays a confirmation message.
-
-    Use case ends.
-
-**Extensions**
-
-* 1a. The given student index is invalid.
-
-    * 1a1. CoursePilot shows an error message.
-
-      Use case ends.
-
-* 1b. The specified assessment does not exist.
-
-    * 1b1. CoursePilot shows an error message.
-
-      Use case ends.
-
-* 1c. The grade value is out of the valid range.
-
-    * 1c1. CoursePilot shows an error message.
-
-      Use case ends.
-
-**Use case: UC05 - Ask for help**
-
-**MSS**
-
-1.  Tutor requests for help.
-2.  CoursePilot shows the details of possible user commands.
-
-    Use case ends.
-
-**Use case: UC06 - List students**
-
-**MSS**
-
-1.  Tutor requests to list students.
-2.  CoursePilot shows a list of students.
-
-    Use case ends.
-
-**Use case: UC07 - Add a tutorial**
+**Use case: UC05 - Add a tutorial**
 
 **MSS**
 
@@ -465,11 +418,11 @@ timing, and students.
 
       Use case ends.
 
-**Use case: UC08 - Delete a tutorial**
+**Use case: UC06 - Delete a tutorial**
 
 **MSS**
 
-1.  Tutor requests to <u>list tutorials (UC09)</u>.
+1.  Tutor requests to list tutorials.
 2.  Tutor requests to delete a specific tutorial in the list.
 3.  CoursePilot deletes the tutorial and displays a confirmation message.
 
@@ -487,7 +440,7 @@ timing, and students.
 
       Use case ends.
 
-**Use case: UC09 - List tutorials**
+**Use case: UC07 - List student contact**
 
 **MSS**
 
@@ -496,7 +449,7 @@ timing, and students.
 
     Use case ends.
 
-**Use case: UC10 - Find student**
+**Use case: UC08 - Find student contact**
 
 **MSS**
 
@@ -510,23 +463,6 @@ timing, and students.
 * 1a. No such student is found.
 
     * 1a1. CoursePilot shows no such student is found.
-
-  Use case ends.
-
-**Use case: UC11 - Find tutorial**
-
-**MSS**
-
-1.  Tutor requests to find a tutorial and specifies details to be searched.
-2.  CoursePilot shows details of tutorial.
-
-    Use case ends.
-
-**Extensions**
-
-* 1a. No such tutorial is found.
-
-    * 1a1. CoursePilot shows no such tutorial is found.
 
   Use case ends.
 
@@ -548,7 +484,7 @@ timing, and students.
 
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
 * **Tutor/TA**: A teaching assistant at a university responsible for conducting tutorial sessions, marking attendance, and grading assessments
-* **Student Record**: A stored entry in CoursePilot containing a student's information
+* **Student Contact**: A stored entry in CoursePilot containing a student's information
 * **Tutorial Slot**: A tutorial object defined by a code, time, day, and capacity, created and managed by a tutor in CoursePilot
 * **Tutorial Resource**: A local file (e.g. PDF) detected by CoursePilot from the tutor's PC and imported into CoursePilot for easy access
 * **Assessment**: A graded component of a course such as an assignment, quiz, or exam

@@ -2,6 +2,7 @@ package seedu.coursepilot.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
+import seedu.coursepilot.logic.commands.CommandResult.PanelSwitch;
 import seedu.coursepilot.model.Model;
 
 /**
@@ -20,19 +21,20 @@ public class ListCommand extends Command {
     public static final String COMMAND_WORD = "list";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-        + "Lists tutorial details or students in the current operating tutorial.\n"
-        + "Parameters: -student | -tutorial\n"
-        + "Examples: " + COMMAND_WORD + " -student\n"
-        + "          " + COMMAND_WORD + " -tutorial";
+        + ": Lists students or tutorials.\n"
+        + "Modes: -student, -tutorial\n"
+        + "Parameters: MODE\n"
+        + "Example: " + COMMAND_WORD + " -student\n"
+        + "Example: " + COMMAND_WORD + " -tutorial";
 
     public static final String MESSAGE_SUCCESS_STUDENT =
-        "Listed students in the current operating tutorial";
+        "Listed students in the current tutorial.";
 
     public static final String MESSAGE_SUCCESS_TUTORIAL =
-        "Listed tutorial details";
+        "Listed all tutorial details.";
 
     public static final String MESSAGE_SUCCESS_ALL_STUDENTS =
-        "No current operating tutorial selected. Listed all students across tutorials.";
+        "Listed all students.";
 
     private final ListTarget listTarget;
 
@@ -55,21 +57,18 @@ public class ListCommand extends Command {
         requireNonNull(model);
 
         if (listTarget == ListTarget.TUTORIAL) {
-            return new CommandResult(MESSAGE_SUCCESS_TUTORIAL);
+            return new CommandResult(MESSAGE_SUCCESS_TUTORIAL, PanelSwitch.SHOW_TUTORIAL_DETAILS);
         }
 
         if (model.getCurrentOperatingTutorial().isEmpty()) {
-            model.updateFilteredStudentList(
-                student -> model.getCoursePilot().getTutorialList().stream()
-                        .anyMatch(tut -> tut.hasStudent(student))
-            );
-            return new CommandResult(MESSAGE_SUCCESS_ALL_STUDENTS);
+            model.updateFilteredStudentList(student -> true);
+            return new CommandResult(MESSAGE_SUCCESS_ALL_STUDENTS, PanelSwitch.SHOW_STUDENT_LIST);
         }
 
         model.updateFilteredStudentList(
             student -> model.getCurrentOperatingTutorial().get().hasStudent(student)
         );
-        return new CommandResult(MESSAGE_SUCCESS_STUDENT);
+        return new CommandResult(MESSAGE_SUCCESS_STUDENT, PanelSwitch.SHOW_STUDENT_LIST);
     }
 
     @Override

@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import seedu.coursepilot.commons.util.ToStringBuilder;
 import seedu.coursepilot.logic.Messages;
+import seedu.coursepilot.logic.commands.CommandResult.PanelSwitch;
 import seedu.coursepilot.logic.commands.exceptions.CommandException;
 import seedu.coursepilot.model.Model;
 import seedu.coursepilot.model.student.Student;
@@ -66,17 +67,19 @@ public class FindCommand extends Command {
 
     public static final String COMMAND_WORD = "find";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all students whose names contain any of "
-            + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: KEYWORD [MORE_KEYWORDS]...\n"
-            + "Example: " + COMMAND_WORD + " alice bob charlie";
+    public static final String MESSAGE_USAGE = COMMAND_WORD
+            + ": Finds students by name or by field prefix.\n"
+            + "Prefixes: /phone, /email, /matric\n"
+            + "Parameters: [PREFIX] KEYWORD [MORE_KEYWORDS]...\n"
+            + "Example: " + COMMAND_WORD + " John\n"
+            + "Example: " + COMMAND_WORD + " /email @u.nus.edu";
 
     public static final String MESSAGE_USAGE_FLAG = COMMAND_WORD + ": Valid flags are: "
             + Flag.validFlagsString() + "\n"
             + "Example: " + COMMAND_WORD + " /email @u.nus.edu @gmail";
 
-    public static final String MESSAGE_NO_CURRENT_OPERATING_TUTORIAL =
-        "No current operating tutorial selected. Use select first.";
+    public static final String MESSAGE_SUCCESS_ALL_STUDENTS =
+        "No tutorial selected. Showing all matching students.";
 
     private final Predicate<Student> predicate;
 
@@ -87,9 +90,14 @@ public class FindCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
+        assert predicate != null;
 
         if (model.getCurrentOperatingTutorial().isEmpty()) {
-            throw new CommandException(MESSAGE_NO_CURRENT_OPERATING_TUTORIAL);
+            model.updateFilteredStudentList(predicate);
+            assert model.getFilteredStudentList() != null;
+            return new CommandResult(
+                String.format(Messages.MESSAGE_STUDENTS_LISTED_OVERVIEW,
+                        model.getFilteredStudentList().size()), PanelSwitch.SHOW_STUDENT_LIST);
         }
 
         model.updateFilteredStudentList(
@@ -97,6 +105,7 @@ public class FindCommand extends Command {
                     && model.getCurrentOperatingTutorial()
                             .map(tutorial -> tutorial.hasStudent(student))
                             .orElse(false));
+        assert model.getFilteredStudentList() != null;
         return new CommandResult(
                 String.format(Messages.MESSAGE_STUDENTS_LISTED_OVERVIEW, model.getFilteredStudentList().size()));
     }

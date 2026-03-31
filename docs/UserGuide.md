@@ -140,9 +140,14 @@ Format: `add -tutorial /code CODE /day DAY /timeslot TIMESLOT /capacity CAPACITY
 * Does not require a tutorial to be selected first.
 * The tutorial code must be unique.
 
+**Field Constraints:**
+* **Day**: Must be the first three letters of day names with only first letter capitalised. (e.g 'Mon')
+* **TimeSlot**: Must follow the format `XX:XX-XX:XX` where `X` is a digit (e.g., `13:00-14:00`). 
+Start time must be before end time. Time is in 24-hour format.
+
 Examples:
-* `add -tutorial /code CS2103T-W12 /day Wed /timeslot 10am-11am /capacity 10`
-* `add -tutorial /code CS2103T-T01 /day Thu /timeslot 2pm-3pm /capacity 15`
+* `add -tutorial /code CS2103T-W12 /day Wed /timeslot 10:00-11:00 /capacity 10`
+* `add -tutorial /code CS2103T-T01 /day Thu /timeslot 14:00-15:00 /capacity 15`
 
 ### Editing a student : `edit`
 
