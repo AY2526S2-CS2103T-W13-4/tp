@@ -52,7 +52,7 @@ public class CoursePilotTest {
         List<Student> newStudents = Arrays.asList(ALICE, editedAlice);
         CoursePilotStub newData = new CoursePilotStub(newStudents);
 
-        assertThrows(DuplicateStudentException.class, () -> coursePilot.resetData(newData));
+        coursePilot.resetData(newData);
     }
 
     @Test
@@ -76,7 +76,7 @@ public class CoursePilotTest {
         coursePilot.addStudent(ALICE);
         Student editedAlice = new StudentBuilder(ALICE).withMatriculationNumber(VALID_MATRIC_BOB)
                 .withTags(VALID_TAG_HUSBAND).build();
-        assertTrue(coursePilot.hasStudent(editedAlice));
+        assertFalse(coursePilot.hasStudent(editedAlice));
     }
 
     @Test

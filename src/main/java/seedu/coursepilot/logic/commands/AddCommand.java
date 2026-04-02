@@ -57,7 +57,7 @@ public class AddCommand extends Command {
             "This student or matriculation number already exists in the CoursePilot.";
     public static final String MESSAGE_DUPLICATE_CONTACT_DETAIL =
             "Another student with the same phone number or email"
-            + "already exists in the CoursePilot.";
+            + " already exists in the CoursePilot.";
     public static final String MESSAGE_DUPLICATE_TUTORIAL =
             "This tutorial already exists in CoursePilot";
     public static final String MESSAGE_NO_CURRENT_OPERATING_TUTORIAL =
