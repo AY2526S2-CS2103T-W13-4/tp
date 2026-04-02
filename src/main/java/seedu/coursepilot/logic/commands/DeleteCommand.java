@@ -94,6 +94,16 @@ public class DeleteCommand extends Command {
             }
 
             Tutorial tutorialToDelete = lastShownList.get(targetIndex.getZeroBased());
+            List<Student> studentsInTutorial = tutorialToDelete.getStudents();
+            for (Student student : studentsInTutorial) {
+                boolean inOtherTutorial = model.getFilteredTutorialList().stream()
+                        .filter(t -> !t.isSameTutorial(tutorialToDelete))
+                        .anyMatch(t -> t.hasStudent(student));
+                if (!inOtherTutorial && model.hasStudent(student)) {
+                    model.deleteStudent(student);
+                }
+            }
+
             model.deleteTutorial(tutorialToDelete);
             return new CommandResult(String.format(MESSAGE_DELETE_TUTORIAL_SUCCESS, Messages.format(tutorialToDelete)));
         }
