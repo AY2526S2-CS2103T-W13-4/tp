@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.coursepilot.model.Model.PREDICATE_SHOW_ALL_STUDENTS;
 
 import seedu.coursepilot.commons.util.ToStringBuilder;
+import seedu.coursepilot.logic.commands.exceptions.CommandException;
 import seedu.coursepilot.model.Model;
 import seedu.coursepilot.model.tutorial.Tutorial;
 
@@ -33,7 +34,7 @@ public class SelectCommand extends Command {
     }
 
     @Override
-    public CommandResult execute(Model model) {
+    public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
         if (tutorialKeyword.equalsIgnoreCase(CLEAR_KEYWORD)) {
@@ -48,7 +49,7 @@ public class SelectCommand extends Command {
                 .orElse(null);
 
         if (tutorial == null) {
-            return new CommandResult(
+            throw new CommandException(
                     String.format(MESSAGE_TUTORIAL_NOT_FOUND, tutorialKeyword));
         }
 
