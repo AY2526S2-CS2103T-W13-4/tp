@@ -9,6 +9,7 @@ import seedu.coursepilot.model.tutorial.Tutorial;
 /**
  * Selects a tutorial in CoursePilot, making it the current operating tutorial.
  * Keyword matching is case insensitive.
+ * Use {@code CLEAR_KEYWORD} as the argument to clear the current selection.
  */
 public class SelectCommand extends Command {
 
@@ -27,7 +28,12 @@ public class SelectCommand extends Command {
 
     private final String tutorialKeyword;
 
+    /**
+     * Creates a SelectCommand to select the tutorial with the given {@code tutorialKeyword}.
+     * Use {@code "none"} to clear the current operating tutorial.
+     */
     public SelectCommand(String tutorialKeyword) {
+        requireNonNull(tutorialKeyword);
         this.tutorialKeyword = tutorialKeyword;
     }
 
@@ -40,10 +46,7 @@ public class SelectCommand extends Command {
             return new CommandResult(MESSAGE_CLEAR_TUTORIAL);
         }
 
-        Tutorial tutorial = model.getFilteredTutorialList().stream()
-                .filter(tut -> tut.getTutorialCode().equalsIgnoreCase(tutorialKeyword))
-                .findFirst()
-                .orElse(null);
+        Tutorial tutorial = model.getTutorialByCode(tutorialKeyword).get();
 
         if (tutorial == null) {
             return new CommandResult(
@@ -72,5 +75,10 @@ public class SelectCommand extends Command {
         return new ToStringBuilder(this)
                 .add("tutorialKeyword", tutorialKeyword)
                 .toString();
+    }
+
+    @Override
+    public int hashCode() {
+        return tutorialKeyword.toLowerCase().hashCode();
     }
 }
