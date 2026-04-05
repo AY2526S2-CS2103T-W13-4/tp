@@ -4,22 +4,22 @@
 start
 :User types text in CommandBox;
 
-if (Text is empty?) then (yes)
+if () then ([text is empty])
     :Return all command words;
-else (no)
-    if (No space in text?) then (yes)
+else ([else])
+    if () then ([no space in text])
         :Filter command words\nby typed prefix;
-    else (no)
-        if (Valid command word?) then (yes)
+    else ([else])
+        if () then ([valid command word])
             switch (Command type?)
             case (add)
-                if (Flag typed?) then (yes)
-                    if (Typing a "/" token?) then (yes)
+                if () then ([flag typed])
+                    if () then ([typing a "/" token])
                         :Suggest matching unused\nprefixes for the flag type;
-                    else (no)
+                    else ([else])
                         :No suggestions;
                     endif
-                else (no)
+                else ([else])
                     :Suggest type flags\n(-student / -tutorial);
                 endif
             case (delete / list)
@@ -27,15 +27,15 @@ else (no)
             case (find)
                 :Suggest find flags;
             case (edit)
-                if (Typing a "/" token?) then (yes)
+                if () then ([typing a "/" token])
                     :Suggest matching unused\nedit prefixes;
-                else (no)
+                else ([else])
                     :No suggestions;
                 endif
             case (others)
                 :No suggestions;
             endswitch
-        else (no)
+        else ([else])
             :No suggestions;
         endif
     endif
