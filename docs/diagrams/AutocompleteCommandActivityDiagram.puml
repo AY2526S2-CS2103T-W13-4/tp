@@ -1,0 +1,41 @@
+@startuml
+!include style.puml
+
+title Get Suggestions For Command
+
+start
+
+if () then ([add])
+    if () then ([flag typed])
+        if () then ([typing a "/" token])
+            :Suggest matching unused\nprefixes for the flag type;
+        else ([else])
+            :No suggestions;
+        endif
+    else ([else])
+        :Suggest type flags\n(-student / -tutorial);
+    endif
+else ([else])
+    if () then ([delete / list])
+        :Suggest type flags;
+    else ([else])
+        if () then ([find])
+            :Suggest find flags;
+        else ([else])
+            if () then ([edit])
+                if () then ([typing a "/" token])
+                    :Suggest matching unused\nedit prefixes;
+                else ([else])
+                    :No suggestions;
+                endif
+            else ([else])
+                :No suggestions;
+            endif
+        endif
+    endif
+endif
+
+:Display suggestions\nin Popup;
+stop
+
+@enduml

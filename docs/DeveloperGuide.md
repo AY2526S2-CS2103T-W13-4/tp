@@ -171,9 +171,13 @@ The following sequence diagram illustrates the interaction when a user types `ad
 
 <img src="images/AutocompleteSequenceDiagram.png" width="700"/>
 
-The autocomplete logic follows a state-based approach depending on how much of the command has been typed. The activity diagram below summarizes the suggestion logic:
+The autocomplete logic follows a state-based approach depending on how much of the command has been typed. The activity diagram below summarizes the top-level suggestion flow:
 
-<img src="images/AutocompleteActivityDiagram.png" width="450"/>
+<img src="images/AutocompleteActivityDiagram.png" width="500"/>
+
+When the input contains a valid command word, the `Get suggestions for command` activity dispatches to command-specific logic, shown below:
+
+<img src="images/AutocompleteCommandActivityDiagram.png" width="700"/>
 
 The suggestion states are:
 1. **Command word completion** — when no space has been typed, filter matching command words (e.g. `a` → `add`).
