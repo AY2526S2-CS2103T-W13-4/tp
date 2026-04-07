@@ -28,10 +28,10 @@ public class SampleDataUtil {
         return new Student[] {
             new Student(new Name("Alex Yeoh"), new Phone("87438807"), new Email("alexyeoh@example.com"),
                 new MatricNumber("A000000"),
-                getTagSet("friends")),
+                getTagSet("DeanList")),
             new Student(new Name("Bernice Yu"), new Phone("99272758"), new Email("berniceyu@example.com"),
                 new MatricNumber("A000001"),
-                getTagSet("colleagues", "friends")),
+                getTagSet("HonorRoll", "DeanList")),
         };
     }
 
@@ -39,10 +39,10 @@ public class SampleDataUtil {
         return new Student[] {
             new Student(new Name("Charlotte Oliveiro"), new Phone("93210283"), new Email("charlotte@example.com"),
                 new MatricNumber("A000002"),
-                getTagSet("neighbours")),
+                getTagSet("Improving")),
             new Student(new Name("David Li"), new Phone("91031282"), new Email("lidavid@example.com"),
                 new MatricNumber("A000003"),
-                getTagSet("family")),
+                getTagSet("Distinction", "HonorRoll")),
         };
     }
 
@@ -50,30 +50,43 @@ public class SampleDataUtil {
         return new Student[] {
             new Student(new Name("Irfan Ibrahim"), new Phone("92492021"), new Email("irfan@example.com"),
                 new MatricNumber("A000004"),
-                getTagSet("classmates")),
+                getTagSet("Exceptional", "DeanList", "Distinction")),
             new Student(new Name("Roy Balakrishnan"), new Phone("92624417"), new Email("royb@example.com"),
                 new MatricNumber("A000005"),
-                getTagSet("colleagues"))
+                getTagSet("Underperforming", "Failing"))
         };
     }
 
     public static ObservableList<Tutorial> getSampleTutorials() {
         return FXCollections.observableArrayList(
-                new Tutorial(new TutorialCode("CS2103T-W13"), new Day("Monday"),
+                new Tutorial(new TutorialCode("T01"), new Day("Mon"),
                         new TimeSlot("10:00-11:00"), new Capacity(20)),
-                new Tutorial(new TutorialCode("CS2103T-W14"), new Day("Wednesday"),
+                new Tutorial(new TutorialCode("T02"), new Day("Wed"),
                         new TimeSlot("12:00-13:00"), new Capacity(15)),
-                new Tutorial(new TutorialCode("CS2103T-W15"), new Day("Friday"),
+                new Tutorial(new TutorialCode("T03"), new Day("Fri"),
                         new TimeSlot("14:00-15:00"), new Capacity(10))
         );
     }
 
     public static ReadOnlyCoursePilot getSampleCoursePilot() {
-        CoursePilot sampleAb = new CoursePilot();
-        for (Student sampleStudent : getSampleStudents1()) {
-            sampleAb.addStudent(sampleStudent);
+        CoursePilot sampleCp = new CoursePilot();
+        ObservableList<Tutorial> sampleTutorials = getSampleTutorials();
+
+        for (Tutorial tutorial : sampleTutorials) {
+            sampleCp.addTutorial(tutorial);
         }
-        return sampleAb;
+
+        Student[][] allSampleBatches = {getSampleStudents1(), getSampleStudents2(), getSampleStudents3()};
+
+        for (int i = 0; i < allSampleBatches.length && i < sampleTutorials.size(); i++) {
+            Tutorial target = sampleTutorials.get(i);
+            for (Student student : allSampleBatches[i]) {
+                sampleCp.addStudent(student);
+                target.addStudent(student);
+            }
+        }
+
+        return sampleCp;
     }
 
     /**
