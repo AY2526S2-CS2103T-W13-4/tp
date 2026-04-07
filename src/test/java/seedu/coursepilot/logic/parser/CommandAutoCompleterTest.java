@@ -169,4 +169,94 @@ public class CommandAutoCompleterTest {
         List<String> result = completer.getSuggestions(null);
         assertEquals(List.of("add", "clear", "delete", "edit", "exit", "find", "help", "list", "select"), result);
     }
+
+    // ==================== Partial prefix matching ====================
+
+    @Test
+    public void getSuggestions_addStudentPartialPrefix_filtersToMatch() {
+        List<String> result = completer.getSuggestions("add -student /na");
+        assertEquals(List.of("/name"), result);
+    }
+
+    @Test
+    public void getSuggestions_editPartialPrefix_filtersToMatch() {
+        List<String> result = completer.getSuggestions("edit 1 /ph");
+        assertEquals(List.of("/phone"), result);
+    }
+
+    @Test
+    public void getSuggestions_addTutorialPartialPrefix_filtersToMatch() {
+        List<String> result = completer.getSuggestions("add -tutorial /ti");
+        assertEquals(List.of("/timeslot"), result);
+    }
+
+    @Test
+    public void getSuggestions_addStudentPartialPrefixNoMatch_returnsEmpty() {
+        List<String> result = completer.getSuggestions("add -student /z");
+        assertTrue(result.isEmpty());
+    }
+
+    // ==================== Space-terminated input ====================
+
+    @Test
+    public void getSuggestions_addStudentPrefixValueThenSpace_returnsEmpty() {
+        List<String> result = completer.getSuggestions("add -student /name Alice ");
+        assertTrue(result.isEmpty());
+    }
+
+    // ==================== Partial flag matching ====================
+
+    @Test
+    public void getSuggestions_addPartialTutorialFlag_filters() {
+        List<String> result = completer.getSuggestions("add -t");
+        assertEquals(List.of("-tutorial"), result);
+    }
+
+    @Test
+    public void getSuggestions_findPartialFlag_filtersToEmail() {
+        List<String> result = completer.getSuggestions("find /em");
+        assertEquals(List.of("/email"), result);
+    }
+
+    // ==================== Multiple used prefixes ====================
+
+    @Test
+    public void getSuggestions_addStudentMultipleUsedPartial_filtersRemaining() {
+        List<String> result = completer.getSuggestions("add -student /name A /phone 123 /em");
+        assertEquals(List.of("/email"), result);
+    }
+
+    @Test
+    public void getSuggestions_addStudentAllUsedExceptTag_returnsOnlyTag() {
+        List<String> result = completer.getSuggestions("add -student /name A /phone 1 /email e /matric M /");
+        assertEquals(List.of("/tag"), result);
+    }
+
+    // ==================== Invalid and edge flag cases ====================
+
+    @Test
+    public void getSuggestions_addInvalidFlag_returnsEmpty() {
+        List<String> result = completer.getSuggestions("add -xyz /");
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void getSuggestions_editWithoutIndex_returnsEmpty() {
+        List<String> result = completer.getSuggestions("edit ");
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void getSuggestions_deleteWithExtraArgs_returnsEmpty() {
+        List<String> result = completer.getSuggestions("delete -student extra");
+        assertTrue(result.isEmpty());
+    }
+
+    // ==================== Whitespace edge cases ====================
+
+    @Test
+    public void getSuggestions_onlySpaces_returnsAllCommands() {
+        List<String> result = completer.getSuggestions("   ");
+        assertEquals(List.of("add", "clear", "delete", "edit", "exit", "find", "help", "list", "select"), result);
+    }
 }
