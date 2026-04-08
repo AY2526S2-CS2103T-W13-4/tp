@@ -402,22 +402,27 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 2a. No tutorial is currently selected.
     * 2a1. CoursePilot shows an error message indicating a tutorial must first be selected
+
       Use case ends.
 
 * 3a. Phone number or Email is already used by a different student entry.
     * 3a1. CoursePilot shows an error message indicating a duplicate contact detail.
+
       Use case ends.
 
 * 4a. The student is already enrolled in the selected tutorial.
     * 4a1. CoursePilot shows an error message indicating a duplicate student in the tutorial.
+
       Use case ends.
 
 * 5a. The selected tutorial is at full capacity.
     * 5a1. CoursePilot shows an error message: "Tutorial is at full capacity."
+
       Use case ends.
   
 * 6a. The student record already exists in the global student list (but not in this tutorial).
     * 6a1. CoursePilot skips creating a new student record and uses the existing one.
+
       Use case resumes from step 7.
 
 **Use case: UC03 - Delete a student**
@@ -438,56 +443,70 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 1a. The given index is invalid (out of bounds or non-numeric).
     * 1a1. CoursePilot shows an error message indicating an invalid index.
+
       Use case ends.
 
 * 2a. No tutorial is currently selected (No "Operating Tutorial").
     * 2a1. CoursePilot shows an error message indicating a tutorial must first be selected
+
       Use case ends.
 
 * 6a. The student exists in at least one other tutorial.
     * 6a1. CoursePilot retains the student in the global list and only removes the association with the current tutorial.
+
       Use case resumes at step 7.
 
 **Use case: UC04 - Edit a student**
 
 **MSS**
 
-1.  Tutor requests to list students.
-2.  Tutor enters the command to mark a student's attendance for a specific tutorial session.
-3.  CoursePilot records the attendance and displays a confirmation message.
+1.  Tutor request to edit a student's details (e.g., Name, Phone, Email, Matriculation Number) by providing the index in the displayed list.
+2.  CoursePilot identifies the student at the specified index.
+3.  CoursePilot validates that the new details do not conflict with existing students (Matriculation Number, Phone, or Email).
+4.  CoursePilot updates the student's details in the global list.
+5.  CoursePilot propagates the changes to all tutorials the student is currently enrolled in.
+6.  CoursePilot updates the display and shows a confirmation message.
 
     Use case ends.
 
 **Extensions**
 
-* 3a. The given student index is invalid.
-
-    * 3a1. CoursePilot shows an error message.
-
-      Use case ends.
-
-* 3b. The specified tutorial session does not exist.
-
-    * 3b1. CoursePilot shows an error message.
+* 1a. The given index is invalid.
+    * 1a1. CoursePilot shows an error message indicating an invalid index.
 
       Use case ends.
 
+* 1b. No fields to edit are provided.
+    * 1b1. CoursePilot shows an error message indicating at least one field to edit must be provided.
+
+      Use case ends.
+
+* 3a. Duplicate details detected.
+    * 3a1. CoursePilot shows an error message indicating duplicate details.
+
+      Use case ends.
 
 **Use case: UC05 - Add a tutorial**
 
 **MSS**
 
-1.  Tutor enters the command to add a tutorial with the tutorial's module, day of the week, 
-timing, and students.
-2.  CoursePilot adds the tutorial and displays a confirmation message.
+1.  Tutor requests to add a tutorial by providing the required details (Tutorial Code, Day, TimeSlot, and Capacity).
+2.  CoursePilot validates the provided details for format and data constraints.
+3.  CoursePilot checks that the tutorial code does not already exist in the system.
+4.  CoursePilot creates the new tutorial with the specified details and adds it to the global tutorial list.
+5.  CoursePilot updates the tutorial list display and shows a success message.
 
     Use case ends.
 
 **Extensions**
 
-* 1a. The tutorial's field(s) is/are missing.
+* 1a. Required details (Mode, Code, Day, Time, or Capacity) are missing or the format is invalid.
+    * 1a1. CoursePilot shows an error message indicating the error.
 
-    * 1a1. CoursePilot shows an error message indicating required fields.
+      Use case resumes from step 1.
+
+* 3a. A tutorial with the same tutorial code already exists.
+    * 3a1. CoursePilot shows an error message indicating this tutorial code already exists in CoursePilot.
 
       Use case ends.
 
@@ -495,49 +514,81 @@ timing, and students.
 
 **MSS**
 
-1.  Tutor requests to list tutorials.
-2.  Tutor requests to delete a specific tutorial in the list.
-3.  CoursePilot deletes the tutorial and displays a confirmation message.
+1.  Tutor requests to delete a specific tutorial by its index in the displayed list.
+2.  CoursePilot identifies the tutorial at the specified index.
+3.  CoursePilot checks all students currently assigned to that tutorial.
+4.  CoursePilot deletes any student from the global system if that student is not enrolled in any other tutorial.
+5.  CoursePilot removes the tutorial from the system.
+6.  CoursePilot updates the display and shows a confirmation message.
 
     Use case ends.
 
 **Extensions**
 
-* 2a. The list is empty.
-
-  Use case ends.
-
-* 2b. The given index is invalid.
-
-    * 2b1. CoursePilot shows an error message.
+* 1a. The given index is invalid (out of bounds or non-numeric).
+    * 1a1. CoursePilot shows an error message indicating an invalid tutorial index.
 
       Use case ends.
 
-**Use case: UC07 - List student contact**
+* 4a. A student in the deleted tutorial is also enrolled in another tutorial.
+    * 4a1. CoursePilot retains the student in the global system and other tutorials.
+
+      Use case resumes at step 5.
+
+* 5a. The tutorial being deleted is the "Current Operating Tutorial".
+    * 5a1. CoursePilot clears the Operating Tutorial selection.
+    * 5a2. CoursePilot resets the student list display to show all students globally.
+
+      Use case resumes at step 6.
+
+**Use case: UC07 - List command**
 
 **MSS**
 
-1.  Tutor requests to list tutorials.
-2.  CoursePilot shows a list of tutorials.
+1.  Tutor requests to list students using the `-student` mode.
+2.  CoursePilot checks if a tutorial is currently selected (Current Operating Tutorial).
+3.  CoursePilot filters the student list to show only students belonging to the selected tutorial.
+4.  CoursePilot updates the display and shows the confirmation message indicating all students in the current tutorial are listed.
 
     Use case ends.
+
+**Extensions**
+
+* 1a. Tutor requests to list tutorials instead (using `-tutorial` mode).
+    * 1a1. CoursePilot displays all registered tutorial groups.
+    * 1a2. CoursePilot shows the confirmation message indicating all tutorial details are listed."
+
+      Use case ends.
+
+* 2a. No tutorial is currently selected.
+    * 2a1. CoursePilot updates the display to show all students in the global database.
+    * 2a2. CoursePilot shows the confirmation message indicating all students are listed.
+
+      Use case ends.
 
 **Use case: UC08 - Find student contact**
 
 **MSS**
 
-1.  Tutor requests to find a student and specifies details to be searched.
-2.  CoursePilot shows details of student.
+1.  Tutor requests to find students by entering keywords and an optional search prefix (e.g., `/phone`, `/email`, `/matric`).
+2.  CoursePilot confirms a tutorial is currently selected.
+3.  CoursePilot filters the student list to show students matching the keywords within the determined scope.
+4.  CoursePilot displays the number of matching students and updates the student list.
 
     Use case ends.
 
 **Extensions**
 
-* 1a. No such student is found.
+* 1a. The tutor provides an invalid prefix.
+    * 1a1. CoursePilot shows an error message listing valid flags: `/phone, /email, /matric`.
 
-    * 1a1. CoursePilot shows no such student is found.
+      Use case ends.
 
-  Use case ends.
+* 2a. No tutorial is currently selected.
+    * 2a1. CoursePilot changes search scope to the entire global student database.
+    * 2a2. CoursePilot updates the display to show all matching students system-wide.
+
+      Use case resumes from step 3.
 
 ### Non-Functional Requirements
 
@@ -550,8 +601,7 @@ timing, and students.
 7.  CoursePilot should work without requiring an installer.
 8.  CoursePilot should be packaged into a single JAR file not exceeding 100MB.
 9.  The GUI should work well for standard screen resolutions of 1920x1080 and higher at 100% and 125% scaling, and should be usable at 1280x720 and higher at 150% scaling.
-10. CoursePilot should work on JDK 17.
-11. CoursePilot should follow an object-oriented design.
+10. CoursePilot should follow an object-oriented design.
 
 ### Glossary
 
