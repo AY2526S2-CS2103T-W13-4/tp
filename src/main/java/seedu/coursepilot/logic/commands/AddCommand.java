@@ -11,6 +11,8 @@ import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_TIMESLOT;
 import static seedu.coursepilot.logic.parser.CliSyntax.PREFIX_TUTORIALCODE;
 
+import java.util.Objects;
+
 import seedu.coursepilot.commons.util.ToStringBuilder;
 import seedu.coursepilot.logic.Messages;
 import seedu.coursepilot.logic.commands.exceptions.CommandException;
@@ -156,13 +158,21 @@ public class AddCommand extends Command {
         }
 
         AddCommand otherAddCommand = (AddCommand) other;
+        if (this.addTarget != otherAddCommand.addTarget) {
+            return false;
+        }
         if (this.addTarget == AddTarget.STUDENT) {
-            return toAdd.equals(otherAddCommand.toAdd);
+            return Objects.equals(toAdd, otherAddCommand.toAdd);
         } else if (this.addTarget == AddTarget.TUTORIAL) {
-            return tutorialToAdd.equals(otherAddCommand.tutorialToAdd);
+            return Objects.equals(tutorialToAdd, otherAddCommand.tutorialToAdd);
         } else {
             return false;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(addTarget, toAdd, tutorialToAdd);
     }
 
     @Override
