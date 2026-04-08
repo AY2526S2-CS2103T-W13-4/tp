@@ -155,6 +155,52 @@ Classes used by multiple components are in the `seedu.coursepilot.commons` packa
 
 This section describes some noteworthy details on how certain features are implemented.
 
+### Command Autocomplete feature
+
+#### Implementation
+
+The command autocomplete feature provides context-aware suggestions as the user types in the command box. It is implemented using `CommandAutoCompleter` in the Logic component, integrated with `CommandBox` in the UI component via a JavaFX `Popup` containing a `ListView`.
+
+The class diagram below shows the key classes involved:
+
+<img src="images/AutocompleteClassDiagram.png" width="700"/>
+
+`CommandBox` holds a reference to `CommandAutoCompleter` and a `Popup` with a `ListView` for displaying suggestions. Whenever the text in the command box changes, `CommandBox` calls `CommandAutoCompleter#getSuggestions()` and renders the results in the popup dropdown.
+
+The following sequence diagram illustrates the interaction when a user types `add ` and then selects a suggestion:
+
+<img src="images/AutocompleteSequenceDiagram.png" width="700"/>
+
+The autocomplete logic follows a state-based approach depending on how much of the command has been typed. The activity diagram below summarizes the top-level suggestion flow:
+
+<img src="images/AutocompleteActivityDiagram.png" width="500"/>
+
+When the input contains a valid command word, the `Get suggestions for command` activity dispatches to command-specific logic, shown below:
+
+<img src="images/AutocompleteCommandActivityDiagram.png" width="700"/>
+
+The suggestion states are:
+1. **Command word completion** — when no space has been typed, filter matching command words (e.g. `a` → `add`).
+2. **Flag suggestion** — after a command word like `add`, `delete`, or `find`, suggest the appropriate flags (e.g. `-student`, `-tutorial`).
+3. **Prefix suggestion** — after a flag is selected, suggest unused prefixes for that context (e.g. `/name`, `/phone`). The `/tag` prefix is always suggested since it can be repeated.
+
+Users interact with suggestions via:
+- **Tab** — applies the currently highlighted suggestion
+- **Click** — applies the clicked suggestion
+- **Escape** — dismisses the suggestion menu
+
+#### Design considerations
+
+**Aspect: Where to place the autocomplete logic**
+
+* **Alternative 1 (current choice):** Separate `CommandAutoCompleter` class in the Logic package.
+  * Pros: Clean separation of concerns; easy to unit test independently.
+  * Cons: Duplicates some knowledge of command syntax that also exists in parsers.
+
+* **Alternative 2:** Embed autocomplete logic directly in `CommandBox`.
+  * Pros: Simpler, fewer classes.
+  * Cons: Mixes UI and logic concerns; harder to test without a UI framework.
+
 ### \[Proposed\] Undo/redo feature
 
 #### Proposed Implementation

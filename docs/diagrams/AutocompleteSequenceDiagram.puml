@@ -1,0 +1,60 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+actor User as User USER_COLOR
+
+box UI UI_COLOR_T1
+participant ":CommandBox" as CommandBox UI_COLOR
+participant ":ListView" as ListView UI_COLOR
+participant ":Popup" as Popup UI_COLOR
+end box
+
+box Logic LOGIC_COLOR_T1
+participant ":CommandAutoCompleter" as AutoCompleter LOGIC_COLOR
+end box
+
+User -> CommandBox : types "add "
+activate CommandBox
+
+CommandBox -> AutoCompleter : getSuggestions("add ")
+activate AutoCompleter
+
+AutoCompleter --> CommandBox : ["-student", "-tutorial"]
+deactivate AutoCompleter
+
+CommandBox -> ListView : setItems(suggestions)
+activate ListView
+ListView --> CommandBox
+deactivate ListView
+
+CommandBox -> Popup : show(window, x, y)
+activate Popup
+Popup --> User : display dropdown
+deactivate Popup
+
+User -> CommandBox : presses Tab
+activate CommandBox
+
+CommandBox -> CommandBox : applySuggestion("-student")
+
+CommandBox -> AutoCompleter : getSuggestions("add -student ")
+activate AutoCompleter
+
+AutoCompleter --> CommandBox : ["/name", "/phone",\n"/email", "/matric", "/tag"]
+deactivate AutoCompleter
+
+CommandBox -> ListView : setItems(suggestions)
+activate ListView
+ListView --> CommandBox
+deactivate ListView
+
+CommandBox -> Popup : show(window, x, y)
+activate Popup
+Popup --> User : display dropdown
+deactivate Popup
+
+deactivate CommandBox
+deactivate CommandBox
+
+@enduml

@@ -1,0 +1,26 @@
+@startuml
+!include style.puml
+
+start
+:User types text in CommandBox;
+
+if () then ([text is empty])
+    :Return all command words;
+else ([else])
+    if () then ([no space in text])
+        :Filter command words\nby typed prefix;
+    else ([else])
+        if () then ([valid command word])
+            :Get suggestions\nfor command;
+            -[hidden]->
+            detach
+        else ([else])
+            :No suggestions;
+        endif
+    endif
+endif
+
+:Display suggestions\nin Popup;
+stop
+
+@enduml
