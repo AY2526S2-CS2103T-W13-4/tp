@@ -136,22 +136,6 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     /**
-     * Sets the visibility of the student list panel.
-     */
-    private void setStudentListPanelVisible(boolean visible) {
-        this.studentListPanel.getRoot().setVisible(visible);
-        this.studentListPanel.getRoot().setManaged(visible);
-    }
-
-    /**
-     * Sets the visibility of the tutorial details panel.
-     */
-    private void setTutorialDetailsPanelVisible(boolean visible) {
-        this.tutorialDetailsPanel.getRoot().setVisible(visible);
-        this.tutorialDetailsPanel.getRoot().setManaged(visible);
-    }
-
-    /**
      * Fills up all the placeholders of this window.
      */
     void fillInnerParts() {
@@ -161,11 +145,9 @@ public class MainWindow extends UiPart<Stage> {
         tutorialListPanelPlaceholder.getChildren().add(tutorialCodeListPanel.getRoot());
 
         studentListPanel = new StudentListPanel(logic.getFilteredStudentList(), logic.getFilteredTutorialList());
-        setStudentListPanelVisible(true);
         studentListPanelPlaceholder.getChildren().add(studentListPanel.getRoot());
 
         tutorialDetailsPanel = new TutorialDetailsPanel(logic.getFilteredTutorialList());
-        setTutorialDetailsPanelVisible(true);
         tutorialDetailsPanelPlaceholder.getChildren().add(tutorialDetailsPanel.getRoot());
 
         resultDisplay = new ResultDisplay();
