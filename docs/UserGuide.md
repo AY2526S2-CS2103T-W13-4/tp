@@ -35,13 +35,13 @@ For those who can type fast, **CoursePilot** transforms student management into 
 1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
-   * `list -tutorial` : Lists all tutorials.
+   * `select CS2103T-W13` : Selects the tutorial `CS2103T-W13` as the current working tutorial.
 
-   * `select CS2103T-W12` : Selects the tutorial `CS2103T-W12` as the current working tutorial.
+   * `find Alex` : Finds all students in the selected tutorial who has "Alex" in their name.
 
    * `list -student` : Lists all students in the selected tutorial.
 
-   * `add -student /name John Doe /phone 98765432 /email johnd@example.com /matric A000000` : Adds a student named `John Doe` to the current tutorial.
+   * `add -student /name Micheal Jackson /phone 98765532 /email mjackson@example.com /matric A000006` : Adds a student named `Micheal Jackson` to the current tutorial.
 
    * `delete -student 3` : Deletes the 3rd student shown in the current tutorial's student list.
 
@@ -106,14 +106,14 @@ Sets a tutorial as the **current operating tutorial**. Once selected, student-le
 Format: `select TUTORIAL_CODE` or `select none`
 
 * The `TUTORIAL_CODE` is case-insensitive.
-* The tutorial code must exactly match a tutorial already in the system (e.g., `CS2103T-W12`).
+* The tutorial code must exactly match a tutorial already in the system (e.g., `CS2103T-W13`).
 * The tutorial remains active until you run another `select` command or `select none`.
 * If the tutorial code is not found, an informational message is shown and the current operating tutorial is unchanged.
 * Use `select none` to clear the current operating tutorial without selecting a new one.
 
 Examples:
-* `select CS2103T-W12` : Selects the tutorial with code `CS2103T-W12`.
-* `select cs2103t-w12` : Also selects the same tutorial (case-insensitive).
+* `select CS2103T-W13` : Selects the tutorial with code `CS2103T-W13`.
+* `select cs2103t-w13` : Also selects the same tutorial (case-insensitive).
 * `select none` : Clears the current operating tutorial.
 * `select INVALID` : No tutorial found with code: `INVALID`
 
@@ -135,7 +135,7 @@ Format: `list -tutorial` or `list -student`
 Examples:
 * `list -tutorial` : Displays all tutorials.
 * `list -student` : Displays all students in the system.
-* `select CS2103T-W12` followed by `list -student` : Displays all students in the CS2103T-W12 tutorial.
+* `select CS2103T-W13` followed by `list -student` : Displays all students in the CS2103T-W13 tutorial.
 
 ![ListCommand](images/ListCommand.png)
 
@@ -165,6 +165,7 @@ Format: `add -student /name NAME /phone PHONE_NUMBER /email EMAIL /matric MATRIC
 Examples:
 * `add -student /name John Doe /phone 98765432 /email johnd@example.com /matric A000000`
 * `add -student /name Betsy Crowe /tag friend /email betsycrowe@example.com /matric A000001 /phone 1234567 /tag student`
+* `select CS2103T-W13` followed by `add -student /name David Li /phone 91031282 /email lidavid@example.com /matric A000003`
 
 ![AddCommandStudent](images/AddCommandStudent.png)
 
@@ -183,8 +184,8 @@ Format: `add -tutorial /code CODE /day DAY /timeslot TIMESLOT /capacity CAPACITY
 * **Capacity**: Must be a positive whole number starting from 1 to 1000.
 
 Examples:
-* `add -tutorial /code CS2103T-W12 /day Wed /timeslot 10:00-11:00 /capacity 10`
-* `add -tutorial /code CS2103T-T01 /day Thu /timeslot 14:00-15:00 /capacity 15`
+* `add -tutorial /code CS2103T-T01 /day Thu /timeslot 10:00-11:00 /capacity 30`
+* `add -tutorial /code CS2103T-W16 /day Thu /timeslot 14:00-15:00 /capacity 15`
 
 ![AddCommandTutorial](images/AddCommandTutorial.png)
 
@@ -206,6 +207,7 @@ Format: `edit INDEX [/name NAME] [/phone PHONE] [/email EMAIL] [/matric MATRICNU
 Examples:
 * `edit 1 /phone 91234567 /email johndoe@example.com` : Edits the phone number and email address of the 1st student.
 * `edit 2 /name Betsy Crower /tag` : Edits the name of the 2nd student and clears all existing tags.
+* `edit 3 /name David Li Hao Jun` : Edits the name of the 3rd student and leaves all existing tags untouched.
 
 ![EditCommand](images/EditCommand.png)
 
@@ -229,8 +231,8 @@ Examples:
 * `find John` : Finds all students in the current tutorial whose name contains "John".
 * `find alex david` : Returns students whose name contains "alex" or "david".
 * `find /email u.nus.edu` : Finds all students whose email contains `u.nus.edu`.
-* `find /phone 987` : Finds students whose phone number starts with `987`.
 * `find /matric A000` : Finds students whose matric number starts with `A000`.
+* `find /phone 992` : Finds students whose phone number starts with `992`.
 
 ![FindCommand](images/FindCommand.png)
 
@@ -251,8 +253,8 @@ Format: `delete -student INDEX`
 * If the student **is enrolled in another tutorial**, they remain in the system and in those other tutorials.
 
 Examples:
-* `delete -student 2` : Deletes the 2nd student in the current tutorial.
 * `find John` followed by `delete -student 1` : Deletes the 1st student in the results of the `find` command.
+* `delete -student 2` : Deletes the 2nd student in the current tutorial.
 
 ![DeleteCommandStudent](images/DeleteCommandStudent.png)
 
@@ -354,6 +356,18 @@ Furthermore, manual edits can cause CoursePilot to behave unexpectedly if invali
 
 1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
 2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
+
+## Known limitations
+
+1. **Duplicate phone numbers is not supported** in CoursePilot as we do not support country code prefixes. This means that if two students from different countries share the same number but have different country codes, one of them cannot be added. The suggested work around is to add the country code at the front, but CoursePilot will not help you differentiate between country codes and phone number.
+2. **Matric number validation is intentionally flexible** as CoursePilot accepts matric numbers in the format of "A" followed by 6 digits (e.g. A123456) with no checksum validation. Since CoursePilot is designed for personal use, we trust tutors to be responsible for the accuracy of their own data and thus allow this flexibility.
+3. **Tags do not support numbers or spaces** as tag names must be a single word containing only letters. This keeps tags concise and scannable at a glance, and multi-word descriptions are better captured in other fields such as the student's name.
+4. **Searching by tag is not currently supported** and the `find` command only allows search by name, phone, email and matric number.
+5. **Email validation is intentionally lenient** and accepts unconventional formats such as `11@11`. Since CoursePilot is designed for personal use, we trust tutors to enter accurate information without needing strict formatting rules that may inadvertently reject valid institutional email formats.
+6. **Tutorial day must be entered in exact 3-letter format** and only accepts `Mon`, `Tue`, `Wed`, `Thu`, `Fri`, `Sat` or `Sun`. This standardised format ensures consistency across all tutorial entries and keeps the display clean and uniform.
+7. **Tutorial timeslot must follow the HH:MM-HH:MM format** and must be entered in 24-hour time (e.g. `13:00-14:00`). This strict format ensures unambiguous parsing and consistent display across all tutorials.
+8. **`list -tutorial` does not do anything visually** as CoursePilot does not have any commands that filter the tutorial list, meaning it will always show all tutorials. It is best used to simply refresh the tutorial details.
+9. **Phone number and email address are required fields when adding a student** as CoursePilot is designed to serve as a contact book for tutors, making these fields central to its purpose. A student entry without contact details would defeat the core value of the application.
 
 ## Command summary
 
