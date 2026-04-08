@@ -59,21 +59,32 @@ public class SampleDataUtil {
 
     public static ObservableList<Tutorial> getSampleTutorials() {
         return FXCollections.observableArrayList(
-                new Tutorial(new TutorialCode("CS2103T-W13"), new Day("Monday"),
+                new Tutorial(new TutorialCode("CS2103T-W13"), new Day("Mon"),
                         new TimeSlot("10:00-11:00"), new Capacity(20)),
-                new Tutorial(new TutorialCode("CS2103T-W14"), new Day("Wednesday"),
+                new Tutorial(new TutorialCode("CS2103T-W14"), new Day("Wed"),
                         new TimeSlot("12:00-13:00"), new Capacity(15)),
-                new Tutorial(new TutorialCode("CS2103T-W15"), new Day("Friday"),
+                new Tutorial(new TutorialCode("CS2103T-W15"), new Day("Fri"),
                         new TimeSlot("14:00-15:00"), new Capacity(10))
         );
     }
 
     public static ReadOnlyCoursePilot getSampleCoursePilot() {
         CoursePilot sampleAb = new CoursePilot();
-        for (Student sampleStudent : getSampleStudents1()) {
-            sampleAb.addStudent(sampleStudent);
-        }
+        ObservableList<Tutorial> sampleTutorials = getSampleTutorials();
+        sampleTutorials.forEach(sampleAb::addTutorial);
+
+        addStudentsToTutorial(sampleAb, sampleTutorials.get(0), getSampleStudents1());
+        addStudentsToTutorial(sampleAb, sampleTutorials.get(1), getSampleStudents2());
+        addStudentsToTutorial(sampleAb, sampleTutorials.get(2), getSampleStudents3());
+
         return sampleAb;
+    }
+
+    private static void addStudentsToTutorial(CoursePilot coursePilot, Tutorial tutorial, Student[] students) {
+        for (Student student : students) {
+            coursePilot.addStudent(student);
+            tutorial.addStudent(student);
+        }
     }
 
     /**
