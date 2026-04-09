@@ -70,7 +70,7 @@ public class AddCommandTest {
         tutorial.addStudent(validStudent);
         modelStub.setCurrentOperatingTutorial(tutorial);
 
-        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_STUDENT, () -> addCommand.execute(modelStub));
+        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_STUDENT_MATRIC, () -> addCommand.execute(modelStub));
     }
 
     @Test
@@ -85,7 +85,7 @@ public class AddCommandTest {
         tutorial.addStudent(alice);
         modelStub.setCurrentOperatingTutorial(tutorial);
 
-        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_STUDENT, () -> addCommand.execute(modelStub));
+        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_STUDENT_MATRIC, () -> addCommand.execute(modelStub));
     }
 
     @Test
@@ -132,61 +132,6 @@ public class AddCommandTest {
     }
 
     @Test
-    public void execute_existingStudentWithDifferentPayload_addsCanonicalStudentToTutorial() throws Exception {
-        Model model = new ModelManager(TypicalStudents.getTypicalCoursePilot(), new UserPrefs());
-        Tutorial tutorial = new Tutorial(new TutorialCode("CS2103T-W99"), new Day("Thu"),
-                new TimeSlot("16:00-17:00"), new Capacity(10));
-        model.addTutorial(tutorial);
-        model.setCurrentOperatingTutorial(tutorial);
-
-        Student modifiedAlicePayload = new StudentBuilder(ALICE)
-                .withPhone("90009999")
-                .withEmail("alice.modified@example.com")
-                .build();
-
-        AddCommand addCommand = new AddCommand(modifiedAlicePayload);
-        CommandResult result = addCommand.execute(model);
-
-        Student canonicalAlice = model.getCoursePilot().getStudentList().stream()
-                .filter(student -> student.isSameStudent(ALICE))
-                .findFirst()
-                .orElseThrow();
-
-        assertEquals(String.format(AddCommand.MESSAGE_SUCCESS_STUDENT, Messages.format(canonicalAlice)),
-                result.getFeedbackToUser());
-        assertTrue(tutorial.hasStudent(canonicalAlice));
-        assertFalse(tutorial.getStudents().contains(modifiedAlicePayload));
-        assertEquals(TypicalStudents.getTypicalStudents().size(), model.getCoursePilot().getStudentList().size());
-    }
-
-    @Test
-    public void execute_existingStudentWithConflictingPayloadContact_addsCanonicalStudentToTutorial() throws Exception {
-        Model model = new ModelManager(TypicalStudents.getTypicalCoursePilot(), new UserPrefs());
-        Tutorial tutorial = new Tutorial(new TutorialCode("CS2103T-W98"), new Day("Fri"),
-                new TimeSlot("17:00-18:00"), new Capacity(10));
-        model.addTutorial(tutorial);
-        model.setCurrentOperatingTutorial(tutorial);
-
-        Student conflictingAlicePayload = new StudentBuilder(ALICE)
-                .withPhone(BENSON.getPhone().value)
-                .withEmail(BENSON.getEmail().value)
-                .build();
-
-        CommandResult result = new AddCommand(conflictingAlicePayload).execute(model);
-
-        Student canonicalAlice = model.getCoursePilot().getStudentList().stream()
-                .filter(student -> student.isSameStudent(ALICE))
-                .findFirst()
-                .orElseThrow();
-
-        assertEquals(String.format(AddCommand.MESSAGE_SUCCESS_STUDENT, Messages.format(canonicalAlice)),
-                result.getFeedbackToUser());
-        assertTrue(tutorial.hasStudent(canonicalAlice));
-        assertFalse(tutorial.getStudents().contains(conflictingAlicePayload));
-        assertEquals(TypicalStudents.getTypicalStudents().size(), model.getCoursePilot().getStudentList().size());
-    }
-
-    @Test
     public void execute_existingStudentAlreadyInCurrentTutorial_throwsCommandException() {
         Model model = new ModelManager(TypicalStudents.getTypicalCoursePilot(), new UserPrefs());
         Tutorial currentTutorial = model.getFilteredTutorialList().get(0);
@@ -198,7 +143,7 @@ public class AddCommandTest {
                 .build();
 
         assertThrows(CommandException.class,
-                AddCommand.MESSAGE_DUPLICATE_STUDENT, () -> new AddCommand(modifiedAlicePayload).execute(model));
+                AddCommand.MESSAGE_DUPLICATE_STUDENT_MATRIC, () -> new AddCommand(modifiedAlicePayload).execute(model));
     }
 
     @Test
