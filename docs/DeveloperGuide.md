@@ -573,7 +573,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 2a. Tutor provides no `Prefix` flag.
     * 2a1. CoursePilot defaults to filtering students by name.
-    
+
       Use case resumes from step 3.
 
 * 2b. Tutor provides an invalid prefix.
