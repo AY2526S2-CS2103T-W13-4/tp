@@ -130,7 +130,7 @@ The `Model` component,
 * stores a `UserPrefs` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPrefs` object.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `CoursePilot`, which `Student` references. This allows `CoursePilot` to only require one `Tag` object per unique tag, instead of each `Student` needing their own `Tag` objects.<br>
+<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `CoursePilot`, which `Student` and 'Tutorial' references. This allows `CoursePilot` to only require one `Tag` object per unique tag, instead of each `Student` needing their own `Tag` objects.<br>
 
 <img src="images/BetterModelClassDiagram.png" width="450" />
 
@@ -319,7 +319,7 @@ Implementation details are intentionally deferred until the feature scope is fin
 * Who can type fast and prefers typing to mouse interactions
 * Who is reasonably comfortable using CLI apps
 
-**Value proposition**: A lightweight, CLI-first desktop tool that gives Tutors and TAs a single hub to organize student groups and contacts across multiple tutorial slots, replacing scattered documents with fast, offline lookup and management, so sessions run consistently and administration overhead stays low
+**Value proposition**: A lightweight, CLI-first desktop tool that gives Tutors and TAs a single hub to organize student groups and contacts across multiple tutorial slots, replacing scattered documents with fast, offline lookup and management, so sessions run consistently and administration overhead stays low.
 
 
 ### User stories
@@ -620,7 +620,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * **CLI**: Command Line Interface; a text-based interface for interacting with CoursePilot
 * **Tutor**: A university instructor or Teaching Assistant (TA) responsible for conducting tutorial sessions and managing student records.
 * **Student Contact**: A stored entry in CoursePilot containing a student's information
-* **Tutorial Slot**: A tutorial object defined by a code, time, day, and capacity, created and managed by a tutor in CoursePilot
+* **Tutorial Slot**: A tutorial object defined by a code, timeslot, day, and capacity, created and managed by a tutor in CoursePilot
+* **Tutorial Code**: The identifying name of that tutorial e.g. CS2103T-W13
 * **Current Operating Tutorial**: The tutorial currently selected via the `select` command, which student-level commands operate on
 * **Matric Number**: A unique student identifier following the format Axxxxxx.
 * **Type**: A flag (`-student` or `-tutorial`) that specifies which entity type a command operates on
