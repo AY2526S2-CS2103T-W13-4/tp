@@ -665,7 +665,7 @@ testers are expected to do more *exploratory* testing.
 
 1. Deleting a student while all students are being shown
 
-  1. Prerequisites: Select a tutorial and list students using the `list -student` command. Multiple students in the list.
+  1. Prerequisites: Select a tutorial and using the `select` command. Multiple students in the list.
 
   1. Test case: `delete -student 1`<br>
       Expected: First student is deleted from the list. Details of the deleted student shown in the status message. Timestamp in the status bar is updated.

@@ -265,8 +265,8 @@ Format: `delete -tutorial INDEX`
 * Does not require a tutorial to be selected first.
 * `INDEX` refers to the position in the **displayed tutorial list**. The index **must be a positive integer** 1, 2, 3, …​
 * The tutorial is removed from the system.
-* Students who are enrolled in other tutorials remain in the global student list and in those tutorials.
-* Students who were enrolled only in the deleted tutorial are removed from the global student list.
+* Students who were enrolled in the deleted tutorial remain in any other tutorials they are enrolled in.
+* If the student is no longer enrolled in any other tutorial after this deletion, they will also be removed from the global student list entirely, as CoursePilot does not allow students to exist without being enrolled in at least one tutorial.
 
 Examples:
 * `delete -tutorial 2` : Deletes the 2nd tutorial in the list.
