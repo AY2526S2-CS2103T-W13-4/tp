@@ -8,8 +8,11 @@ import java.util.Arrays;
 import seedu.coursepilot.logic.commands.FindCommand;
 import seedu.coursepilot.logic.parser.exceptions.ParseException;
 import seedu.coursepilot.model.student.EmailContainsKeywordsPredicate;
+import seedu.coursepilot.model.student.MatricNumber;
 import seedu.coursepilot.model.student.MatricNumberStartsWithKeywordsPredicate;
+import seedu.coursepilot.model.student.Name;
 import seedu.coursepilot.model.student.NameContainsKeywordsPredicate;
+import seedu.coursepilot.model.student.Phone;
 import seedu.coursepilot.model.student.PhoneStartsWithKeywordsPredicate;
 
 /**
@@ -51,10 +54,20 @@ public class FindCommandParser implements Parser<FindCommand> {
 
             switch (flag) {
             case PHONE:
+                for (String kw : keywords) {
+                    if (!Phone.isValidPhone(kw)) {
+                        throw new ParseException(Phone.MESSAGE_CONSTRAINTS);
+                    }
+                }
                 return new FindCommand(new PhoneStartsWithKeywordsPredicate(Arrays.asList(keywords)));
             case EMAIL:
                 return new FindCommand(new EmailContainsKeywordsPredicate(Arrays.asList(keywords)));
             case MATRIC:
+                for (String kw : keywords) {
+                    if (!MatricNumber.isValidMatricNumber(kw)) {
+                        throw new ParseException(MatricNumber.MESSAGE_CONSTRAINTS);
+                    }
+                }
                 return new FindCommand(new MatricNumberStartsWithKeywordsPredicate(Arrays.asList(keywords)));
             default:
                 // Default case only occurs if you added a flag into FindCommand.Flag but did not add the case here
@@ -62,7 +75,11 @@ public class FindCommandParser implements Parser<FindCommand> {
                 throw new AssertionError("Unhandled flag: " + flag);
             }
         }
-
+        for (String token : tokens) {
+            if (!Name.isValidName(token)) {
+                throw new ParseException(Name.MESSAGE_CONSTRAINTS);
+            }
+        }
         return new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList(tokens)));
     }
 }
