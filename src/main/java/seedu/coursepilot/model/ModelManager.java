@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.coursepilot.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
@@ -12,6 +13,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import seedu.coursepilot.commons.core.GuiSettings;
 import seedu.coursepilot.commons.core.LogsCenter;
 import seedu.coursepilot.model.student.Student;
@@ -41,7 +43,8 @@ public class ModelManager implements Model {
         this.coursePilot = new CoursePilot(coursePilot);
         this.userPrefs = new UserPrefs(userPrefs);
         this.filteredStudents = new FilteredList<>(this.coursePilot.getStudentList());
-        this.filteredTutorials = new FilteredList<>(this.coursePilot.getTutorialList());
+        this.filteredTutorials = new FilteredList<>(new SortedList<>(
+                this.coursePilot.getTutorialList(), Comparator.comparing(Tutorial::getTutorialCode)));
 
         currentOperatingTutorial.setValue(null);
     }

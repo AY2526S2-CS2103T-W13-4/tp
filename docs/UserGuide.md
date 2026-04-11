@@ -53,6 +53,19 @@ For those who can type fast, **CoursePilot** transforms student management into 
 This ensures commands like `add -student` and `list -student` work as expected.
 Following this workflow can help avoid common errors.
 
+## Understanding the UI
+
+![Ui](images/UiAnnotated.png)
+
+CoursePilot's UI is divided into three linked panels at the top, followed by the Display Box, Command Box, and Current Operating Tutorial indicator at the bottom.
+
+* **Tutorial Code List**: Displays all tutorials in the system sorted alphabetically. The currently selected tutorial is highlighted with a `●` indicator.
+* **Tutorial Details Panel**: Displays the day, timeslot, and capacity for each tutorial. Rows correspond directly to the tutorials in the **Tutorial Code List** — the first row in the **Tutorial Code List** matches the first row in the **Tutorial Details Panel**.
+* **Student List**: Displays students enrolled in the currently selected tutorial. When no tutorial is selected, all students in the system are shown.
+* **Display Box**: Shows the resulting message of each command entered into the **Command Box**.
+* **Command Box**: This is where you enter commands.
+* **Current Operating Tutorial**: Shown at the bottom right corner, this indicates the currently selected tutorial.
+
 ## Features
 
 <div markdown="block" class="alert alert-info">
@@ -369,10 +382,9 @@ Furthermore, manual edits can cause CoursePilot to behave unexpectedly if invali
 3. **Tags do not support numbers or spaces** as tag names must be a single word containing only letters. This keeps tags concise and scannable at a glance, and multi-word descriptions are better captured in other fields such as the student's name.
 4. **Searching by tag is not currently supported** and the `find` command only allows search by name, phone, email and matric number.
 5. **Email validation is intentionally lenient** and accepts unconventional formats such as `11@11`. Since CoursePilot is designed for personal use, we trust tutors to enter accurate information without needing strict formatting rules that may inadvertently reject valid institutional email formats.
-6. **Tutorial day must be entered in exact 3-letter format** and only accepts `Mon`, `Tue`, `Wed`, `Thu`, `Fri`, `Sat` or `Sun`. This standardised format ensures consistency across all tutorial entries and keeps the display clean and uniform.
-7. **Tutorial timeslot must follow the HH:MM-HH:MM format** and must be entered in 24-hour time (e.g. `13:00-14:00`). This strict format ensures unambiguous parsing and consistent display across all tutorials.
-8. **`list -tutorial` does not do anything visually** as CoursePilot does not have any commands that filter the tutorial list, meaning it will always show all tutorials. It is best used to simply refresh the tutorial details.
-9. **Phone number and email address are required fields when adding a student** as CoursePilot is designed to serve as a contact book for tutors, making these fields central to its purpose. A student entry without contact details would defeat the core value of the application.
+6. **Tutorial timeslot must follow the HH:MM-HH:MM format** and must be entered in 24-hour time (e.g. `13:00-14:00`). This strict format ensures unambiguous parsing and consistent display across all tutorials.
+7. **`list -tutorial` does not do anything visually** as CoursePilot does not have any commands that filter the tutorial list, meaning it will always show all tutorials. It is best used to simply refresh the tutorial details.
+8. **Phone number and email address are required fields when adding a student** as CoursePilot is designed to serve as a contact book for tutors, making these fields central to its purpose. A student entry without contact details would defeat the core value of the application.
 
 ## Command summary
 
