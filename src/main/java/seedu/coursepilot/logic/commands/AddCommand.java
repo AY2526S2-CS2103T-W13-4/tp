@@ -56,14 +56,16 @@ public class AddCommand extends Command {
             + PREFIX_CAPACITY + " 10 ";
 
     public static final String MESSAGE_SUCCESS_STUDENT = "Added student: %1$s";
+    public static final String MESSAGE_LINKED_EXISTING_STUDENT =
+            "Linked existing student to tutorial: %1$s\n"
+            + "(Matric number matched an existing record, so the stored details were used. "
+            + "Use the edit command to update them.)";
     public static final String MESSAGE_SUCCESS_TUTORIAL = "Added tutorial: %1$s";
     public static final String MESSAGE_DUPLICATE_STUDENT =
-            "This student or matriculation number already exists in CoursePilot.";
+            "This student is already in the current tutorial.";
     public static final String MESSAGE_DUPLICATE_CONTACT_DETAIL =
             "Another student with the same phone number or email"
             + " already exists in CoursePilot.";
-    public static final String MESSAGE_DUPLICATE_STUDENT_MATRIC =
-            "A different student with this matriculation number already exists.";
     public static final String MESSAGE_DUPLICATE_TUTORIAL =
             "This tutorial code already exists in CoursePilot";
     public static final String MESSAGE_NO_CURRENT_OPERATING_TUTORIAL =
@@ -120,16 +122,11 @@ public class AddCommand extends Command {
                     .filter(storedStudent -> storedStudent.isSameStudent(toAdd))
                     .findFirst();
 
-            if (existingStudent.isPresent() && !existingStudent.get().equals(toAdd)) {
-                throw new CommandException(MESSAGE_DUPLICATE_STUDENT_MATRIC);
-            }
-
             Student studentToAddToTutorial = existingStudent.orElse(toAdd);
 
             if (existingStudent.isEmpty() && model.getCoursePilot().getStudentList().stream()
-                    .anyMatch(storedStudent -> !storedStudent.isSameStudent(toAdd)
-                        && (storedStudent.getPhone().equals(toAdd.getPhone())
-                            || storedStudent.getEmail().equals(toAdd.getEmail())))) {
+                    .anyMatch(storedStudent -> storedStudent.getPhone().equals(toAdd.getPhone())
+                            || storedStudent.getEmail().equals(toAdd.getEmail()))) {
                 throw new CommandException(MESSAGE_DUPLICATE_CONTACT_DETAIL);
             }
 
@@ -147,8 +144,10 @@ public class AddCommand extends Command {
 
             currentOperatingTutorial.addStudent(studentToAddToTutorial);
             model.updateFilteredStudentList(currentOperatingTutorial::hasStudent);
-            return new CommandResult(
-                    String.format(MESSAGE_SUCCESS_STUDENT, Messages.format(studentToAddToTutorial)));
+
+            boolean linkedExisting = existingStudent.isPresent() && !existingStudent.get().equals(toAdd);
+            String template = linkedExisting ? MESSAGE_LINKED_EXISTING_STUDENT : MESSAGE_SUCCESS_STUDENT;
+            return new CommandResult(String.format(template, Messages.format(studentToAddToTutorial)));
         }
         if (addTarget == AddTarget.TUTORIAL) {
             if (model.hasTutorial(tutorialToAdd)) {

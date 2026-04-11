@@ -59,7 +59,7 @@ public class AddCommandTest {
     }
 
     @Test
-    public void execute_duplicateStudent_throwsCommandException() {
+    public void execute_duplicateStudentInTutorial_throwsCommandException() {
         Student validStudent = new StudentBuilder().build();
         Student duplicateStudent = new StudentBuilder().altContactBuild();
         AddCommand addCommand = new AddCommand(duplicateStudent);
@@ -70,23 +70,32 @@ public class AddCommandTest {
         modelStub.setCurrentOperatingTutorial(tutorial);
 
         assertThrows(
-            CommandException.class, AddCommand.MESSAGE_DUPLICATE_STUDENT_MATRIC, () -> addCommand.execute(modelStub));
+            CommandException.class, AddCommand.MESSAGE_DUPLICATE_STUDENT, () -> addCommand.execute(modelStub));
     }
 
     @Test
-    public void execute_duplicateMatricNumber_throwsCommandException() {
-        Student alice = new StudentBuilder(ALICE).build();
-        Student bobWithAliceMatric = new StudentBuilder(BOB)
-                .withMatriculationNumber(ALICE.getMatriculationNumber().matricNumber).build();
-        AddCommand addCommand = new AddCommand(bobWithAliceMatric);
-        ModelStubWithStudent modelStub = new ModelStubWithStudent(alice);
-        Tutorial tutorial = new Tutorial(new TutorialCode("T01"), new Day("Mon"),
-                new TimeSlot("13:00-14:00"), new Capacity(20));
-        tutorial.addStudent(alice);
-        modelStub.setCurrentOperatingTutorial(tutorial);
+    public void execute_existingStudentInDifferentTutorial_linkedSuccessfully() throws CommandException {
+        Model model = new ModelManager(TypicalStudents.getTypicalCoursePilot(), new UserPrefs());
+        Tutorial tutorial2 = new Tutorial(new TutorialCode("CS2103T-T01"), new Day("Thu"),
+                new TimeSlot("14:00-15:00"), new Capacity(10));
+        model.addTutorial(tutorial2);
+        model.setCurrentOperatingTutorial(tutorial2);
 
-        assertThrows(
-            CommandException.class, AddCommand.MESSAGE_DUPLICATE_STUDENT_MATRIC, () -> addCommand.execute(modelStub));
+        // Caller-supplied student shares Alice's matric but has different phone/email/tags.
+        Student aliceWithDifferentDetails = new StudentBuilder(ALICE)
+                .withPhone("99990000")
+                .withEmail("alice.alt@example.com")
+                .withTags("newTag")
+                .build();
+
+        CommandResult result = new AddCommand(aliceWithDifferentDetails).execute(model);
+
+        String expected = String.format(AddCommand.MESSAGE_LINKED_EXISTING_STUDENT, Messages.format(ALICE));
+        assertEquals(expected, result.getFeedbackToUser());
+        assertTrue(tutorial2.hasStudent(ALICE));
+        // The original Alice record is unchanged; no alternate Alice exists.
+        assertTrue(model.hasStudent(ALICE));
+        assertFalse(model.getCoursePilot().getStudentList().contains(aliceWithDifferentDetails));
     }
 
     @Test
@@ -144,7 +153,7 @@ public class AddCommandTest {
                 .build();
 
         assertThrows(CommandException.class,
-                AddCommand.MESSAGE_DUPLICATE_STUDENT_MATRIC, () -> new AddCommand(modifiedAlicePayload).execute(model));
+                AddCommand.MESSAGE_DUPLICATE_STUDENT, () -> new AddCommand(modifiedAlicePayload).execute(model));
     }
 
     @Test
