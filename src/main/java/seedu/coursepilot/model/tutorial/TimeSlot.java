@@ -49,6 +49,30 @@ public class TimeSlot {
         return start.isBefore(end);
     }
 
+    /**
+     * Returns the start time of this slot.
+     */
+    public LocalTime getStartTime() {
+        return LocalTime.parse(value.split("-")[0]);
+    }
+
+    /**
+     * Returns the end time of this slot.
+     */
+    public LocalTime getEndTime() {
+        return LocalTime.parse(value.split("-")[1]);
+    }
+
+    /**
+     * Returns true if this time slot overlaps with {@code other}.
+     * Slots that merely touch at a boundary (e.g. 10:00-11:00 and 11:00-12:00) do not overlap.
+     */
+    public boolean overlapsWith(TimeSlot other) {
+        requireNonNull(other);
+        return getStartTime().isBefore(other.getEndTime())
+                && other.getStartTime().isBefore(getEndTime());
+    }
+
     @Override
     public String toString() {
         return value;
