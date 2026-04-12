@@ -380,7 +380,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 
 1.  Tutor requests for help.
-2.  CoursePilot opens a separate help window containing a link to the user guide and a summary of commands.
+2.  CoursePilot provides help information to assist the Tutor.
 
     Use case ends.
 
@@ -388,103 +388,108 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. Tutor requests to select a tutorial by providing a tutorial code.
+1. Tutor requests to select a tutorial.
 2. CoursePilot finds the matching tutorial.
 3. CoursePilot sets the tutorial as the current operating tutorial.
-4. CoursePilot updates the student list to show only students in the selected tutorial and shows a success message.
+4. CoursePilot confirms the selection to the Tutor.
 
    Use case ends.
 
 **Extensions**
 
-* 1a. The provided tutorial code does not match any existing tutorial.
-    * 1a1. CoursePilot shows an error message and the current operating tutorial remains unchanged.
+* 1a. CoursePilot detects that the provided tutorial does not exist.
+    * 1a1. CoursePilot indicates tutorial could not be found and the current operating tutorial remains unchanged.
 
       Use case ends.
 
-* 1b. Tutor uses `select none` instead of providing a tutorial code.
+* 1b. Tutor requests to unselect the current tutorial.
     * 1b1. CoursePilot clears the current operating tutorial.
-    * 1b2. CoursePilot updates the student list to show all students in the system.
+    * 1b2. CoursePilot confirms the deselection to the Tutor.
 
       Use case ends.
 
 **Use case: UC03 - Add a student**
 
+**Preconditions**: Tutor has selected a tutorial.
+
 **MSS**
 
-1. Tutor selects a tutorial (UC02).
-2. Tutor requests to add a student by providing the required details (Name, Phone Number, Email, Matriculation Number).
-3. CoursePilot validates the provided details.
-4. CoursePilot adds the student to the selected tutorial and shows a success message.
+1. Tutor requests to add a student by providing the required details.
+2. CoursePilot validates the provided details
+3. CoursePilot adds the student to the selected tutorial.
+4. CoursePilot confirms the addition to the Tutor.
 
    Use case ends.
 
 **Extensions**
 
-* 2a. Required fields are missing or the format is invalid.
-    * 2a1. CoursePilot shows an error message indicating the invalid or missing fields.
+* 1a. CoursePilot detects that the provided details are invalid or incomplete.
+    * 1a1. CoursePilot indicates the error and requests the Tutor to provide valid details.
 
       Use case ends.
 
-* 3a. The phone number or email is already in use by another student.
-    * 3a1. CoursePilot shows an error message indicating duplicate contact details.
+* 2a. CoursePilot detects that the phone number or email is already in use by another student.
+    * 2a1. CoursePilot indicates that the contact details are already in use.
 
       Use case ends.
 
-* 3b. The student is already enrolled in the selected tutorial.
-    * 3b1. CoursePilot shows an error message indicating a duplicate student.
+* 2b. CoursePilot detects that the student is already enrolled in the selected tutorial.
+    * 2b1. CoursePilot indicates that the student is already in the tutorial.
 
       Use case ends.
 
-* 3c. The selected tutorial is at full capacity.
-    * 3c1. CoursePilot shows an error message indicating the tutorial is full.
+* 2c. CoursePilot detects that the selected tutorial is at full capacity.
+    * 2c1. CoursePilot indicates that the tutorial is at full capacity.
 
       Use case ends.
 
 **Use case: UC04 - Delete a student**
 
+**Preconditions**: Tutor has selected a tutorial.
+
 **MSS**
 
-1. Tutor selects a tutorial (UC02).
-2. Tutor requests to delete a student by specifying the index in the displayed student list.
-3. CoursePilot removes the student from the current tutorial.
-4. CoursePilot removes the student from the global student list if they are not enrolled in any other tutorial.
-5. CoursePilot updates the display and shows a confirmation message.
+1. Tutor requests to delete a specific student
+2. CoursePilot removes the student from the current tutorial.
+3. CoursePilot removes the student from the global student list if they are not enrolled in any other tutorial
+4. CoursePilot confirms the deletion.
 
    Use case ends.
 
 **Extensions**
 
-* 2a. The given index is invalid.
-    * 2a1. CoursePilot shows an error message indicating an invalid index.
+* 1a. CoursePilot detects the target student is invalid.
+    * 1a1. CoursePilot indicates that the student could not be found.
 
       Use case ends.
 
 **Use case: UC05 - Edit a student**
 
+**Preconditions**: Tutor has selected a tutorial.
+
 **MSS**
 
-1. Tutor requests to edit a student by specifying the index in the displayed list and the fields to update.
+1. Tutor requests to edit a specific student by providing the fields to update.
 2. CoursePilot validates the new details.
-3. CoursePilot updates the student's details across all tutorials they are enrolled in and updates the global student list.
-4. CoursePilot updates the display and shows a confirmation message.
+3. CoursePilot updates the student's details across all tutorials they are enrolled in.
+4. CoursePilot confirms the update to the Tutor.
 
    Use case ends.
 
 **Extensions**
 
-* 1a. The given index is invalid.
-    * 1a1. CoursePilot shows an error message indicating an invalid index.
+* 1a. CoursePilot detects that the target student is invalid.
+    * 1a1. CoursePilot indicates that the student could not be found.
 
       Use case ends.
 
-* 1b. No fields to edit are provided.
-    * 1b1. CoursePilot shows an error message indicating at least one field must be provided.
+* 1b. CoursePilot detects that no fields to update are provided.
+    * 1b1. CoursePilot indicates that at least one field must be provided.
 
       Use case ends.
 
-* 2a. The new details conflict with an existing student (duplicate matric number, phone, or email).
-    * 2a1. CoursePilot shows an error message indicating duplicate details.
+* 2a. CoursePilot detects that the new details conflict with an existing student.
+    * 2a1. CoursePilot indicates that the details are already in use by another student.
 
       Use case ends.
 
@@ -492,21 +497,22 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. Tutor requests to add a tutorial by providing the required details (Tutorial Code, Day, TimeSlot, Capacity).
+1. Tutor requests to add a tutorial by providing the required details.
 2. CoursePilot validates the provided details.
-3. CoursePilot adds the tutorial to the system and shows a success message.
+3. CoursePilot adds the tutorial to the system.
+4. CoursePilot confirms the addition to the Tutor.
 
    Use case ends.
 
 **Extensions**
 
-* 1a. Required fields are missing or the format is invalid.
-    * 1a1. CoursePilot shows an error message indicating the invalid or missing fields.
+* 1a. CoursePilot detects that the provided details are invalid or incomplete.
+    * 1a1. CoursePilot indicates the error and requests the Tutor to provide valid details.
 
       Use case ends.
 
-* 2a. A tutorial with the same code already exists.
-    * 2a1. CoursePilot shows an error message indicating a duplicate tutorial code.
+* 2a. CoursePilot detects that a tutorial with the same code already exists.
+    * 2a1. CoursePilot indicates that the tutorial code is already in use.
 
       Use case ends.
 
@@ -514,24 +520,23 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. Tutor requests to delete a tutorial by specifying its index in the displayed tutorial list.
+1. Tutor requests to delete a specific tutorial.
 2. CoursePilot removes the tutorial from the system.
 3. CoursePilot removes the tutorial from all students enrolled in it.
-4. CoursePilot removes any student from the global list who is no longer enrolled in any remaining tutorial.
-5. CoursePilot updates the display and shows a confirmation message.
+4. CoursePilot removes any student who is no longer enrolled in any remaining tutorial.
+5. CoursePilot confirms the deletion to the Tutor.
 
    Use case ends.
 
 **Extensions**
 
-* 1a. The given index is invalid.
-    * 1a1. CoursePilot shows an error message indicating an invalid index.
+* 1a. CoursePilot detects that the target tutorial is invalid.
+    * 1a1. CoursePilot indicates that the tutorial could not be found.
 
       Use case ends.
 
-* 2a. The tutorial removed is the current operating tutorial.
-    * 2a1. CoursePilot clears the Operating Tutorial selection.
-    * 2a2. CoursePilot resets the student list display to show all students in the global student list.
+* 2a. CoursePilot detects that the tutorial being removed is the current operating tutorial.
+    * 2a1. CoursePilot clears the current operating tutorial.
 
       Use case resumes at step 3.
 
@@ -539,21 +544,20 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. Tutor selects a tutorial (UC02).
-2. Tutor requests to list students using the `-student` mode.
-3. CoursePilot displays all students enrolled in the current operating tutorial and shows a confirmation message.
+1. Tutor requests to list students.
+2. CoursePilot displays all students enrolled in the current operating tutorial.
 
    Use case ends.
 
 **Extensions**
 
-* 1a. Tutor requests to list tutorials instead using `-tutorial` mode.
+* 1a. Tutor requests to list tutorials instead.
     * 1a1. CoursePilot displays all registered tutorials and their details.
 
       Use case ends.
 
-* 2a. No tutorial is currently selected.
-    * 2a1. CoursePilot displays all students in the global system and shows a confirmation message.
+* 1b. CoursePilot detects that no tutorial is currently selected.
+    * 1b1. CoursePilot displays all students in the system.
 
       Use case ends.
 
@@ -561,36 +565,33 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. Tutor selects a tutorial (UC02).
-2. Tutor requests to find students by entering a field `Prefix` flag (`/phone`, `/email`, `/matric`) first.
-3. Tutor requests to find students by entering one or more keywords.
-4. CoursePilot filters and displays students in the current operating tutorial whose names match any of the keywords.
-5. CoursePilot shows the matching students and the total number of them found.
+1. Tutor requests to find students by providing one or more keywords.
+2. CoursePilot filters students in the current operating tutorial whose details match any of the keywords.
+3. CoursePilot displays the matching students and the total number found.
 
-      Use case ends.
+   Use case ends.
 
 **Extensions**
 
-* 2a. Tutor provides no `Prefix` flag.
-    * 2a1. CoursePilot defaults to filtering students by name.
+* 1a. Tutor specifies a field to search by.
+    * 1a1. CoursePilot filters students by that specific field instead of by name.
+
+      Use case resumes from step 2.
+
+* 1b. CoursePilot detects that the specified field is invalid.
+    * 1b1. CoursePilot indicates the valid fields that can be searched.
+
+      Use case ends.
+
+* 1c. CoursePilot detects that no keywords are provided.
+    * 1c1. CoursePilot indicates that keywords must be provided.
+
+      Use case ends.
+
+* 2a. No tutorial is currently selected.
+    * 2a1. CoursePilot filters students in the across the global list whose details match any of the keywords.
 
       Use case resumes from step 3.
-
-* 2b. Tutor provides an invalid prefix.
-    * 2b1. CoursePilot shows an error message listing the valid prefixes.
-
-      Use case ends.
-
-* 3a. No tutorial is currently selected.
-    * 3a1. CoursePilot searches across all students in the global list instead.
-    * 3a2. CoursePilot filters and displays students in the global student list whose names match any of the keywords.
-
-      Use case resumes from step 4.
-
-* 3b. No keywords are provided.
-    * 3b1. CoursePilot shows an error message indicating keywords must be provided.
-
-      Use case ends.
 
 **Use case: UC10 - Clear all data**
 
@@ -598,7 +599,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 1. Tutor requests to clear all data.
 2. CoursePilot removes all students and tutorials from the system.
-3. CoursePilot updates the display and shows a confirmation message.
+3. CoursePilot confirms the deletion to the Tutor.
 
    Use case ends.
 
