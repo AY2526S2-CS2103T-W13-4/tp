@@ -15,6 +15,7 @@ import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.coursepilot.logic.Messages;
 import seedu.coursepilot.model.Model;
 import seedu.coursepilot.model.ModelManager;
 import seedu.coursepilot.model.UserPrefs;
@@ -57,8 +58,8 @@ public class FindCommandTest {
 
     @Test
     public void execute_zeroKeywords_noStudentFound() {
-        String expectedMessage = String.format(MESSAGE_STUDENTS_LISTED_OVERVIEW, 0);
         NameContainsKeywordsPredicate predicate = preparePredicate(" ");
+        String expectedMessage = String.format(Messages.MESSAGE_STUDENTS_LISTED_OVERVIEW, 0) + "\n" + predicate.getSearchDescription();
         FindCommand command = new FindCommand(predicate);
         model.setCurrentOperatingTutorial(model.getFilteredTutorialList().get(0));
         expectedModel.setCurrentOperatingTutorial(expectedModel.getFilteredTutorialList().get(0));
@@ -70,8 +71,8 @@ public class FindCommandTest {
 
     @Test
     public void execute_multipleKeywords_multipleStudentsFound() {
-        String expectedMessage = String.format(MESSAGE_STUDENTS_LISTED_OVERVIEW, 3);
         NameContainsKeywordsPredicate predicate = preparePredicate("Kurz Elle Kunz");
+        String expectedMessage = String.format(Messages.MESSAGE_STUDENTS_LISTED_OVERVIEW, 3) + "\n" + predicate.getSearchDescription();
         FindCommand command = new FindCommand(predicate);
         model.setCurrentOperatingTutorial(model.getFilteredTutorialList().get(0));
         expectedModel.setCurrentOperatingTutorial(expectedModel.getFilteredTutorialList().get(0));
