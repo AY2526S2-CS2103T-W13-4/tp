@@ -53,6 +53,19 @@ For those who can type fast, **CoursePilot** transforms student management into 
 This ensures commands like `add -student` and `delete -student` work as expected.
 Following this workflow can help avoid common errors.
 
+## Understanding the UI
+
+![Ui](images/UiAnnotated.png)
+
+CoursePilot's UI is divided into three linked panels at the top, followed by the Display Box, Command Box, and Current Operating Tutorial indicator at the bottom.
+
+* **Tutorial Code List**: Displays all tutorials in the system sorted alphabetically. The currently selected tutorial is highlighted with a `●` indicator.
+* **Tutorial Details Panel**: Displays the day, timeslot, and capacity for each tutorial. Rows correspond directly to the tutorials in the **Tutorial Code List** — the first row in the **Tutorial Code List** matches the first row in the **Tutorial Details Panel**.
+* **Student List**: Displays students enrolled in the currently selected tutorial. When no tutorial is selected, all students in the system are shown.
+* **Display Box**: Shows the resulting message of each command entered into the **Command Box**.
+* **Command Box**: This is where you enter commands.
+* **Current Operating Tutorial**: Shown at the bottom right corner, this indicates the currently selected tutorial.
+
 ## Features
 
 <div markdown="block" class="alert alert-info">
