@@ -324,6 +324,20 @@ Team size: 5
 3. **Sort the student list alphabetically by name within each tutorial.**
    Currently, students are displayed in the order they were added to the tutorial. This is inconsistent with the tutorial list, which is sorted alphabetically by tutorial code. Users familiar with standard list-based UIs would reasonably expect student names to be sorted alphabetically as well, and the absence of sorting has been reported as a feature flaw. We plan to sort the student list alphabetically by name (case-insensitive, A–Z) whenever it is displayed, both in the global view and within a selected tutorial. This applies to `list -student`, `find`, and the initial display after `select`. The sort order will be stable - students with the same name will retain their original insertion order relative to each other.
 
+4. **Add tag-based search support to the `find` command.**
+   Currently, the `find` command supports searching by name, phone number, email, and matric number, but does not support searching by tag. This limits tutors who use tags to categorise students (e.g., `scholarship`, `exchange`, `Year2`) from efficiently retrieving a specific group. We plan to extend the `find` command with a `/tag` prefix flag, with the format `find /tag KEYWORD [MORE_KEYWORDS]…` (e.g., `find /tag scholarship`), which returns all students in the current operating tutorial whose tags contain any of the given keywords. If no tutorial is currently selected, the search will be performed across all students in the global list. Multiple keywords will be OR-matched, consistent with the behaviour of existing search flags.
+
+5. **Make error messages in the `add -student` command more specific about the cause of failure.**
+   Currently, several error scenarios in `add -student` are grouped under overly broad messages that do not tell the tutor exactly what went wrong. We plan to split these into the following distinct messages:
+   - **No tutorial selected**: The existing message `"No tutorial selected. Please select a tutorial to operate on first."` is already sufficiently specific and will be retained as-is.
+   - **Tutorial at full capacity**: "The current operating tutorial [`TUTORIAL_CODE`] is at full capacity ([`CURRENT`]/[`MAX`] students). Cannot add more students." (e.g., "The current operating tutorial CS2103T-W13 is at full capacity (10/10 students). Cannot add more students.")
+   - **Exact duplicate student** (same matric, name, phone, email): "This student already exists in CoursePilot and is already enrolled in the current operating tutorial."
+   - **Duplicate matric number with different details**:`"A different student with the matric number [MATRIC] already exists in CoursePilot. Please verify the student's details." (e.g., "A different student with the matric number A123456 already exists in CoursePilot. Please verify the student's details.")
+   - **Duplicate phone number**: "Another student with the phone number [PHONE] already exists in CoursePilot." (e.g., "Another student with the phone number 91234567 already exists in CoursePilot.")
+   - **Duplicate email address**: "Another student with the email address [EMAIL] already exists in CoursePilot." (e.g., "Another student with the email address john@example.com already exists in CoursePilot.")
+   - **Student already in tutorial and exists globally**: "This student is already enrolled in the current operating tutorial [TUTORIAL_CODE]." (e.g., "This student is already enrolled in the current operating tutorial CS2103T-W13.")
+   These changes ensure that tutors can immediately identify and correct the specific issue without needing to manually inspect their student or tutorial data.
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## Appendix: Effort

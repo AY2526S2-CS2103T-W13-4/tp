@@ -148,7 +148,7 @@ Format: `list -tutorial` or `list -student`
 Examples:
 * `list -tutorial` : Displays all tutorials.
 * `list -student` : Displays all students in the system.
-* `select CS2103T-W13` followed by `list -student` : Displays all students in the CS2103T-W13 tutorial.
+* `select CS2103T-W13` followed by `find dave` then `list -student` : Displays all students in the CS2103T-W13 tutorial.
 
 ![ListCommand](images/ListCommand.png)
 
