@@ -186,15 +186,15 @@ When the input contains a valid command word, the `Get suggestions for command` 
 <img src="images/AutocompleteCommandActivityDiagram.png" width="700"/>
 
 The suggestion states are:
-1. **Command word completion** — when no space has been typed, filter matching command words (e.g. `a` → `add`).
-2. **Flag suggestion** — after a command word like `add`, `delete`, or `find`, suggest the appropriate flags (e.g. `-student`, `-tutorial`).
-3. **Prefix suggestion** — after a flag is selected, suggest unused prefixes for that context (e.g. `/name`, `/phone`). The `/tag` prefix is always suggested since it can be repeated.
+1. **Command word completion** - when no space has been typed, filter matching command words (e.g. `a` → `add`).
+2. **Flag suggestion** - after a command word like `add`, `delete`, or `find`, suggest the appropriate flags (e.g. `-student`, `-tutorial`).
+3. **Prefix suggestion** - after a flag is selected, suggest unused prefixes for that context (e.g. `/name`, `/phone`). The `/tag` prefix is always suggested since it can be repeated.
 
 Users interact with suggestions via:
-- **Tab** — applies the currently highlighted suggestion
-- **Enter** — applies the currently highlighted suggestion
-- **Click** — applies the clicked suggestion
-- **Escape** — dismisses the suggestion menu
+- **Tab** - applies the currently highlighted suggestion
+- **Enter** - applies the currently highlighted suggestion
+- **Click** - applies the clicked suggestion
+- **Escape** - dismisses the suggestion menu
 
 #### Design considerations
 
@@ -214,9 +214,9 @@ Users interact with suggestions via:
 
 The proposed undo/redo mechanism is facilitated by `VersionedCoursePilot`. It extends `CoursePilot` with an undo/redo history, stored internally as an `coursePilotStateList` and `currentStatePointer`. Additionally, it implements the following operations:
 
-* `VersionedCoursePilot#commit()` — Saves the current CoursePilot state in its history.
-* `VersionedCoursePilot#undo()` — Restores the previous CoursePilot state from its history.
-* `VersionedCoursePilot#redo()` — Restores a previously undone CoursePilot state from its history.
+* `VersionedCoursePilot#commit()` - Saves the current CoursePilot state in its history.
+* `VersionedCoursePilot#undo()` - Restores the previous CoursePilot state from its history.
+* `VersionedCoursePilot#redo()` - Restores a previously undone CoursePilot state from its history.
 
 These operations are exposed in the `Model` interface as `Model#commitCoursePilot()`, `Model#undoCoursePilot()` and `Model#redoCoursePilot()` respectively.
 
@@ -259,7 +259,7 @@ Similarly, how an undo operation goes through the `Model` component is shown bel
 
 ![UndoSequenceDiagram](images/UndoSequenceDiagram-Model.png)
 
-The `redo` command does the opposite — it calls `Model#redoCoursePilot()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores CoursePilot to that state.
+The `redo` command does the opposite - it calls `Model#redoCoursePilot()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores CoursePilot to that state.
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** If the `currentStatePointer` is at index `coursePilotStateList.size() - 1`, pointing to the latest CoursePilot state, then there are no undone CoursePilot states to restore. The `redo` command uses `Model#canRedoCoursePilot()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
 
@@ -311,6 +311,76 @@ Implementation details are intentionally deferred until the feature scope is fin
 
 --------------------------------------------------------------------------------------------------------------------
 
+## Appendix: Planned Enhancements
+
+Team size: 5
+
+1. **Add an `enroll` command to add existing students to additional tutorials without re-entering their details.**
+   Currently, adding a student who already exists in the global student list to a second tutorial requires the tutor to re-enter all their details (`/name`, `/phone`, `/email`, `/matric`, `/tag`) in full via `add -student`. This is inconvenient and error-prone, as any mismatch in details will result in a duplicate detection error rather than a helpful message. We plan to introduce an `enroll` command with the format `enroll MATRIC_NUMBER` (e.g., `enroll A123456`) that looks up an existing student by matric number and enrolls them directly into the current operating tutorial. The command will: (1) throw an error if no student with the given matric number exists in the global list, (2) throw an error if the student is already enrolled in the current operating tutorial, and (3) throw an error if no tutorial is currently selected. This enhancement directly addresses the `Constraint-Typing-Preferred` and `Recommendation-CLI-First` project constraints by allowing a fast typist to enroll a student with a single short command instead of a lengthy repeated entry.
+
+2. **Add a `filter` or similar command to filter the tutorial list by day or time slot.**
+   Currently, `list -tutorial` always displays all tutorials, making it redundant since the tutorial panel is permanently visible. This has been reported as a feature flaw. The original intent of `list -tutorial` was to serve as a precursor to filtering functionality. We plan to introduce a `filter` command that filters the tutorial panel by a specified field. The format will be `filter /day DAY` (e.g., `filter /day Wed`) or `filter /timeslot TIMESLOT` (e.g., `filter /timeslot 10:00-11:00`), which narrows the tutorial panel to show only tutorials matching the given condition. Running `list -tutorial` will continue to reset the tutorial panel to show all tutorials, giving it a clear and distinct purpose as the reset command. This makes both `list -tutorial` and the new `filter` command non-redundant and provides tutors with a practical way to focus on a subset of their tutorials.
+
+3. **Sort the student list alphabetically by name within each tutorial.**
+   Currently, students are displayed in the order they were added to the tutorial. This is inconsistent with the tutorial list, which is sorted alphabetically by tutorial code. Users familiar with standard list-based UIs would reasonably expect student names to be sorted alphabetically as well, and the absence of sorting has been reported as a feature flaw. We plan to sort the student list alphabetically by name (case-insensitive, A–Z) whenever it is displayed, both in the global view and within a selected tutorial. This applies to `list -student`, `find`, and the initial display after `select`. The sort order will be stable - students with the same name will retain their original insertion order relative to each other.
+
+--------------------------------------------------------------------------------------------------------------------
+
+## Appendix: Effort
+
+### Overview
+
+CoursePilot was built by evolving the AddressBook Level 3 (AB3) codebase into a tutorial management system for university tutors. While AB3 manages a single entity type (`Person`) with a flat list structure, CoursePilot introduces two interdependent entity types (`Student` and `Tutorial`) with a many-to-many relationship between them. This significantly increased the complexity of the data model, command logic, storage layer, and UI compared to AB3.
+
+We estimate the overall implementation effort of CoursePilot to be approximately **8 out of 10** relative to building AB3 from scratch (where 10 = AB3 effort), reflecting the additional complexity described below.
+
+---
+
+### Difficulty and Challenges
+
+**1. Dual-entity data model with many-to-many relationships**
+
+Unlike AB3 which manages one entity type, CoursePilot manages `Student` and `Tutorial` objects with a many-to-many relationship - a student can be enrolled in multiple tutorials, and a tutorial contains multiple students. This required designing a model that maintains referential integrity across both entity lists. For example, deleting a tutorial requires checking whether each of its students is enrolled elsewhere before deciding whether to remove them from the global student list. This logic is non-trivial and required careful coordination between `Tutorial`, `UniqueStudentList`, `UniqueTutorialList`, and `ModelManager`.
+
+**2. Tutorial-scoped command workflow**
+
+AB3 commands operate on a flat global list. CoursePilot introduces the concept of a **current operating tutorial** - a selected tutorial that scopes all student-level commands. Implementing this required adding reactive state (`ObjectProperty<Tutorial>`) to the model, propagating it through the `Logic` interface to the UI layer, and ensuring that every student-level command correctly handles both the selected and unselected states.
+
+**3. Redesigning the GUI**
+
+AB3 has a simple single-panel layout. CoursePilot required a significantly more complex GUI with multiple coordinated panels - a tutorial code panel, a tutorial details panel, and a student list panel - all displaying data simultaneously. Key challenges included:
+
+- Synchronizing the vertical scroll bars of two independent `TableView` components so that scrolling one scrolls the other
+- Locking `SplitPane` dividers to prevent unintended resizing which messes with `Constraint-Screen-Resolution`
+- Implementing reactive tutorial highlighting using custom `TableCell` rendering that responds to changes in the current operating tutorial property
+- Suppressing unwanted JavaFX selection behaviour using custom `NoOpListSelectionModel` and `NoOpTableSelectionModel` implementations
+- Prevent users clicking having unwanted effects within the GUI
+
+**4. Determining the right architecture for tutorial-scoped operations**
+
+A significant portion of early effort was spent determining how to structure the implementation. The key design question was whether tutorial membership should be stored in `Student` (each student tracks its tutorials), in `Tutorial` (each tutorial tracks its students), or in a separate join structure. We ultimately chose to store the student list within `Tutorial` as this aligned best with the command workflow - most commands begin by selecting a tutorial and then operating on its students. However, this decision had cascading implications for storage serialization, the delete flow, and the UI rendering of tutorial tags on student cards.
+
+**5. Command Autocomplete**
+
+Implementing context-aware autocomplete required building a state machine that tracks how much of a command has been typed and dispatches to command-specific suggestion logic accordingly. Integrating this with JavaFX's event model - particularly handling Tab, Enter, Escape, and arrow key navigation within a `Popup` - required careful event filtering to avoid conflicts with the existing command execution flow. While we understand that this will likely remain as a novel feature, we strongly belive that this would enhance our target audience's experience of a `Recommendation-CLI-First` application.
+
+---
+
+### Achievements
+
+- Successfully extended AB3's single-entity architecture to support two interdependent entity types with a many-to-many relationship
+- Delivered a working command autocomplete system that covers all commands, flags, and prefixes with context-awareness
+- Implemented a multi-panel GUI with synchronized scrolling and reactive highlighting that provides tutors with a clear at-a-glance view of all their tutorials and students
+- Maintained a consistent CLI-first design throughout, ensuring all operations are fully accessible via typed commands
+
+---
+
+### Reuse and Adaptation
+
+The project was built by evolving the AB3 codebase. The core architecture (Logic, Model, Storage, UI layers), the `ArgumentTokenizer`, `Prefix`, `ParserUtil`, and JSON storage infrastructure were reused from AB3. However, significant adaptation was required to extend these components to support `Tutorial` as a second entity type, including adding `JsonAdaptedTutorial`, `UniqueTutorialList`, and the tutorial-related `Model` API methods. Thus, we believe that we change significant portions of the original AB3 such that it could be considered our team's own implementation. The original `find` command and predicate structure from AB3 were extended to support field-specific search, requiring a full redesign of the predicate class hierarchy.
+
+--------------------------------------------------------------------------------------------------------------------
+
 ## **Appendix: Requirements**
 
 ### Product scope
@@ -318,7 +388,6 @@ Implementation details are intentionally deferred until the feature scope is fin
 **Target user profile**:
 
 * University tutors or teaching assistants (TA) managing one or more tutorial groups
-* TA who needs to track student participation, attendance, and grading progress across recurring weekly assessments
 * TA who prefers local desktop apps over web-based platforms like Canvas
 * Who can type fast and prefers typing to mouse interactions
 * Who is reasonably comfortable using CLI apps
@@ -439,7 +508,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
       Use case ends.
 
 * 2c. CoursePilot detects that the selected tutorial is at full capacity.
-    * 2c1. CoursePilot indicates that the tutorial is at full capacity.
+    * 2c1. CoursePilot indicates that the tutorial is at full capacity and student could not be added.
 
       Use case ends.
 
@@ -513,6 +582,11 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 2a. CoursePilot detects that a tutorial with the same code already exists.
     * 2a1. CoursePilot indicates that the tutorial code is already in use.
+
+      Use case ends.
+
+* 2b. CoursePilot detects that the new tutorial's timeslot overlaps with an existing tutorial on the same day.
+    * 2b1. CoursePilot indicates that the timeslot conflicts with an existing tutorial.
 
       Use case ends.
 
@@ -614,7 +688,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 7.  All commands should execute and display results within 2 seconds when the system stores up to 1000 students and 100 tutorial slots.
 8.  Should launch and be ready to accept commands within 3 seconds under typical conditions.
 9.  Data should be stored locally in a human-editable file format (e.g., JSON).
-10. Should not lose any stored data when the application is closed normally via the `exit` commmand, and should persist data between sessions.
+10. Should not lose any stored data when the application is closed normally via the `exit` command, and should persist data between sessions.
 11. Existing data should remain intact even if a command fails due to invalid input.
 12.  At 1920x1080 and higher (100% and 125% scaling), and at 1280x720 and higher (150% scaling), the GUI should show all primary UI panels without overlapping components or truncated text, and all interactive controls should remain accessible without horizontal scrolling.
 
@@ -738,6 +812,16 @@ testers are expected to do more *exploratory* testing.
 
    1. Other incorrect add tutorial commands to try: `add -tutorial`, `add -tutorial /code CS2103T-W12 /day Monday /timeslot 10:00-11:00 /capacity 10` (invalid day format), `add -tutorial /code CS2103T-W12 /day Wed /timeslot 10:00 /capacity 10` (invalid timeslot format)<br>
       Expected: Similar to previous.
+
+1. Additional timeslot overlap check:
+
+   1. Prerequisites: Ensure a tutorial already exists on a given day (e.g., `CS2103T-W12` on `Wed` from `10:00-11:00`).
+
+   1. Test case: `add -tutorial /code CS2103T-NEW /day Wed /timeslot 10:30-11:30 /capacity 10`<br>
+      Expected: No tutorial is added. Error message indicating a timeslot conflict with an existing tutorial shown in the status message.
+
+   1. Test case: `add -tutorial /code CS2103T-NEW /day wed /timeslot 12:00-13:00 /capacity 10`<br>
+      Expected: Tutorial is added successfully, confirming day input is case-insensitive.
 
 1. Additional exploratory checks:
 

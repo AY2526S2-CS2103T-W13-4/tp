@@ -14,6 +14,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 <img src="images/ojunyi.png" width="200px">
 
 [[github](https://github.com/ojunyi/)]
+[[portfolio](team/ojunyi.md)]
 
 * Role: Developer
 

@@ -169,7 +169,7 @@ Format: `add -student /name NAME /phone PHONE_NUMBER /email EMAIL /matric MATRIC
 * A student cannot be added to the same tutorial twice.
 
 **Field Constraints:**
-* **Name**: Must contain at least one alphabetic character. Spaces and symbols such as commas, hyphens, forward slashes, and `@` are allowed. Cannot be blank. Maximum 100 characters long.
+* **Name**: Must contain at least one alphabetic character. Spaces and symbols such as commas, hyphens, forward slashes, and `@` are allowed (e.g., `O'Brien`, `Anne-Marie`, `Ravi s/o Kumar`). Cannot be blank. Maximum 100 characters long.
 * **Phone**: Must contain only digits and be at least 3 digits long to a maximum of 15 digits long.
 * **Email**: Must follow standard email format (e.g., `student@u.nus.edu`). Maximum 100 characters long.
 * **Matric Number**: Can be any non-blank value. CoursePilot does not enforce a fixed format because the target audience includes tutors working with different matriculation number schemes.
@@ -193,7 +193,7 @@ Format: `add -tutorial /code CODE /day DAY /timeslot TIMESLOT /capacity CAPACITY
 **Field Constraints:**
 * **Code**: Must contain only alphanumeric characters, hyphens, and underscores. Cannot be blank. Maximum 20 characters long.
 * **Day**: Must be one of: Mon, Tue, Wed, Thu, Fri, Sat, Sun (case-insensitive).
-* **TimeSlot**: Must follow the format `HH:mm-HH:mm` where `H` is the hour number, and `m` is the minute number (e.g., `13:00-14:00`) ranging only from `00:00 to 23:59`. The start time must be before the end time, and both must **occur within the same calendar day**. Time is in 24-hour format.
+* **TimeSlot**: Must follow the format `HH:mm-HH:mm` where `H` is the hour number, and `m` is the minute number (e.g., `13:00-14:00`) ranging only from `00:00 to 23:59`. The start time must be before the end time, and both must **occur within the same calendar day**. Time is in 24-hour format. A new tutorial's timeslot cannot overlap with any existing tutorial's timeslot on the same day (e.g., if `CS2103T-W12` runs `10:00-11:00` on `Wed`, adding another tutorial on `Wed` with timeslot `10:30-11:30` will be rejected).
 * **Capacity**: Must be a positive whole number starting from 1 to 1000.
 
 Examples:
@@ -369,7 +369,7 @@ Furthermore, manual edits can cause CoursePilot to behave unexpectedly if invali
 **A**: CoursePilot will display an error message indicating what went wrong. Use the `help` command to view the correct command format.
 
 **Q**: When should I use `select none`?<br>
-**A**: Use `select none` when you want to stop working within a specific tutorial without selecting a new one. This clears the current operating tutorial, and student-level commands like `add -student` and `delete -student` will no longer be available until you select a tutorial again. It is useful when you want to use `list -student` or `find` to search across all students in the system.
+**A**: Use `select none` when you want to stop working within a specific tutorial without selecting a new one. This clears the current operating tutorial. Note that `add -student`, `delete -student` and `edit` require a tutorial to be selected and will show an error if used after `select none`. It is useful when you want to use `list -student` or `find` to search across all students in the system.
 
 ## Known issues
 
@@ -386,7 +386,7 @@ Furthermore, manual edits can cause CoursePilot to behave unexpectedly if invali
 6. **Tutorial days must be entered as a 3-letter abbreviation** (e.g.,`Mon`, `Tue`, `Wed`, `Thu`, `Fri`, `Sat` or `Sun`). The input is case-insensitive. We do not allow inputs such as `Monday` or `Tuesday`. This standardised format ensures consistency across all tutorial entries and keeps the display clean and uniform.
 7. **Tutorial timeslot** must follow the format `HH:mm-HH:mm` where `H` is the hour number, and `m` is the minute number (e.g., `13:00-14:00`) ranging only from `00:00 to 23:59`. The start time must be before the end time, and both must **occur within the same calendar day**. Time is in 24-hour format.
 8. **Tutorial timeslots does not allow crossing over to the next day** as in our reserach into typical lesson timings worldwide, there does not exists any tutorial lesson that takes place in local date time over the period of two or more days. But there is a work around in case such a niche case occurs. You can create multiple tutorial slots, appending `-1` or `-2` and so on to indicate that the tutorials are linked. Then make sure the time of those tutorial slots link up with one another.
-9. **`list -tutorial` does not do anything visually** as CoursePilot does not have any commands that filter the tutorial list, meaning it will always show all tutorials. It is best used to simply refresh the tutorial details.
+9. **`list -tutorial` does not produce a visible change** in most cases, as CoursePilot currently does not support filtering the tutorial list. The tutorial panel always shows all tutorials. The command is best used to reset the student list back to the full global view after a `find` or `list -student` operation.
 10. **Searching by tag is not currently supported** and the `find` command only allows search by name, phone, email and matric number.
 
 ## Command summary
