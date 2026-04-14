@@ -152,7 +152,7 @@ Format: `add -student /name NAME /phone PHONE_NUMBER /email EMAIL /matric MATRIC
 * Requires a tutorial to be selected first.
 * The fields (`/name`, `/phone`, `/email`, `/matric`) are mandatory.
 * A student can have any number of tags (including 0).
-* If the student does not yet exist in the system, they are also added to the global student list. If they already exist (matched by name or matric number), they are linked to the selected tutorial without creating a duplicate.
+* If the student does not yet exist in the system, they are also added to the global student list. If they already exist (matched by matric number), they are linked to the selected tutorial without creating a duplicate.
 * A student cannot be added to the same tutorial twice.
 
 **Field Constraints:**
