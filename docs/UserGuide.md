@@ -302,6 +302,7 @@ This command permanently deletes all students and all tutorials. This action can
 
 ![ClearCommand](images/ClearCommand.png)
 <div style="page-break-after: always;"></div>
+
 ### Exiting the program : `exit`
 
 Exits the program.
