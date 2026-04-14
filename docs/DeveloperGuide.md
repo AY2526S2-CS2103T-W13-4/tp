@@ -352,6 +352,9 @@ Team size: 5
 9. **Add a multi-criteria search command (mfind) to filter students by multiple fields and tags.**
    Currently, the find command is limited to searching by a single attribute at a time, which makes it difficult to locate specific subgroups of students. We plan to introduce a multi-criteria search command with the format `mfind [/name NAME] [/phone PHONE] [/eemail EMAIL] [/matric MATRIC] [/tag TAG [MORE_TAGS]...]` (e.g., `mfind /nname John /tag Year2`). The command will return students who satisfy all specified flags (AND-logic between fields), while supporting multiple keywords within the tag flag (OR-logic between tags). Like the `find` command, it will operate on the current tutorial if one is selected, or the global list if not. This provides tutors with a powerful tool for granular data retrieval, such as identifying specific scholarship students across different name groups or cohorts.
 
+10. **Make error messages for edit more specific when an invalid index is provided.**
+    Currently, providing an index of 0 or a negative integer to the `edit` command results in a generic `invalid command format`, which can be confusing for tutors. We plan to refine the error handling to distinguish between formatting errors and out-of-bounds errors. If a tutor enters an index of 0 or below, CoursePilot will display a specific error message similar to: "The index provided must be a positive integer (1, 2, 3...) and within the range of the displayed list." This ensures that tutors understand the mistake is specifically related to the index value rather than the command syntax, aligning with our goal of providing clear, actionable feedback across all CLI operations.
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## Appendix: Effort
